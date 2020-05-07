@@ -21,11 +21,11 @@ namespace EmVerif.Communication
         }
 
         private Boolean[] _AckRecvFlag = new Boolean[Byte.MaxValue];
-        private List<byte>[] _RecvDataList = new List<byte>[Byte.MaxValue];
+        private IReadOnlyList<byte>[] _RecvDataList = new List<byte>[Byte.MaxValue];
         private List<UserDataFromEcu> _UserDataList = new List<UserDataFromEcu>();
         private object _UserDataListLock = new object();
 
-        public List<IPAddress> GetIpV4List()
+        public IEnumerable<IPAddress> GetIpV4List()
         {
             return InternalCmd.Instance.GetIpV4List();
         }
@@ -73,7 +73,7 @@ namespace EmVerif.Communication
             WaitProgExecCmdAck();
         }
 
-        public void SetUserData(List<Byte> inData)
+        public void SetUserData(IEnumerable<Byte> inData)
         {
             List<Byte> data = new List<byte>(inData);
             int count = data.Count;
@@ -86,9 +86,9 @@ namespace EmVerif.Communication
             InternalCmd.Instance.SendUserDataToEcu(data);
         }
 
-        public List<UserDataFromEcu> GetUserData()
+        public IReadOnlyList<UserDataFromEcu> GetUserData()
         {
-            List<UserDataFromEcu> ret;
+            IReadOnlyList<UserDataFromEcu> ret;
 
             lock (_UserDataListLock)
             {
@@ -115,11 +115,11 @@ namespace EmVerif.Communication
             );
         }
 
-        public void SetSpi(List<Byte> inDataLen, List<UInt16> inKbpsList, List<Boolean> inIs5khzList, out List<UInt16> outKbpsList)
+        public void SetSpi(IReadOnlyList<Byte> inDataLen, IReadOnlyList<UInt16> inKbpsList, IReadOnlyList<Boolean> inIs5khzList, out IReadOnlyList<UInt16> outKbpsList)
         {
             List<Byte> data = new List<byte>();
 
-            outKbpsList = new List<ushort>();
+            List<UInt16> kbpsList = new List<ushort>();
             if ((inKbpsList.Count != 2) || (inIs5khzList.Count != 2))
             {
                 throw new Exception("Lack of SPI parameter.");
@@ -149,14 +149,15 @@ namespace EmVerif.Communication
             _AckRecvFlag[(Byte)InternalCmd.PublicCmdId.SetSpiCmdId] = false;
             InternalCmd.Instance.ExecCmd(InternalCmd.PublicCmdId.SetSpiCmdId, data, RecvSetSpiCmdAck);
             WaitSetSpiCmdAck();
-            outKbpsList.Add((UInt16)(
+            kbpsList.Add((UInt16)(
                 (UInt16)_RecvDataList[(Byte)InternalCmd.PublicCmdId.SetSpiCmdId][0] * 256 +
                 (UInt16)_RecvDataList[(Byte)InternalCmd.PublicCmdId.SetSpiCmdId][1]
             ));
-            outKbpsList.Add((UInt16)(
+            kbpsList.Add((UInt16)(
                 (UInt16)_RecvDataList[(Byte)InternalCmd.PublicCmdId.SetSpiCmdId][2] * 256 +
                 (UInt16)_RecvDataList[(Byte)InternalCmd.PublicCmdId.SetSpiCmdId][3]
             ));
+            outKbpsList = kbpsList;
         }
 
         public void End()
@@ -165,7 +166,7 @@ namespace EmVerif.Communication
         }
 
         #region プログラムアップロード処理
-        private void RecvUploadProgCmdAck(List<byte> inRecvDataList)
+        private void RecvUploadProgCmdAck(IReadOnlyList<byte> inRecvDataList)
         {
             _RecvDataList[(Byte)InternalCmd.PublicCmdId.UploadProgCmdId]= inRecvDataList;
             _AckRecvFlag[(Byte)InternalCmd.PublicCmdId.UploadProgCmdId] = true;
@@ -188,7 +189,7 @@ namespace EmVerif.Communication
         #endregion
 
         #region プログラム実行開始処理
-        private void RecvProgExecCmdAck(List<byte> inRecvDataList)
+        private void RecvProgExecCmdAck(IReadOnlyList<byte> inRecvDataList)
         {
             _RecvDataList[(Byte)InternalCmd.PublicCmdId.ProgExecCmdId] = inRecvDataList;
             _AckRecvFlag[(Byte)InternalCmd.PublicCmdId.ProgExecCmdId] = true;
@@ -211,12 +212,14 @@ namespace EmVerif.Communication
         #endregion
 
         #region ユーザーデータ処理
-        private void RecvUserData(List<byte> inRecvDataList)
+        private void RecvUserData(IReadOnlyList<byte> inRecvDataList)
         {
             if (_UserDataList.Count < 1000)
             {
-                inRecvDataList.RemoveRange(0, 2);
-                GCHandle gch = GCHandle.Alloc(inRecvDataList.ToArray(), GCHandleType.Pinned);
+                List<Byte> recvDataList = new List<byte>(inRecvDataList);
+
+                recvDataList.RemoveRange(0, 2);
+                GCHandle gch = GCHandle.Alloc(recvDataList.ToArray(), GCHandleType.Pinned);
                 UserDataFromEcu curUserData = (UserDataFromEcu)Marshal.PtrToStructure(gch.AddrOfPinnedObject(), typeof(UserDataFromEcu));
                 gch.Free();
                 lock (_UserDataListLock)
@@ -228,7 +231,7 @@ namespace EmVerif.Communication
         #endregion
 
         #region CAN 設定処理
-        private void RecvSetCanCmdAck(List<byte> inRecvDataList)
+        private void RecvSetCanCmdAck(IReadOnlyList<byte> inRecvDataList)
         {
             _RecvDataList[(Byte)InternalCmd.PublicCmdId.SetCanCmdId] = inRecvDataList;
             if (inRecvDataList.Count >= 2)
@@ -254,7 +257,7 @@ namespace EmVerif.Communication
         #endregion
 
         #region SPI 設定処理
-        private void RecvSetSpiCmdAck(List<byte> inRecvDataList)
+        private void RecvSetSpiCmdAck(IReadOnlyList<byte> inRecvDataList)
         {
             _RecvDataList[(Byte)InternalCmd.PublicCmdId.SetSpiCmdId] = inRecvDataList;
             if (inRecvDataList.Count >= 4)

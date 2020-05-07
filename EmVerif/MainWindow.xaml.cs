@@ -74,7 +74,7 @@ namespace EmVerif
                 OnPropertyChanged("ButtonText");
             }
         }
-        public List<IPAddress> ItemsSource { get; private set; }
+        public IEnumerable<IPAddress> ItemsSource { get; private set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

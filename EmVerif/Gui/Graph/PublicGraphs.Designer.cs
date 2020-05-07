@@ -1,4 +1,4 @@
-﻿namespace EmVerif.Gui.Chart
+﻿namespace EmVerif.Gui.Graph
 {
     partial class PublicGraphs
     {
@@ -30,10 +30,10 @@
         {
             this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.In6ChChart = new EmVerif.Gui.Chart.Graph();
+            this.In6ChChart = new EmVerif.Gui.Graph.OneGraph();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.MixOut4ChChart = new EmVerif.Gui.Chart.Graph();
-            this.ThroughOut12ChChart = new EmVerif.Gui.Chart.Graph();
+            this.MixOut4ChChart = new EmVerif.Gui.Graph.OneGraph();
+            this.ThroughOut12ChChart = new EmVerif.Gui.Graph.OneGraph();
             this.tm_UpdateCharts = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -133,10 +133,10 @@
         #endregion
 
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private Graph In6ChChart;
+        private OneGraph In6ChChart;
         private System.Windows.Forms.SplitContainer splitContainer2;
-        private Graph MixOut4ChChart;
-        private Graph ThroughOut12ChChart;
+        private OneGraph MixOut4ChChart;
+        private OneGraph ThroughOut12ChChart;
         private System.Windows.Forms.Timer tm_UpdateCharts;
     }
 }

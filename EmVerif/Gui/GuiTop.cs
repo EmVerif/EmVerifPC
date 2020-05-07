@@ -19,12 +19,12 @@ namespace EmVerif.Gui
             InitializeComponent();
         }
 
-        public void SetGraph(List<double> inInDataList, List<double> inMixOutDataList, List<double> inThroughOutDataList)
+        public void SetGraph(IReadOnlyList<double> inInDataList, IReadOnlyList<double> inMixOutDataList, IReadOnlyList<double> inThroughOutDataList)
         {
             publicGraphs1.Set(inInDataList, inMixOutDataList, inThroughOutDataList);
         }
 
-        public void SetLoadBar(List<double> inDataList)
+        public void SetLoadBar(IReadOnlyList<double> inDataList)
         {
             publicLoadBar1.Set(inDataList);
         }

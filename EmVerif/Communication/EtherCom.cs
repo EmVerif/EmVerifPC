@@ -16,13 +16,14 @@ namespace EmVerif.Communication
 
         private UdpClient _UdpClient;
         private string _ServerIpAddr = "192.168.0.100";
+        private string _UpperIpAddr = "192.168.0.";
         private int _ServerPort = 2000;
         private int _MyPort = 2001;
         private Task _RecvTask;
 
         private Boolean _FinishRequest;
 
-        public List<IPAddress> GetIpV4List()
+        public IEnumerable<IPAddress> GetIpV4List()
         {
             NetworkInterface[] nis = NetworkInterface.GetAllNetworkInterfaces();
             List<IPAddress> ipAddrList = new List<IPAddress>();
@@ -34,7 +35,7 @@ namespace EmVerif.Communication
                     if (a.Address.AddressFamily == AddressFamily.InterNetwork)
                     {
                         string ipStr = a.Address.ToString();
-                        if (!ipStr.Contains(_ServerIpAddr))
+                        if (!ipStr.Contains(_ServerIpAddr) && ipStr.Contains(_UpperIpAddr))
                         {
                             ipAddrList.Add(a.Address);
                         }

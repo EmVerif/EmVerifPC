@@ -230,22 +230,22 @@
     <Compile Include="Communication\MmTimer.cs" />
     <Compile Include="Communication\PublicCmd.cs" />
     <Compile Include="Communication\S3Analyzer.cs" />
-    <Compile Include="Gui\Chart\Graph.cs">
+    <Compile Include="Gui\Graph\OneGraph.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Gui\Chart\Graph.Designer.cs">
-      <DependentUpon>Graph.cs</DependentUpon>
+    <Compile Include="Gui\Graph\OneGraph.Designer.cs">
+      <DependentUpon>OneGraph.cs</DependentUpon>
     </Compile>
-    <Compile Include="Gui\Chart\PublicGraphs.cs">
+    <Compile Include="Gui\Graph\PublicGraphs.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Gui\Chart\PublicGraphs.Designer.cs">
+    <Compile Include="Gui\Graph\PublicGraphs.Designer.cs">
       <DependentUpon>PublicGraphs.cs</DependentUpon>
     </Compile>
-    <Compile Include="Gui\Chart\PublicLoadBar.cs">
+    <Compile Include="Gui\Graph\PublicLoadBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Gui\Chart\PublicLoadBar.Designer.cs">
+    <Compile Include="Gui\Graph\PublicLoadBar.Designer.cs">
       <DependentUpon>PublicLoadBar.cs</DependentUpon>
     </Compile>
     <Compile Include="Gui\GuiTop.cs">
@@ -290,13 +290,13 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Gui\Chart\Graph.resx">
-      <DependentUpon>Graph.cs</DependentUpon>
+    <EmbeddedResource Include="Gui\Graph\OneGraph.resx">
+      <DependentUpon>OneGraph.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Gui\Chart\PublicGraphs.resx">
+    <EmbeddedResource Include="Gui\Graph\PublicGraphs.resx">
       <DependentUpon>PublicGraphs.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Gui\Chart\PublicLoadBar.resx">
+    <EmbeddedResource Include="Gui\Graph\PublicLoadBar.resx">
       <DependentUpon>PublicLoadBar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Gui\GuiTop.resx">
@@ -319,6 +319,8 @@
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Gui\Variable\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
-namespace EmVerif.Gui.Chart
+namespace EmVerif.Gui.Graph
 {
     public partial class PublicLoadBar : UserControl
     {
@@ -28,7 +28,7 @@ namespace EmVerif.Gui.Chart
             tm_UpdateBar.Start();
         }
 
-        public void Set(List<double> inDataList)
+        public void Set(IReadOnlyList<double> inDataList)
         {
             if (inDataList.Count == 2)
             {

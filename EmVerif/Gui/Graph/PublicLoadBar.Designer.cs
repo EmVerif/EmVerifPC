@@ -1,4 +1,4 @@
-﻿namespace EmVerif.Gui.Chart
+﻿namespace EmVerif.Gui.Graph
 {
     partial class PublicLoadBar
     {

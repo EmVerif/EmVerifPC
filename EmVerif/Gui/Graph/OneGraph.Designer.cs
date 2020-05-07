@@ -1,6 +1,6 @@
-﻿namespace EmVerif.Gui.Chart
+﻿namespace EmVerif.Gui.Graph
 {
-    partial class Graph
+    partial class OneGraph
     {
         /// <summary> 
         /// 必要なデザイナー変数です。

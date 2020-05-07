@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
-namespace EmVerif.Gui.Chart
+namespace EmVerif.Gui.Graph
 {
-    public partial class Graph : UserControl
+    public partial class OneGraph : UserControl
     {
         public const Int32 ChartSmpNum = 250;
 
@@ -20,10 +20,10 @@ namespace EmVerif.Gui.Chart
 
         private List<double> _SetDataList = new List<double>();
         private Boolean _SetDataListUpdate = false;
-        private List<double> _DataForSyncList = new List<double>();
+        private IReadOnlyList<double> _DataForSyncList = new List<double>();
         private Boolean _DataForSyncListUpdate = false;
 
-        public Graph()
+        public OneGraph()
         {
             InitializeComponent();
         }
@@ -38,7 +38,7 @@ namespace EmVerif.Gui.Chart
         }
 
         #region 別タスク、関数コール側で排他制御必要
-        public void SetData(List<double> inDataList)
+        public void SetData(IReadOnlyList<double> inDataList)
         {
             Int32 count;
 

@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.publicGraphs1 = new EmVerif.Gui.Chart.PublicGraphs();
+            this.publicGraphs1 = new EmVerif.Gui.Graph.PublicGraphs();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.publicLoadBar1 = new EmVerif.Gui.Chart.PublicLoadBar();
+            this.publicLoadBar1 = new EmVerif.Gui.Graph.PublicLoadBar();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -112,9 +112,9 @@
 
         #endregion
 
-        private Chart.PublicGraphs publicGraphs1;
+        private Graph.PublicGraphs publicGraphs1;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
-        private Chart.PublicLoadBar publicLoadBar1;
+        private Graph.PublicLoadBar publicLoadBar1;
     }
 }

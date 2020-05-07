@@ -31,7 +31,7 @@ namespace EmVerif.Script
         private double _MaxLoad;
         private double _CurLoad;
 
-        public List<IPAddress> GetIpV4List()
+        public IEnumerable<IPAddress> GetIpV4List()
         {
             return PublicCmd.Instance.GetIpV4List();
         }
@@ -67,7 +67,7 @@ namespace EmVerif.Script
             try
             {
                 UInt16 tmp;
-                List<UInt16> tmpList;
+                IReadOnlyList<UInt16> tmpList;
 
                 PublicCmd.Instance.Start(inIpAddress);
                 PublicCmd.Instance.SetCan(500, out tmp);
@@ -140,9 +140,9 @@ namespace EmVerif.Script
             }
         }
 
-        private List<UserDataFromEcuStructure> GetUserDataFromEcu()
+        private IReadOnlyList<UserDataFromEcuStructure> GetUserDataFromEcu()
         {
-            List<UserDataFromEcu> userDataFromEcuList = PublicCmd.Instance.GetUserData();
+            IReadOnlyList<UserDataFromEcu> userDataFromEcuList = PublicCmd.Instance.GetUserData();
             List<UserDataFromEcuStructure> userDataFromEcuStructureList = new List<UserDataFromEcuStructure>();
 
             foreach (var userDataFromEcu in userDataFromEcuList)
@@ -160,7 +160,7 @@ namespace EmVerif.Script
             return userDataFromEcuStructureList;
         }
 
-        private void SetTimestamp(List<UserDataFromEcuStructure> inUserDataFromEcuStructureList)
+        private void SetTimestamp(IReadOnlyList<UserDataFromEcuStructure> inUserDataFromEcuStructureList)
         {
             if (inUserDataFromEcuStructureList.Count != 0)
             {
@@ -168,30 +168,33 @@ namespace EmVerif.Script
             }
         }
 
-        private void SetGraph(List<UserDataFromEcuStructure> inUserDataFromEcuStructureList)
+        private void SetGraph(IReadOnlyList<UserDataFromEcuStructure> inUserDataFromEcuStructureList)
         {
-            _State.CurrentInDataList = new List<double>();
-            _State.CurrentMixOutDataList = new List<double>();
-            _State.CurrentThroughOutDataList = new List<double>();
+            List<double> currentInDataList = new List<double>();
+            List<double> currentMixOutDataList = new List<double>();
+            List<double> currentThroughOutDataList = new List<double>();
             foreach (var userDataFromEcuStructure in inUserDataFromEcuStructureList)
             {
                 foreach (var data in userDataFromEcuStructure.InVal)
                 {
-                    _State.CurrentInDataList.Add(((double)data - 32768) / 32768);
+                    currentInDataList.Add(((double)data - 32768) / 32768);
                 }
                 foreach (var data in userDataFromEcuStructure.MixOutVal)
                 {
-                    _State.CurrentMixOutDataList.Add(((double)data - 32768) / 32768);
+                    currentMixOutDataList.Add(((double)data - 32768) / 32768);
                 }
                 foreach (var data in userDataFromEcuStructure.ThroughOutVal)
                 {
-                    _State.CurrentThroughOutDataList.Add(((double)data - 32768) / 32768);
+                    currentThroughOutDataList.Add(((double)data - 32768) / 32768);
                 }
             }
-            _GuiTop.SetGraph(_State.CurrentInDataList, _State.CurrentMixOutDataList, _State.CurrentThroughOutDataList);
+            _State.CurrentInDataList = currentInDataList;
+            _State.CurrentMixOutDataList = currentMixOutDataList;
+            _State.CurrentThroughOutDataList = currentThroughOutDataList;
+            _GuiTop.SetGraph(currentInDataList, currentMixOutDataList, currentThroughOutDataList);
         }
 
-        private void SetLoadBar(List<UserDataFromEcuStructure> inUserDataFromEcuStructureList)
+        private void SetLoadBar(IReadOnlyList<UserDataFromEcuStructure> inUserDataFromEcuStructureList)
         {
             _GuiTop.SetLoadBar(new List<double>() { _MaxLoad, _CurLoad });
         }
@@ -398,13 +401,13 @@ namespace EmVerif.Script
     public class ControllerState
     {
         public UserDataToEcuStructure UserDataToEcuStructure;
-        public List<UserDataFromEcuStructure> UserDataFromEcuStructureList;
+        public IReadOnlyList<UserDataFromEcuStructure> UserDataFromEcuStructureList;
         public string CurrentState;
         public UInt32 TimestampMs;
         public Dictionary<string, double> VariableDict;
-        public List<double> CurrentInDataList;
-        public List<double> CurrentMixOutDataList;
-        public List<double> CurrentThroughOutDataList;
+        public IReadOnlyList<double> CurrentInDataList;
+        public IReadOnlyList<double> CurrentMixOutDataList;
+        public IReadOnlyList<double> CurrentThroughOutDataList;
         public string[] SineHzRef;
         public string[] SineGainRef;
         public string[] SinePhaseRef;

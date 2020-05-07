@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace EmVerif.Gui.Chart
+namespace EmVerif.Gui.Graph
 {
     public partial class PublicGraphs : UserControl
     {
@@ -24,7 +24,7 @@ namespace EmVerif.Gui.Chart
             tm_UpdateCharts.Start();
         }
 
-        public void Set(List<double> inInDataList, List<double> inMixOutDataList, List<double> inThroughOutDataList)
+        public void Set(IReadOnlyList<double> inInDataList, IReadOnlyList<double> inMixOutDataList, IReadOnlyList<double> inThroughOutDataList)
         {
             lock(_dataLock)
             {
