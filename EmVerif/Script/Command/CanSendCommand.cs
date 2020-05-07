@@ -55,7 +55,7 @@ namespace EmVerif.Script.Command
 
         public CanSendCommand(
             UInt32 inSendCanId,
-            List<Byte> inSendDataList,
+            IReadOnlyList<Byte> inSendDataList,
             PublicApis.CanDataMask inDataMask,
             UInt32 inResponseCanId,
             string inNextState
@@ -82,7 +82,7 @@ namespace EmVerif.Script.Command
 
         public CanSendCommand(
             UInt32 inSendCanId,
-            List<Byte> inSendDataList,
+            IReadOnlyList<Byte> inSendDataList,
             PublicApis.CanDataMask inDataMask,
             UInt32 inResponseCanId,
             double inRepeatTime,
@@ -257,14 +257,18 @@ namespace EmVerif.Script.Command
             return foundFlag;
         }
 
-        private UInt64 ConvertToUInt64(List<Byte> inDataList)
+        private UInt64 ConvertToUInt64(IReadOnlyList<Byte> inDataList)
         {
             UInt64 ret = 0;
             Int32 lShift = 56;
 
             if (inDataList.Count <= 8)
             {
-                inDataList.ForEach(data => { ret = ret | ((UInt64)data << lShift); lShift = lShift - 8; });
+                foreach (var data in inDataList)
+                {
+                    ret = ret | ((UInt64)data << lShift);
+                    lShift = lShift - 8;
+                }
             }
 
             return ret;

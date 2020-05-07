@@ -32,13 +32,19 @@
             this.publicGraphs1 = new EmVerif.Gui.Graph.PublicGraphs();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.publicLoadBar1 = new EmVerif.Gui.Graph.PublicLoadBar();
+            this.splitContainer3 = new System.Windows.Forms.SplitContainer();
+            this.publicVariableView1 = new EmVerif.Gui.Variable.PublicVariableView();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
+            this.splitContainer3.Panel1.SuspendLayout();
+            this.splitContainer3.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -78,6 +84,10 @@
             // splitContainer2.Panel1
             // 
             this.splitContainer2.Panel1.Controls.Add(this.publicLoadBar1);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.splitContainer3);
             this.splitContainer2.Size = new System.Drawing.Size(419, 621);
             this.splitContainer2.SplitterDistance = 93;
             this.splitContainer2.TabIndex = 0;
@@ -89,6 +99,28 @@
             this.publicLoadBar1.Name = "publicLoadBar1";
             this.publicLoadBar1.Size = new System.Drawing.Size(419, 93);
             this.publicLoadBar1.TabIndex = 0;
+            // 
+            // splitContainer3
+            // 
+            this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer3.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer3.Name = "splitContainer3";
+            this.splitContainer3.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer3.Panel1
+            // 
+            this.splitContainer3.Panel1.Controls.Add(this.publicVariableView1);
+            this.splitContainer3.Size = new System.Drawing.Size(419, 524);
+            this.splitContainer3.SplitterDistance = 322;
+            this.splitContainer3.TabIndex = 0;
+            // 
+            // publicVariableView1
+            // 
+            this.publicVariableView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.publicVariableView1.Location = new System.Drawing.Point(0, 0);
+            this.publicVariableView1.Name = "publicVariableView1";
+            this.publicVariableView1.Size = new System.Drawing.Size(419, 322);
+            this.publicVariableView1.TabIndex = 0;
             // 
             // GuiTop
             // 
@@ -104,8 +136,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
+            this.splitContainer3.Panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
+            this.splitContainer3.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -116,5 +152,7 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private Graph.PublicLoadBar publicLoadBar1;
+        private System.Windows.Forms.SplitContainer splitContainer3;
+        private Variable.PublicVariableView publicVariableView1;
     }
 }

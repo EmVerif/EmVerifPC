@@ -76,7 +76,7 @@ namespace EmVerif.Script
         public class SetVar
         {
             public string VarName { get; set; }
-            public double Value { get; set; }
+            public Decimal Value { get; set; }
 
             public SetVar()
             {

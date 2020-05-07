@@ -28,5 +28,15 @@ namespace EmVerif.Gui
         {
             publicLoadBar1.Set(inDataList);
         }
+
+        public void SetVariable(Dictionary<string, Decimal> inNameToValueDic)
+        {
+            publicVariableView1.Set(inNameToValueDic);
+        }
+
+        public IReadOnlyDictionary<string, Decimal> GetUpdatedValue()
+        {
+            return publicVariableView1.GetUpdatedValue();
+        }
     }
 }

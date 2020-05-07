@@ -124,6 +124,7 @@ namespace EmVerif.Script
                 SetTimestamp(_State.UserDataFromEcuStructureList);
                 SetGraph(_State.UserDataFromEcuStructureList);
                 SetLoadBar(_State.UserDataFromEcuStructureList);
+                SetVariable(_State.VariableDict);
                 nextState = ExecCmd();
                 ConvertVariable();
                 PostProcess(nextState);
@@ -197,6 +198,17 @@ namespace EmVerif.Script
         private void SetLoadBar(IReadOnlyList<UserDataFromEcuStructure> inUserDataFromEcuStructureList)
         {
             _GuiTop.SetLoadBar(new List<double>() { _MaxLoad, _CurLoad });
+        }
+
+        private void SetVariable(Dictionary<string, decimal> ioVariableDict)
+        {
+            var updatedValueDict = _GuiTop.GetUpdatedValue();
+
+            foreach (var varName in updatedValueDict.Keys)
+            {
+                ioVariableDict[varName] = updatedValueDict[varName];
+            }
+            _GuiTop.SetVariable(ioVariableDict);
         }
 
         private string ExecCmd()
@@ -404,7 +416,7 @@ namespace EmVerif.Script
         public IReadOnlyList<UserDataFromEcuStructure> UserDataFromEcuStructureList;
         public string CurrentState;
         public UInt32 TimestampMs;
-        public Dictionary<string, double> VariableDict;
+        public Dictionary<string, Decimal> VariableDict;
         public IReadOnlyList<double> CurrentInDataList;
         public IReadOnlyList<double> CurrentMixOutDataList;
         public IReadOnlyList<double> CurrentThroughOutDataList;
@@ -420,7 +432,7 @@ namespace EmVerif.Script
             UserDataToEcuStructure = new UserDataToEcuStructure();
             CurrentState = BootStr;
             TimestampMs = 0;
-            VariableDict = new Dictionary<string, double>();
+            VariableDict = new Dictionary<string, Decimal>();
             CurrentInDataList = new List<double>();
             CurrentMixOutDataList = new List<double>();
             CurrentThroughOutDataList = new List<double>();

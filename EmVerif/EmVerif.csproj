@@ -254,6 +254,18 @@
     <Compile Include="Gui\GuiTop.Designer.cs">
       <DependentUpon>GuiTop.cs</DependentUpon>
     </Compile>
+    <Compile Include="Gui\Variable\OneCell.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Gui\Variable\OneCell.Designer.cs">
+      <DependentUpon>OneCell.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gui\Variable\PublicVariableView.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Gui\Variable\PublicVariableView.Designer.cs">
+      <DependentUpon>PublicVariableView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Script\Command\CanSendCommand.cs" />
     <Compile Include="Script\Command\GetWaveCommand.cs" />
     <Compile Include="Script\PublicApis.cs" />
@@ -302,6 +314,12 @@
     <EmbeddedResource Include="Gui\GuiTop.resx">
       <DependentUpon>GuiTop.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Gui\Variable\OneCell.resx">
+      <DependentUpon>OneCell.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gui\Variable\PublicVariableView.resx">
+      <DependentUpon>PublicVariableView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -319,8 +337,6 @@
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Gui\Variable\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
