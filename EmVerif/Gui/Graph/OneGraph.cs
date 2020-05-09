@@ -21,7 +21,6 @@ namespace EmVerif.Gui.Graph
         private List<double> _SetDataList = new List<double>();
         private Boolean _SetDataListUpdate = false;
         private IReadOnlyList<double> _DataForSyncList = new List<double>();
-        private Boolean _DataForSyncListUpdate = false;
 
         public OneGraph()
         {
@@ -58,7 +57,6 @@ namespace EmVerif.Gui.Graph
             if(_SetDataListUpdate)
             {
                 _DataForSyncList = new List<double>(_SetDataList);
-                _DataForSyncListUpdate = true;
             }
             _SetDataListUpdate = false;
         }
@@ -69,21 +67,17 @@ namespace EmVerif.Gui.Graph
             Int32 col = 0;
             Int32 row = 1;
 
-            if (_DataForSyncListUpdate)
+            foreach (double data in _DataForSyncList)
             {
-                foreach (double data in _DataForSyncList)
+                _DataSet.Tables[0].Rows[col][row] = data;
+                row++;
+                if (row > _ChNum)
                 {
-                    _DataSet.Tables[0].Rows[col][row] = data;
-                    row++;
-                    if (row > _ChNum)
-                    {
-                        row = 1;
-                        col++;
-                    }
+                    row = 1;
+                    col++;
                 }
-                chart_FastLine.DataBind();
             }
-            _DataForSyncListUpdate = false;
+            chart_FastLine.DataBind();
         }
 
         private void GenerateData()

@@ -14,6 +14,7 @@ namespace EmVerif.Gui.Variable
     {
         private object _NameToValueDictLock = new object();
         private Dictionary<string, Decimal> _NameToValueDict = new Dictionary<string, Decimal>();
+        private Dictionary<string, string> _NameToFormulaDict = new Dictionary<string, string>();
         private Dictionary<string, Decimal> _PrevNameToValueDict = new Dictionary<string, Decimal>();
         private Dictionary<string, OneCell> _NameToCellDict = new Dictionary<string, OneCell>();
 
@@ -40,21 +41,24 @@ namespace EmVerif.Gui.Variable
             return ret;
         }
 
-        public void Set(Dictionary<string, Decimal> inNameToValueDic)
+        public void Set(Dictionary<string, Decimal> inNameToValueDic, Dictionary<string, string> inNameToFormulaDic)
         {
             lock (_NameToValueDictLock)
             {
-                _NameToValueDict = inNameToValueDic;
+                _NameToValueDict = new Dictionary<string, decimal>(inNameToValueDic);
+                _NameToFormulaDict = new Dictionary<string, string>(inNameToFormulaDic);
             }
         }
 
         private void tm_UpdateVariableView_Tick(object sender, EventArgs e)
         {
             Dictionary<string, Decimal> nameToValueDict;
+            Dictionary<string, string> nameToFormulaDict;
 
             lock (_NameToValueDictLock)
             {
-                nameToValueDict = new Dictionary<string, decimal>(_NameToValueDict);
+                nameToValueDict = _NameToValueDict;
+                nameToFormulaDict = _NameToFormulaDict;
             }
 
             foreach (var varName in nameToValueDict.Keys)
@@ -63,14 +67,29 @@ namespace EmVerif.Gui.Variable
                 {
                     OneCell oneCell = new OneCell();
 
+                    if (nameToFormulaDict.ContainsKey(varName))
+                    {
+                        oneCell.tb_Value.ReadOnly = true;
+                        oneCell.tb_Value.Text = nameToValueDict[varName].ToString() + @"(" + nameToFormulaDict[varName] + @")";
+                    }
+                    else
+                    {
+                        oneCell.tb_Value.Text = nameToValueDict[varName].ToString();
+                    }
                     oneCell.tb_VarName.Text = varName;
-                    oneCell.tb_Value.Text = nameToValueDict[varName].ToString();
                     flowLayoutPanel1.Controls.Add(oneCell);
                     _NameToCellDict.Add(varName, oneCell);
                 }
                 else if (_PrevNameToValueDict[varName] != nameToValueDict[varName])
                 {
-                    _NameToCellDict[varName].tb_Value.Text = nameToValueDict[varName].ToString();
+                    if (nameToFormulaDict.ContainsKey(varName))
+                    {
+                        _NameToCellDict[varName].tb_Value.Text = nameToValueDict[varName].ToString() + @"(" + nameToFormulaDict[varName] + @")";
+                    }
+                    else
+                    {
+                        _NameToCellDict[varName].tb_Value.Text = nameToValueDict[varName].ToString();
+                    }
                 }
             }
             _PrevNameToValueDict = nameToValueDict;

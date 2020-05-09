@@ -57,6 +57,11 @@ namespace EmVerif
             MainWindowDataContext.Instance.ClickStartButton(roslynCodeEditor.Text, (IPAddress)comboBox.SelectedItem);
             button.IsEnabled = true;
         }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            MainWindowDataContext.Instance.CloseWindow();
+        }
     }
 
     class MainWindowDataContext : INotifyPropertyChanged
@@ -98,6 +103,14 @@ namespace EmVerif
             else
             {
                 StartScript(inRoslynText, inIpAddress);
+            }
+        }
+
+        public void CloseWindow()
+        {
+            if (ButtonText == _StopStr)
+            {
+                StopScript(this, new EventArgs());
             }
         }
 

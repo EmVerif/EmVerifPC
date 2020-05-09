@@ -76,12 +76,27 @@ namespace EmVerif.Script
         public class SetVar
         {
             public string VarName { get; set; }
+        }
+
+        public class SetConstVar : SetVar
+        {
             public Decimal Value { get; set; }
 
-            public SetVar()
+            public SetConstVar()
             {
                 VarName = "";
                 Value = 0;
+            }
+        }
+
+        public class SetFormulaVar : SetVar
+        {
+            public string Formula { get; set; }
+
+            public SetFormulaVar()
+            {
+                VarName = "";
+                Formula = "";
             }
         }
 

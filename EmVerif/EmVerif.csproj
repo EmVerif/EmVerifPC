@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{047402BA-75EB-4186-B8A7-207BBC5BFC08}</ProjectGuid>
+    <ProjectGuid>{EAD28B44-8F7A-4B6D-B969-79CB761D45AE}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>EmVerif</RootNamespace>
     <AssemblyName>EmVerif</AssemblyName>
@@ -14,7 +14,6 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -34,9 +33,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject>EmVerif.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Esent.Interop, Version=1.9.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -194,6 +190,7 @@
     </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Windows.Forms.DataVisualization.Design" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -217,18 +214,52 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CustomRoslynHost.cs" />
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gui\GuiTop.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gui\GuiTop.Designer.cs">
+      <DependentUpon>GuiTop.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gui\Log\PublicLog.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Gui\Log\PublicLog.Designer.cs">
+      <DependentUpon>PublicLog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Script\Command\CanSendCommand.cs" />
+    <Compile Include="Script\Command\GetWaveCommand.cs" />
+    <Compile Include="Script\Command\ICommand.cs" />
+    <Compile Include="Script\Command\SetCommand.cs" />
+    <Compile Include="Script\Command\WaitCommand.cs" />
+    <Compile Include="Script\PublicApis.cs" />
+    <Compile Include="Script\PublicConfig.cs" />
+    <Compile Include="Script\PublicController.cs" />
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Communication\EtherCom.cs" />
-    <Compile Include="Communication\PublicConfig.cs" />
     <Compile Include="Communication\InternalCmd.cs" />
     <Compile Include="Communication\MmTimer.cs" />
     <Compile Include="Communication\PublicCmd.cs" />
+    <Compile Include="Communication\PublicConfig.cs" />
     <Compile Include="Communication\S3Analyzer.cs" />
     <Compile Include="Gui\Graph\OneGraph.cs">
       <SubType>UserControl</SubType>
@@ -248,12 +279,6 @@
     <Compile Include="Gui\Graph\PublicLoadBar.Designer.cs">
       <DependentUpon>PublicLoadBar.cs</DependentUpon>
     </Compile>
-    <Compile Include="Gui\GuiTop.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Gui\GuiTop.Designer.cs">
-      <DependentUpon>GuiTop.cs</DependentUpon>
-    </Compile>
     <Compile Include="Gui\Variable\OneCell.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -266,23 +291,6 @@
     <Compile Include="Gui\Variable\PublicVariableView.Designer.cs">
       <DependentUpon>PublicVariableView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Script\Command\CanSendCommand.cs" />
-    <Compile Include="Script\Command\GetWaveCommand.cs" />
-    <Compile Include="Script\PublicApis.cs" />
-    <Compile Include="Script\PublicConfig.cs" />
-    <Compile Include="Script\PublicController.cs" />
-    <Compile Include="Script\Command\ICommand.cs" />
-    <Compile Include="Script\Command\SetCommand.cs" />
-    <Compile Include="Script\Command\WaitCommand.cs" />
-    <Page Include="MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CustomRoslynHost.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -313,6 +321,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Gui\GuiTop.resx">
       <DependentUpon>GuiTop.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Gui\Log\PublicLog.resx">
+      <DependentUpon>PublicLog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Gui\Variable\OneCell.resx">
       <DependentUpon>OneCell.cs</DependentUpon>

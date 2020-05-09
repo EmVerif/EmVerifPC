@@ -223,7 +223,7 @@ namespace EmVerif.Script.Command
 
                     if (_DataMask != null)
                     {
-                        sendData = ConvertVariable(ioState, _DataMask.RefVar, sendData, _DataMask.Mask, _DataMask.LShift);
+                        sendData = ConvertFormula(ioState, _DataMask.RefVar, sendData, _DataMask.Mask, _DataMask.LShift);
                     }
                     ioState.UserDataToEcuStructure.CanSendData[sendNum].CanId = _SendCanId;
                     ioState.UserDataToEcuStructure.CanSendData[sendNum].IsExtendedId = 0;
@@ -286,7 +286,7 @@ namespace EmVerif.Script.Command
             return retList.ToArray();
         }
 
-        private UInt64 ConvertVariable(ControllerState ioState, string inOrgFormula, UInt64 inOrgData, UInt64 inMask, Int32 inLShift)
+        private UInt64 ConvertFormula(ControllerState ioState, string inOrgFormula, UInt64 inOrgData, UInt64 inMask, Int32 inLShift)
         {
             DataTable dt = new DataTable();
             var varNameMatches = _VarNameRegex.Matches(inOrgFormula);

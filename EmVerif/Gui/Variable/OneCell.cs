@@ -22,8 +22,11 @@ namespace EmVerif.Gui.Variable
 
         private void tb_Value_Leave(object sender, EventArgs e)
         {
-            tb_Value.BackColor = Color.Red;
-            ValueChangedFlag = true;
+            if (!tb_Value.ReadOnly)
+            {
+                tb_Value.BackColor = Color.Red;
+                ValueChangedFlag = true;
+            }
         }
     }
 }

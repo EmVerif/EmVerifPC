@@ -169,7 +169,7 @@ namespace EmVerif.Script.Command
 
             CheckSignalParam();
             //CheckVirtualPathParam(); VirtualPathクラスのコンストラクタで実施済み。
-            //CheckSetVarParam(); チェックすべきパラメータが無い。
+            CheckSetVarParam();
         }
 
         public void Boot(ControllerState inState)
@@ -233,6 +233,24 @@ namespace EmVerif.Script.Command
                         throw new Exception(
                             "不明な信号タイプ⇒" + _Signal.GetType().Name + "\n" +
                             "使用可能なクラスは、FixWave/RefWave/WhiteNoise。"
+                        );
+                }
+            }
+        }
+
+        private void CheckSetVarParam()
+        {
+            if (_SetVar != null)
+            {
+                switch (_SetVar.GetType().Name)
+                {
+                    case "SetConstVar":
+                    case "SetFormulaVar":
+                        break;
+                    default:
+                        throw new Exception(
+                            "不明な信号タイプ⇒" + _SetVar.GetType().Name + "\n" +
+                            "使用可能なクラスは、SetConstVar/SetFormulaVar。"
                         );
                 }
             }
@@ -320,7 +338,17 @@ namespace EmVerif.Script.Command
         {
             if (_SetVar != null)
             {
-                ioState.VariableDict[_SetVar.VarName] = _SetVar.Value;
+                switch (_SetVar.GetType().Name)
+                {
+                    case "SetConstVar":
+                        ioState.VariableDict[_SetVar.VarName] = ((PublicApis.SetConstVar)_SetVar).Value;
+                        break;
+                    case "SetFormulaVar":
+                        ioState.VariableFormulaDict[_SetVar.VarName] = ((PublicApis.SetFormulaVar)_SetVar).Formula;
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }

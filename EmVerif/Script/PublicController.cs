@@ -121,12 +121,12 @@ namespace EmVerif.Script
                 string nextState;
 
                 _State.UserDataFromEcuStructureList = GetUserDataFromEcu();
-                SetTimestamp(_State.UserDataFromEcuStructureList);
-                SetGraph(_State.UserDataFromEcuStructureList);
-                SetLoadBar(_State.UserDataFromEcuStructureList);
-                SetVariable(_State.VariableDict);
+                SetTimestamp();
+                SetGraph();
+                SetLoadBar();
+                SetVariable();
                 nextState = ExecCmd();
-                ConvertVariable();
+                ConvertExpression();
                 PostProcess(nextState);
 
                 _State.CurrentState = nextState;
@@ -161,20 +161,20 @@ namespace EmVerif.Script
             return userDataFromEcuStructureList;
         }
 
-        private void SetTimestamp(IReadOnlyList<UserDataFromEcuStructure> inUserDataFromEcuStructureList)
+        private void SetTimestamp()
         {
-            if (inUserDataFromEcuStructureList.Count != 0)
+            if (_State.UserDataFromEcuStructureList.Count != 0)
             {
-                _State.TimestampMs = inUserDataFromEcuStructureList.Last().Timestamp;
+                _State.TimestampMs = _State.UserDataFromEcuStructureList.Last().Timestamp;
             }
         }
 
-        private void SetGraph(IReadOnlyList<UserDataFromEcuStructure> inUserDataFromEcuStructureList)
+        private void SetGraph()
         {
             List<double> currentInDataList = new List<double>();
             List<double> currentMixOutDataList = new List<double>();
             List<double> currentThroughOutDataList = new List<double>();
-            foreach (var userDataFromEcuStructure in inUserDataFromEcuStructureList)
+            foreach (var userDataFromEcuStructure in _State.UserDataFromEcuStructureList)
             {
                 foreach (var data in userDataFromEcuStructure.InVal)
                 {
@@ -195,20 +195,20 @@ namespace EmVerif.Script
             _GuiTop.SetGraph(currentInDataList, currentMixOutDataList, currentThroughOutDataList);
         }
 
-        private void SetLoadBar(IReadOnlyList<UserDataFromEcuStructure> inUserDataFromEcuStructureList)
+        private void SetLoadBar()
         {
             _GuiTop.SetLoadBar(new List<double>() { _MaxLoad, _CurLoad });
         }
 
-        private void SetVariable(Dictionary<string, decimal> ioVariableDict)
+        private void SetVariable()
         {
             var updatedValueDict = _GuiTop.GetUpdatedValue();
 
             foreach (var varName in updatedValueDict.Keys)
             {
-                ioVariableDict[varName] = updatedValueDict[varName];
+                _State.VariableDict[varName] = updatedValueDict[varName];
             }
-            _GuiTop.SetVariable(ioVariableDict);
+            _GuiTop.SetVariable(_State.VariableDict, _State.VariableFormulaDict);
         }
 
         private string ExecCmd()
@@ -234,29 +234,55 @@ namespace EmVerif.Script
             return nextState;
         }
 
-        private void ConvertVariable()
+        private void ConvertExpression()
         {
-            var varNameRegex = new Regex(@"(?<VarName>[a-zA-Z_]\w*)");
+            ConvertFormulaVar();
+            ConvertRefWave();
+        }
+
+        private void ConvertRefWave()
+        {
             DataTable dt = new DataTable();
 
             for (int idx = 0; idx < (PublicConfig.ThroughOutChNum * PublicConfig.SignalBaseNum); idx++)
             {
-                if (_State.SineGainRef[idx] != null)
+                ConvertRefWaveElement(_State.SineGainRef[idx], ref _State.UserDataToEcuStructure.SineGain[idx]);
+                ConvertRefWaveElement(_State.SineHzRef[idx], ref _State.UserDataToEcuStructure.SineHz[idx]);
+                ConvertRefWaveElement(_State.SinePhaseRef[idx], ref _State.UserDataToEcuStructure.SinePhase[idx]);
+            }
+        }
+
+        private void ConvertRefWaveElement(string inRefName, ref float ioElementValue)
+        {
+            if (inRefName != null)
+            {
+                if (_State.VariableDict.ContainsKey(inRefName))
                 {
-                    _State.UserDataToEcuStructure.SineGain[idx] = (float)ConvertVariableCore(_State.SineGainRef[idx]);
+                    ioElementValue = (float)_State.VariableDict[inRefName];
                 }
-                if (_State.SineHzRef[idx] != null)
+                else
                 {
-                    _State.UserDataToEcuStructure.SineHz[idx] = (float)ConvertVariableCore(_State.SineHzRef[idx]);
-                }
-                if (_State.SinePhaseRef[idx] != null)
-                {
-                    _State.UserDataToEcuStructure.SinePhase[idx] = (float)ConvertVariableCore(_State.SinePhaseRef[idx]);
+                    try
+                    {
+                        ioElementValue = (float)Convert.ToDouble(inRefName);
+                    }
+                    catch
+                    {
+                        throw new Exception("不明な文字列⇒" + inRefName);
+                    }
                 }
             }
         }
 
-        private double ConvertVariableCore(string inOrgFormula)
+        private void ConvertFormulaVar()
+        {
+            foreach (var varName in _State.VariableFormulaDict.Keys)
+            {
+                _State.VariableDict[varName] = (Decimal)ConvertFormula(_State.VariableFormulaDict[varName]);
+            }
+        }
+
+        private double ConvertFormula(string inOrgFormula)
         {
             var varNameRegex = new Regex(@"(?<VarName>[a-zA-Z_]\w*)");
             DataTable dt = new DataTable();
@@ -269,11 +295,18 @@ namespace EmVerif.Script
                 {
                     string varName = (string)varNameMatch.Groups["VarName"].Value;
 
-                    resultStr = resultStr.Replace(varName, _State.VariableDict[varName].ToString());
+                    try
+                    {
+                        resultStr = resultStr.Replace(varName, _State.VariableDict[varName].ToString());
+                    }
+                    catch
+                    {
+                        throw new Exception("不明な文字列⇒" + varName);
+                    }
                 }
             }
-            return Convert.ToDouble(dt.Compute(resultStr, ""));
 
+            return Convert.ToDouble(dt.Compute(resultStr, ""));
         }
 
         private void PostProcess(string inNextState)
@@ -417,6 +450,7 @@ namespace EmVerif.Script
         public string CurrentState;
         public UInt32 TimestampMs;
         public Dictionary<string, Decimal> VariableDict;
+        public Dictionary<string, string> VariableFormulaDict;
         public IReadOnlyList<double> CurrentInDataList;
         public IReadOnlyList<double> CurrentMixOutDataList;
         public IReadOnlyList<double> CurrentThroughOutDataList;
@@ -433,6 +467,7 @@ namespace EmVerif.Script
             CurrentState = BootStr;
             TimestampMs = 0;
             VariableDict = new Dictionary<string, Decimal>();
+            VariableFormulaDict = new Dictionary<string, string>();
             CurrentInDataList = new List<double>();
             CurrentMixOutDataList = new List<double>();
             CurrentThroughOutDataList = new List<double>();

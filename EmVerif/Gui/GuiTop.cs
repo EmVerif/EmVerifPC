@@ -29,9 +29,9 @@ namespace EmVerif.Gui
             publicLoadBar1.Set(inDataList);
         }
 
-        public void SetVariable(Dictionary<string, Decimal> inNameToValueDic)
+        public void SetVariable(Dictionary<string, Decimal> inNameToValueDic, Dictionary<string, string> inNameToFormulaDic)
         {
-            publicVariableView1.Set(inNameToValueDic);
+            publicVariableView1.Set(inNameToValueDic, inNameToFormulaDic);
         }
 
         public IReadOnlyDictionary<string, Decimal> GetUpdatedValue()
