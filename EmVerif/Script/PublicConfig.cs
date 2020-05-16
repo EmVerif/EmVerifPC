@@ -12,5 +12,6 @@ namespace EmVerif.Script
         public const Int32 MixOutChNum = 6;
         public const Int32 ThroughOutChNum = 12;
         public const Int32 SignalBaseNum = 3;
+        public const UInt32 SamplingTimeMSec = 10;
     }
 }

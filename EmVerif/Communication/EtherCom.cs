@@ -81,6 +81,9 @@ namespace EmVerif.Communication
 
         public void Send(Byte[] inSendData)
         {
+            //IPEndPoint serverEP = new IPEndPoint(IPAddress.Parse(_ServerIpAddr), _ServerPort);
+
+            //_UdpClient.BeginSend(inSendData, inSendData.Length, serverEP, null, null);
             _UdpClient.Send(inSendData, inSendData.Length, _ServerIpAddr, _ServerPort);
         }
 

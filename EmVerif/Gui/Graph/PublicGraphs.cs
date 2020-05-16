@@ -20,8 +20,6 @@ namespace EmVerif.Gui.Graph
             In6ChChart.Init("In " + EmVerif.Script.PublicConfig.InChNum + "Ch", EmVerif.Script.PublicConfig.InChNum);
             MixOut4ChChart.Init("MixOut " + EmVerif.Script.PublicConfig.MixOutChNum + "Ch", EmVerif.Script.PublicConfig.MixOutChNum);
             ThroughOut12ChChart.Init("ThroughOut " + EmVerif.Script.PublicConfig.ThroughOutChNum + "Ch", EmVerif.Script.PublicConfig.ThroughOutChNum);
-            tm_UpdateCharts.Interval = 100;
-            tm_UpdateCharts.Start();
         }
 
         public void Set(IReadOnlyList<double> inInDataList, IReadOnlyList<double> inMixOutDataList, IReadOnlyList<double> inThroughOutDataList)
@@ -34,7 +32,7 @@ namespace EmVerif.Gui.Graph
             }
         }
 
-        private void Tm_UpdateCharts_Tick(object sender, EventArgs e)
+        public void UpdateGraphs()
         {
             lock(_dataLock)
             {

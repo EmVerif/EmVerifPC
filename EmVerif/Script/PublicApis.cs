@@ -12,50 +12,31 @@ namespace EmVerif.Script
         public class Signal
         {
             public Byte Ch { get; set; }
-        }
-
-        public class FixWave : Signal
-        {
-            public Byte Id { get; set; }
-            public float Freq { get; set; }
-            public float Phase { get; set; }
-            public float Gain { get; set; }
-
-            public FixWave()
-            {
-                Ch = 0;
-                Id = 0;
-                Freq = 0;
-                Phase = 0;
-                Gain = 0;
-            }
+            public string Gain { get; set; }
         }
 
         public class WhiteNoise : Signal
         {
-            public float Gain { get; set; }
-
             public WhiteNoise()
             {
                 Ch = 0;
-                Gain = 0;
+                Gain = "0";
             }
         }
 
-        public class RefWave : Signal
+        public class SineWave : Signal
         {
             public Byte Id { get; set; }
             public string Freq { get; set; }
-            public string Gain { get; set; }
             public string Phase { get; set; }
 
-            public RefWave()
+            public SineWave()
             {
                 Ch = 0;
                 Id = 0;
-                Freq = "";
-                Gain = "";
-                Phase = "";
+                Freq = "0";
+                Gain = "0";
+                Phase = "0";
             }
         }
 
@@ -100,6 +81,18 @@ namespace EmVerif.Script
             }
         }
 
+        public class SquareWave
+        {
+            public string NumeratorCycle;
+            public string DenominatorCycle;
+
+            public SquareWave()
+            {
+                NumeratorCycle = (UInt16.MaxValue / 2).ToString();
+                DenominatorCycle = UInt16.MaxValue.ToString();
+            }
+        }
+
         public class CanDataMask
         {
             public UInt32 BytePos { get; set; }
@@ -122,11 +115,12 @@ namespace EmVerif.Script
             string Trig,
             Signal Signal = null,
             VirtualPath VirtualPath = null,
+            SquareWave SquareWave = null,
             SetVar SetVar = null,
             string Next = null
         )
         {
-            SetCommand cmd = new SetCommand(inSignal: Signal, inVirtualPath: VirtualPath, inSetVar: SetVar, inNextState: Next);
+            SetCommand cmd = new SetCommand(inSignal: Signal, inVirtualPath: VirtualPath, inSquareWave: SquareWave, inSetVar: SetVar, inNextState: Next);
 
             PublicController.Instance.Register(Trig, cmd);
         }

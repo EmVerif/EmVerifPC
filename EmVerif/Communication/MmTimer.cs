@@ -34,7 +34,7 @@ namespace EmVerif.Communication
             if (timeBeginPeriod(1) == 0)
             {
                 _TimerHandler = TimerProc;
-                _TimerID = timeSetEvent(1, 1, _TimerHandler, UIntPtr.Zero, 1);
+                _TimerID = timeSetEvent(1, 0, _TimerHandler, UIntPtr.Zero, 1);
             }
         }
 

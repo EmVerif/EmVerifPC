@@ -28,13 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.In6ChChart = new EmVerif.Gui.Graph.OneGraph();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.MixOut4ChChart = new EmVerif.Gui.Graph.OneGraph();
             this.ThroughOut12ChChart = new EmVerif.Gui.Graph.OneGraph();
-            this.tm_UpdateCharts = new System.Windows.Forms.Timer(this.components);
+            this.MixOut4ChChart = new EmVerif.Gui.Graph.OneGraph();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -91,14 +89,6 @@
             this.splitContainer2.SplitterDistance = 200;
             this.splitContainer2.TabIndex = 0;
             // 
-            // MixOut4ChChart
-            // 
-            this.MixOut4ChChart.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MixOut4ChChart.Location = new System.Drawing.Point(0, 0);
-            this.MixOut4ChChart.Name = "MixOut4ChChart";
-            this.MixOut4ChChart.Size = new System.Drawing.Size(514, 192);
-            this.MixOut4ChChart.TabIndex = 0;
-            // 
             // ThroughOut12ChChart
             // 
             this.ThroughOut12ChChart.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -107,9 +97,13 @@
             this.ThroughOut12ChChart.Size = new System.Drawing.Size(514, 200);
             this.ThroughOut12ChChart.TabIndex = 0;
             // 
-            // tm_UpdateCharts
+            // MixOut4ChChart
             // 
-            this.tm_UpdateCharts.Tick += new System.EventHandler(this.Tm_UpdateCharts_Tick);
+            this.MixOut4ChChart.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MixOut4ChChart.Location = new System.Drawing.Point(0, 0);
+            this.MixOut4ChChart.Name = "MixOut4ChChart";
+            this.MixOut4ChChart.Size = new System.Drawing.Size(514, 192);
+            this.MixOut4ChChart.TabIndex = 0;
             // 
             // PublicGraphs
             // 
@@ -137,6 +131,5 @@
         private System.Windows.Forms.SplitContainer splitContainer2;
         private OneGraph MixOut4ChChart;
         private OneGraph ThroughOut12ChChart;
-        private System.Windows.Forms.Timer tm_UpdateCharts;
     }
 }

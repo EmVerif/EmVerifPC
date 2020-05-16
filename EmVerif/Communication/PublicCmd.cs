@@ -19,6 +19,27 @@ namespace EmVerif.Communication
                 MmTimer.Instance.OnTimer -= value;
             }
         }
+        public UInt32 PcRecvErrorCounter
+        {
+            get
+            {
+                return InternalCmd.Instance.PcRecvErrorCounter;
+            }
+        }
+        public UInt32 EcuRecvErrorCounter
+        {
+            get
+            {
+                return InternalCmd.Instance.EcuRecvErrorCounter;
+            }
+        }
+        public Boolean EcuActive
+        {
+            get
+            {
+                return InternalCmd.Instance.EcuActive;
+            }
+        }
 
         private Boolean[] _AckRecvFlag = new Boolean[Byte.MaxValue];
         private IReadOnlyList<byte>[] _RecvDataList = new List<byte>[Byte.MaxValue];
@@ -115,20 +136,13 @@ namespace EmVerif.Communication
             );
         }
 
-        public void SetSpi(IReadOnlyList<Byte> inDataLen, IReadOnlyList<UInt16> inKbpsList, IReadOnlyList<Boolean> inIs5khzList, out IReadOnlyList<UInt16> outKbpsList)
+        public void SetSpi(Byte inDataLen, UInt16 inKbps, Boolean inIs5khz, out UInt16 outKbps)
         {
             List<Byte> data = new List<byte>();
 
-            List<UInt16> kbpsList = new List<ushort>();
-            if ((inKbpsList.Count != 2) || (inIs5khzList.Count != 2))
-            {
-                throw new Exception("Lack of SPI parameter.");
-            }
-            data.Add((Byte)((inKbpsList[0] >> 8) & 0xFF));
-            data.Add((Byte)(inKbpsList[0] & 0xFF));
-            data.Add((Byte)((inKbpsList[1] >> 8) & 0xFF));
-            data.Add((Byte)(inKbpsList[1] & 0xFF));
-            if (inIs5khzList[0])
+            data.Add((Byte)((inKbps >> 8) & 0xFF));
+            data.Add((Byte)(inKbps & 0xFF));
+            if (inIs5khz)
             {
                 data.Add(1);
             }
@@ -136,28 +150,14 @@ namespace EmVerif.Communication
             {
                 data.Add(0);
             }
-            if (inIs5khzList[1])
-            {
-                data.Add(1);
-            }
-            else
-            {
-                data.Add(0);
-            }
-            data.Add(inDataLen[0]);
-            data.Add(inDataLen[1]);
+            data.Add(inDataLen);
             _AckRecvFlag[(Byte)InternalCmd.PublicCmdId.SetSpiCmdId] = false;
             InternalCmd.Instance.ExecCmd(InternalCmd.PublicCmdId.SetSpiCmdId, data, RecvSetSpiCmdAck);
             WaitSetSpiCmdAck();
-            kbpsList.Add((UInt16)(
+            outKbps = (UInt16)(
                 (UInt16)_RecvDataList[(Byte)InternalCmd.PublicCmdId.SetSpiCmdId][0] * 256 +
                 (UInt16)_RecvDataList[(Byte)InternalCmd.PublicCmdId.SetSpiCmdId][1]
-            ));
-            kbpsList.Add((UInt16)(
-                (UInt16)_RecvDataList[(Byte)InternalCmd.PublicCmdId.SetSpiCmdId][2] * 256 +
-                (UInt16)_RecvDataList[(Byte)InternalCmd.PublicCmdId.SetSpiCmdId][3]
-            ));
-            outKbpsList = kbpsList;
+            );
         }
 
         public void End()
@@ -260,7 +260,7 @@ namespace EmVerif.Communication
         private void RecvSetSpiCmdAck(IReadOnlyList<byte> inRecvDataList)
         {
             _RecvDataList[(Byte)InternalCmd.PublicCmdId.SetSpiCmdId] = inRecvDataList;
-            if (inRecvDataList.Count >= 4)
+            if (inRecvDataList.Count >= 2)
             {
                 _AckRecvFlag[(Byte)InternalCmd.PublicCmdId.SetSpiCmdId] = true;
             }

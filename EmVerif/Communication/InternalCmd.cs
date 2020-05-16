@@ -22,6 +22,13 @@ namespace EmVerif.Communication
         public static InternalCmd Instance = new InternalCmd();
         public UInt32 PcRecvErrorCounter { get; private set; }
         public UInt32 EcuRecvErrorCounter { get; private set; }
+        public Boolean EcuActive
+        {
+            get
+            {
+                return EtherCom.Instance.GetRecvTaskBusy();
+            }
+        }
 
         private const UInt32 _IfVersion = 0x00000000;
 
@@ -36,7 +43,7 @@ namespace EmVerif.Communication
 
         private UInt32 _AlivePcTimeCounterMSec;
         private UInt32 _DeadEcuTimeCounterMSec;
-        private Boolean _AliveEcuFlag;
+        private Boolean _CheckAliveEcuFlag;
 
         private Dg_Recv[] _RecvEvent = new Dg_Recv[Byte.MaxValue];
 
@@ -55,7 +62,7 @@ namespace EmVerif.Communication
 
             _AlivePcTimeCounterMSec = 0;
             _DeadEcuTimeCounterMSec = 0;
-            _AliveEcuFlag = false;
+            _CheckAliveEcuFlag = false;
 
             for (int idx = 0; idx < _RecvEvent.Length; idx++)
             {
@@ -106,7 +113,7 @@ namespace EmVerif.Communication
                 SendStartCmd();
                 WaitStartCmdAck();
 
-                _AliveEcuFlag = false;
+                _CheckAliveEcuFlag = true;
             }
         }
 
@@ -164,7 +171,7 @@ namespace EmVerif.Communication
             {
                 byte cmd = inRecvData[1];
 
-                _AliveEcuFlag = true;
+                _CheckAliveEcuFlag = true;
                 if (inRecvData[0] != _EcuPcCmdCounter)
                 {
                     PcRecvErrorCounter++;
@@ -214,9 +221,9 @@ namespace EmVerif.Communication
 
         private void DeadEcu_Tick(object sender, EventArgs e)
         {
-            if (_AliveEcuFlag)
+            if (_CheckAliveEcuFlag)
             {
-                _AliveEcuFlag = false;
+                _CheckAliveEcuFlag = false;
                 _DeadEcuTimeCounterMSec = 0;
             }
             else
@@ -225,8 +232,6 @@ namespace EmVerif.Communication
                 if (_DeadEcuTimeCounterMSec > 2000)
                 {
                     End();
-                    // TODO:
-                    //throw new Exception("ECU 停止");
                 }
             }
         }

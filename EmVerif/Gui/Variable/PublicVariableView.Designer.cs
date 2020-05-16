@@ -28,11 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.bu_Set = new System.Windows.Forms.Button();
-            this.tm_UpdateVariableView = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -81,10 +79,6 @@
             this.bu_Set.UseVisualStyleBackColor = true;
             this.bu_Set.Click += new System.EventHandler(this.bu_Set_Click);
             // 
-            // tm_UpdateVariableView
-            // 
-            this.tm_UpdateVariableView.Tick += new System.EventHandler(this.tm_UpdateVariableView_Tick);
-            // 
             // PublicVariableView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -105,6 +99,5 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Button bu_Set;
-        private System.Windows.Forms.Timer tm_UpdateVariableView;
     }
 }

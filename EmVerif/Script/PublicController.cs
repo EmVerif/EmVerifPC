@@ -18,14 +18,13 @@ namespace EmVerif.Script
     public class PublicController
     {
         static public PublicController Instance = new PublicController();
-        public const UInt32 SamplingTimeMSec = 10;
         public event EventHandler EndEvent;
 
         private Dictionary<string, List<ICommand>> _RegistrationListDict = new Dictionary<string, List<ICommand>>();
         private List<ICommand> _ExecList = new List<ICommand>();
         private ControllerState _State = new ControllerState();
 
-        private GuiTop _GuiTop;
+        private GuiTop _GuiTop = null;
         private Task _ExecScript10MsTask;
         private UInt32 _TaskTickCounterMs;
         private double _MaxLoad;
@@ -67,11 +66,10 @@ namespace EmVerif.Script
             try
             {
                 UInt16 tmp;
-                IReadOnlyList<UInt16> tmpList;
 
                 PublicCmd.Instance.Start(inIpAddress);
                 PublicCmd.Instance.SetCan(500, out tmp);
-                PublicCmd.Instance.SetSpi(new List<Byte>() { 2, 1 }, new List<UInt16>() { 5000, 300 }, new List<bool>() { true, true }, out tmpList);
+                PublicCmd.Instance.SetSpi(2, 2000, true, out tmp);
                 PublicCmd.Instance.UploadProg("EmVerifCtrl.srec");
                 PublicCmd.Instance.ProgExec();
             }
@@ -80,12 +78,12 @@ namespace EmVerif.Script
                 PublicCmd.Instance.End();
                 _GuiTop.Close();
                 _GuiTop.Dispose();
+                _GuiTop = null;
                 throw ex;
             }
-            bootCmdList.ForEach((cmd) => cmd.Boot(_State));
-            _ExecList = _ExecList.Union(bootCmdList).ToList();
-            _ExecScript10MsTask = new Task(ExecScript10MsTask);
+            LogManager.Instance.Start(@".\log.txt", _GuiTop);
 
+            _ExecScript10MsTask = new Task(ExecScript10MsTask);
             _TaskTickCounterMs = 0;
             _CurLoad = 0;
             _MaxLoad = 0;
@@ -97,20 +95,25 @@ namespace EmVerif.Script
             PublicCmd.Instance.OnTimer -= BootExecScript1MsTask;
             PublicCmd.Instance.End();
             Finally();
-            _GuiTop.Close();
-            _GuiTop.Dispose();
+            LogManager.Instance.Stop();
+            if (_GuiTop != null)
+            {
+                _GuiTop.Close();
+                _GuiTop.Dispose();
+                _GuiTop = null;
+            }
         }
 
         private void BootExecScript1MsTask(object sender, EventArgs e)
         {
             _TaskTickCounterMs++;
             if (
-                (_TaskTickCounterMs >= SamplingTimeMSec) &&
+                (_TaskTickCounterMs >= PublicConfig.SamplingTimeMSec) &&
                 (_ExecScript10MsTask.Status == TaskStatus.Created)
             )
             {
                 _ExecScript10MsTask.Start();
-                _TaskTickCounterMs -= SamplingTimeMSec;
+                _TaskTickCounterMs -= PublicConfig.SamplingTimeMSec;
             }
         }
 
@@ -118,18 +121,20 @@ namespace EmVerif.Script
         {
             try
             {
-                string nextState;
-
                 _State.UserDataFromEcuStructureList = GetUserDataFromEcu();
                 SetTimestamp();
-                SetGraph();
-                SetLoadBar();
-                SetVariable();
-                nextState = ExecCmd();
-                ConvertExpression();
-                PostProcess(nextState);
 
-                _State.CurrentState = nextState;
+
+                SetGraph();
+                SetVariable();
+                SetCanLog();
+                _GuiTop.SetLoadBar(new List<double>() { _MaxLoad, _CurLoad });
+
+                PreProcess();
+
+                ExecCmd();
+                ConvertExpression();
+                PostProcess();
             }
             catch (Exception ex)
             {
@@ -169,6 +174,22 @@ namespace EmVerif.Script
             }
         }
 
+        private void PreProcess()
+        {
+            if (_State.CurrentState != _State.NextState)
+            {
+                if (_RegistrationListDict.ContainsKey(_State.NextState))
+                {
+                    List<ICommand> bootCmdList = _RegistrationListDict[_State.NextState];
+                    bootCmdList.ForEach((cmd) => cmd.Boot(_State));
+                    _ExecList = _ExecList.Union(bootCmdList).ToList();
+                }
+                _State.CurrentState = _State.NextState;
+                LogManager.Instance.Set(_State.TimestampMs.ToString("D10") + " State: " + _State.CurrentState + " Start");
+                _GuiTop.SetState(_State.CurrentState);
+            }
+        }
+
         private void SetGraph()
         {
             List<double> currentInDataList = new List<double>();
@@ -195,11 +216,6 @@ namespace EmVerif.Script
             _GuiTop.SetGraph(currentInDataList, currentMixOutDataList, currentThroughOutDataList);
         }
 
-        private void SetLoadBar()
-        {
-            _GuiTop.SetLoadBar(new List<double>() { _MaxLoad, _CurLoad });
-        }
-
         private void SetVariable()
         {
             var updatedValueDict = _GuiTop.GetUpdatedValue();
@@ -211,7 +227,38 @@ namespace EmVerif.Script
             _GuiTop.SetVariable(_State.VariableDict, _State.VariableFormulaDict);
         }
 
-        private string ExecCmd()
+        private void SetCanLog()
+        {
+            foreach (var userDataFromEcuStructure in _State.UserDataFromEcuStructureList)
+            {
+                string header = userDataFromEcuStructure.Timestamp.ToString("D10") + " ";
+
+                for (int idx = 0; idx < userDataFromEcuStructure.CanRecvNum; idx++)
+                {
+                    string recvLog = header + "CAN Recv: ";
+
+                    recvLog += "0x" + userDataFromEcuStructure.CanRecvData[idx].CanId.ToString("X3");
+                    for (int byteNo = 0; byteNo < userDataFromEcuStructure.CanRecvData[idx].DataLen; byteNo++)
+                    {
+                        recvLog += " " + userDataFromEcuStructure.CanRecvData[idx].Data[byteNo].ToString("X2");
+                    }
+                    LogManager.Instance.Set(recvLog);
+                }
+                for (int idx = 0; idx < userDataFromEcuStructure.CanSendFinNum; idx++)
+                {
+                    string sendLog = header + "CAN Send: ";
+
+                    sendLog += "0x" + userDataFromEcuStructure.CanSendFinData[idx].CanId.ToString("X3");
+                    for (int byteNo = 0; byteNo < userDataFromEcuStructure.CanSendFinData[idx].DataLen; byteNo++)
+                    {
+                        sendLog += " " + userDataFromEcuStructure.CanSendFinData[idx].Data[byteNo].ToString("X2");
+                    }
+                    LogManager.Instance.Set(sendLog);
+                }
+            }
+        }
+
+        private void ExecCmd()
         {
             string nextState = _State.CurrentState;
 
@@ -230,48 +277,14 @@ namespace EmVerif.Script
                     }
                 }
             }
-
-            return nextState;
+            _State.NextState = nextState;
         }
 
         private void ConvertExpression()
         {
             ConvertFormulaVar();
-            ConvertRefWave();
-        }
-
-        private void ConvertRefWave()
-        {
-            DataTable dt = new DataTable();
-
-            for (int idx = 0; idx < (PublicConfig.ThroughOutChNum * PublicConfig.SignalBaseNum); idx++)
-            {
-                ConvertRefWaveElement(_State.SineGainRef[idx], ref _State.UserDataToEcuStructure.SineGain[idx]);
-                ConvertRefWaveElement(_State.SineHzRef[idx], ref _State.UserDataToEcuStructure.SineHz[idx]);
-                ConvertRefWaveElement(_State.SinePhaseRef[idx], ref _State.UserDataToEcuStructure.SinePhase[idx]);
-            }
-        }
-
-        private void ConvertRefWaveElement(string inRefName, ref float ioElementValue)
-        {
-            if (inRefName != null)
-            {
-                if (_State.VariableDict.ContainsKey(inRefName))
-                {
-                    ioElementValue = (float)_State.VariableDict[inRefName];
-                }
-                else
-                {
-                    try
-                    {
-                        ioElementValue = (float)Convert.ToDouble(inRefName);
-                    }
-                    catch
-                    {
-                        throw new Exception("不明な文字列⇒" + inRefName);
-                    }
-                }
-            }
+            ConvertSignal();
+            ConvertSquareWave();
         }
 
         private void ConvertFormulaVar()
@@ -279,6 +292,52 @@ namespace EmVerif.Script
             foreach (var varName in _State.VariableFormulaDict.Keys)
             {
                 _State.VariableDict[varName] = (Decimal)ConvertFormula(_State.VariableFormulaDict[varName]);
+            }
+        }
+
+        private void ConvertSignal()
+        {
+            DataTable dt = new DataTable();
+
+            for (int idx = 0; idx < (PublicConfig.ThroughOutChNum * PublicConfig.SignalBaseNum); idx++)
+            {
+                if (_State.SineGainRef[idx] != null)
+                {
+                    _State.UserDataToEcuStructure.SineGain[idx] = (float)ConvertFormula(_State.SineGainRef[idx]);
+                }
+                if (_State.SineHzRef[idx] != null)
+                {
+                    _State.UserDataToEcuStructure.SineHz[idx] = (float)ConvertFormula(_State.SineHzRef[idx]);
+                }
+                if (_State.SinePhaseRef[idx] != null)
+                {
+                    _State.UserDataToEcuStructure.SinePhase[idx] = (float)ConvertFormula(_State.SinePhaseRef[idx]);
+                }
+            }
+            for (int idx = 0; idx < PublicConfig.ThroughOutChNum; idx++)
+            {
+                if (_State.WhiteNoiseGainRef[idx] != null)
+                {
+                    _State.UserDataToEcuStructure.WhiteNoiseGain[idx] = (float)ConvertFormula(_State.WhiteNoiseGainRef[idx]);
+                }
+            }
+        }
+
+        private void ConvertSquareWave()
+        {
+            if (_State.SquareWaveDenominatorCycleRef != null)
+            {
+                double val = ConvertFormula(_State.SquareWaveDenominatorCycleRef);
+
+                val = Math.Max(Math.Min(65535.0, val), 0);
+                _State.UserDataToEcuStructure.SquareWaveDenominatorCycle = (UInt16)val;
+            }
+            if (_State.SquareWaveNumeratorCycleRef != null)
+            {
+                double val = ConvertFormula(_State.SquareWaveNumeratorCycleRef);
+
+                val = Math.Max(Math.Min(65535.0, val), 0);
+                _State.UserDataToEcuStructure.SquareWaveNumeratorCycle = (UInt16)val;
             }
         }
 
@@ -309,7 +368,7 @@ namespace EmVerif.Script
             return Convert.ToDouble(dt.Compute(resultStr, ""));
         }
 
-        private void PostProcess(string inNextState)
+        private void PostProcess()
         {
             int size = Marshal.SizeOf(_State.UserDataToEcuStructure);
             IntPtr ptr = Marshal.AllocHGlobal(size);
@@ -320,21 +379,37 @@ namespace EmVerif.Script
 
             PublicCmd.Instance.SetUserData(bytes.ToList());
             _State.UserDataToEcuStructure.CanSendNum = 0;
-            if (_State.CurrentState == ControllerState.EndStr)
+            if (
+                (_State.CurrentState == ControllerState.EndStr) ||
+                (_GuiTop.FormClosingRequest)
+            )
             {
                 _GuiTop.Invoke((Action)(() =>
                 {
                     EndEvent?.Invoke(this, new EventArgs());
                 }));
             }
+            else if (
+                (PublicCmd.Instance.PcRecvErrorCounter != 0) ||
+                (PublicCmd.Instance.EcuRecvErrorCounter != 0)
+            )
+            {
+                _GuiTop.Invoke((Action)(() =>
+                {
+                    MessageBox.Show("通信障害発生\n受信エラー数：" + PublicCmd.Instance.PcRecvErrorCounter + "\n送信エラー数：" + PublicCmd.Instance.EcuRecvErrorCounter);
+                    EndEvent?.Invoke(this, new EventArgs());
+                }));
+            }
+            else if (!PublicCmd.Instance.EcuActive)
+            {
+                _GuiTop.Invoke((Action)(() =>
+                {
+                    MessageBox.Show("Ecu 反応無し");
+                    EndEvent?.Invoke(this, new EventArgs());
+                }));
+            }
             else
             {
-                if ((_State.CurrentState != inNextState) && _RegistrationListDict.ContainsKey(inNextState))
-                {
-                    List<ICommand> bootCmdList = _RegistrationListDict[inNextState];
-                    bootCmdList.ForEach((cmd) => cmd.Boot(_State));
-                    _ExecList = _ExecList.Union(bootCmdList).ToList();
-                }
                 _ExecScript10MsTask = new Task(ExecScript10MsTask);
             }
         }
@@ -423,6 +498,8 @@ namespace EmVerif.Script
         public Byte[] FromInToMixOutDelaySmp;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = PublicConfig.MixOutChNum * PublicConfig.ThroughOutChNum)]
         public Byte[] FromThroughOutToMixOutDelaySmp;
+        public UInt16 SquareWaveNumeratorCycle;
+        public UInt16 SquareWaveDenominatorCycle;
 
         public UserDataToEcuStructure()
         {
@@ -440,6 +517,8 @@ namespace EmVerif.Script
             FromThroughOutToMixOutGain = new float[PublicConfig.MixOutChNum * PublicConfig.ThroughOutChNum];
             FromInToMixOutDelaySmp = new Byte[PublicConfig.MixOutChNum * PublicConfig.InChNum];
             FromThroughOutToMixOutDelaySmp = new Byte[PublicConfig.MixOutChNum * PublicConfig.ThroughOutChNum];
+            SquareWaveNumeratorCycle = UInt16.MaxValue / 2;
+            SquareWaveDenominatorCycle = UInt16.MaxValue;
         }
     }
 
@@ -448,6 +527,7 @@ namespace EmVerif.Script
         public UserDataToEcuStructure UserDataToEcuStructure;
         public IReadOnlyList<UserDataFromEcuStructure> UserDataFromEcuStructureList;
         public string CurrentState;
+        public string NextState;
         public UInt32 TimestampMs;
         public Dictionary<string, Decimal> VariableDict;
         public Dictionary<string, string> VariableFormulaDict;
@@ -457,6 +537,9 @@ namespace EmVerif.Script
         public string[] SineHzRef;
         public string[] SineGainRef;
         public string[] SinePhaseRef;
+        public string[] WhiteNoiseGainRef;
+        public string SquareWaveNumeratorCycleRef;
+        public string SquareWaveDenominatorCycleRef;
 
         public const string BootStr = "Boot";
         public const string EndStr = "End";
@@ -464,7 +547,8 @@ namespace EmVerif.Script
         public ControllerState()
         {
             UserDataToEcuStructure = new UserDataToEcuStructure();
-            CurrentState = BootStr;
+            CurrentState = "";
+            NextState = BootStr;
             TimestampMs = 0;
             VariableDict = new Dictionary<string, Decimal>();
             VariableFormulaDict = new Dictionary<string, string>();
@@ -474,6 +558,7 @@ namespace EmVerif.Script
             SineHzRef = new string[PublicConfig.ThroughOutChNum * PublicConfig.SignalBaseNum];
             SineGainRef = new string[PublicConfig.ThroughOutChNum * PublicConfig.SignalBaseNum];
             SinePhaseRef = new string[PublicConfig.ThroughOutChNum * PublicConfig.SignalBaseNum];
+            WhiteNoiseGainRef = new string[PublicConfig.ThroughOutChNum];
         }
     }
 }

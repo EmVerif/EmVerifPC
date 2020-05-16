@@ -146,11 +146,13 @@ namespace EmVerif.Script.Command
         private string _NextState;
         private PublicApis.Signal _Signal;
         private VirtualPath _VirtualPath;
+        private PublicApis.SquareWave _SquareWave;
         private PublicApis.SetVar _SetVar;
 
         public SetCommand(
             PublicApis.Signal inSignal,
             PublicApis.VirtualPath inVirtualPath,
+            PublicApis.SquareWave inSquareWave,
             PublicApis.SetVar inSetVar,
             string inNextState
         )
@@ -165,10 +167,12 @@ namespace EmVerif.Script.Command
             {
                 _VirtualPath = null;
             }
+            _SquareWave = inSquareWave;
             _SetVar = inSetVar;
 
             CheckSignalParam();
-            //CheckVirtualPathParam(); VirtualPathクラスのコンストラクタで実施済み。
+            // CheckVirtualPathParam(); VirtualPathクラスのコンストラクタで実施済み。
+            // CheckSquareWave(); チェックするパラメータ無し。
             CheckSetVarParam();
         }
 
@@ -180,6 +184,7 @@ namespace EmVerif.Script.Command
         {
             ExecSignalSetting(ioState);
             ExecVirtualPathSetting(ioState);
+            ExecSquareWaveSetting(ioState);
             ExecSetVarSetting(ioState);
             outFinFlag = true;
 
@@ -203,21 +208,9 @@ namespace EmVerif.Script.Command
                 }
                 switch (_Signal.GetType().Name)
                 {
-                    case "FixWave":
+                    case "SineWave":
                         {
-                            PublicApis.FixWave signal = (PublicApis.FixWave)_Signal;
-                            if (signal.Id >= PublicConfig.SignalBaseNum)
-                            {
-                                throw new Exception(
-                                    "Set コマンド内 Signal.Id 設定エラー⇒" + signal.Id + "\n" +
-                                    "Id 設定値範囲は 0 以上 " + PublicConfig.SignalBaseNum + " 未満。"
-                                );
-                            }
-                        }
-                        break;
-                    case "RefWave":
-                        {
-                            PublicApis.RefWave signal = (PublicApis.RefWave)_Signal;
+                            PublicApis.SineWave signal = (PublicApis.SineWave)_Signal;
                             if (signal.Id >= PublicConfig.SignalBaseNum)
                             {
                                 throw new Exception(
@@ -232,7 +225,7 @@ namespace EmVerif.Script.Command
                     default:
                         throw new Exception(
                             "不明な信号タイプ⇒" + _Signal.GetType().Name + "\n" +
-                            "使用可能なクラスは、FixWave/RefWave/WhiteNoise。"
+                            "使用可能なクラスは、SineWave/WhiteNoise。"
                         );
                 }
             }
@@ -262,22 +255,9 @@ namespace EmVerif.Script.Command
             {
                 switch (_Signal.GetType().Name)
                 {
-                    case "FixWave":
+                    case "SineWave":
                         {
-                            PublicApis.FixWave signal = (PublicApis.FixWave)_Signal;
-                            int idx = PublicConfig.SignalBaseNum * signal.Ch + signal.Id;
-
-                            ioState.UserDataToEcuStructure.SineHz[idx] = signal.Freq;
-                            ioState.UserDataToEcuStructure.SineGain[idx] = signal.Gain;
-                            ioState.UserDataToEcuStructure.SinePhase[idx] = signal.Phase;
-                            ioState.SineHzRef[idx] = null;
-                            ioState.SineGainRef[idx] = null;
-                            ioState.SinePhaseRef[idx] = null;
-                        }
-                        break;
-                    case "RefWave":
-                        {
-                            PublicApis.RefWave signal = (PublicApis.RefWave)_Signal;
+                            PublicApis.SineWave signal = (PublicApis.SineWave)_Signal;
                             int idx = PublicConfig.SignalBaseNum * signal.Ch + signal.Id;
 
                             ioState.SineHzRef[idx] = signal.Freq;
@@ -290,7 +270,7 @@ namespace EmVerif.Script.Command
                             PublicApis.WhiteNoise signal = (PublicApis.WhiteNoise)_Signal;
                             int idx = signal.Ch;
 
-                            ioState.UserDataToEcuStructure.WhiteNoiseGain[idx] = signal.Gain;
+                            ioState.WhiteNoiseGainRef[idx] = signal.Gain;
                         }
                         break;
                     default:
@@ -331,6 +311,15 @@ namespace EmVerif.Script.Command
                         }
                         break;
                 }
+            }
+        }
+
+        private void ExecSquareWaveSetting(ControllerState ioState)
+        {
+            if (_SquareWave != null)
+            {
+                ioState.SquareWaveNumeratorCycleRef = _SquareWave.NumeratorCycle;
+                ioState.SquareWaveDenominatorCycleRef = _SquareWave.DenominatorCycle;
             }
         }
 

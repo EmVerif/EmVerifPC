@@ -37,14 +37,14 @@
             this.tb_VarName.Location = new System.Drawing.Point(0, 0);
             this.tb_VarName.Name = "tb_VarName";
             this.tb_VarName.ReadOnly = true;
-            this.tb_VarName.Size = new System.Drawing.Size(74, 19);
+            this.tb_VarName.Size = new System.Drawing.Size(56, 19);
             this.tb_VarName.TabIndex = 0;
             // 
             // tb_Value
             // 
-            this.tb_Value.Location = new System.Drawing.Point(80, 0);
+            this.tb_Value.Location = new System.Drawing.Point(62, 0);
             this.tb_Value.Name = "tb_Value";
-            this.tb_Value.Size = new System.Drawing.Size(159, 19);
+            this.tb_Value.Size = new System.Drawing.Size(131, 19);
             this.tb_Value.TabIndex = 1;
             this.tb_Value.Leave += new System.EventHandler(this.tb_Value_Leave);
             // 
@@ -55,7 +55,7 @@
             this.Controls.Add(this.tb_Value);
             this.Controls.Add(this.tb_VarName);
             this.Name = "OneCell";
-            this.Size = new System.Drawing.Size(242, 21);
+            this.Size = new System.Drawing.Size(196, 21);
             this.ResumeLayout(false);
             this.PerformLayout();
 

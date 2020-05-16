@@ -28,10 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.splitContainer4 = new System.Windows.Forms.SplitContainer();
+            this.tm_Update = new System.Windows.Forms.Timer(this.components);
             this.publicGraphs1 = new EmVerif.Gui.Graph.PublicGraphs();
             this.publicLoadBar1 = new EmVerif.Gui.Graph.PublicLoadBar();
             this.publicVariableView1 = new EmVerif.Gui.Variable.PublicVariableView();
@@ -90,8 +92,6 @@
             // splitContainer3
             // 
             this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer3.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-            this.splitContainer3.IsSplitterFixed = true;
             this.splitContainer3.Location = new System.Drawing.Point(0, 0);
             this.splitContainer3.Name = "splitContainer3";
             // 
@@ -103,7 +103,7 @@
             // 
             this.splitContainer3.Panel2.Controls.Add(this.publicLog1);
             this.splitContainer3.Size = new System.Drawing.Size(939, 464);
-            this.splitContainer3.SplitterDistance = 424;
+            this.splitContainer3.SplitterDistance = 419;
             this.splitContainer3.TabIndex = 0;
             // 
             // splitContainer4
@@ -122,9 +122,13 @@
             // splitContainer4.Panel2
             // 
             this.splitContainer4.Panel2.Controls.Add(this.publicVariableView1);
-            this.splitContainer4.Size = new System.Drawing.Size(424, 464);
+            this.splitContainer4.Size = new System.Drawing.Size(419, 464);
             this.splitContainer4.SplitterDistance = 99;
             this.splitContainer4.TabIndex = 0;
+            // 
+            // tm_Update
+            // 
+            this.tm_Update.Tick += new System.EventHandler(this.tm_Update_Tick);
             // 
             // publicGraphs1
             // 
@@ -139,7 +143,7 @@
             this.publicLoadBar1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.publicLoadBar1.Location = new System.Drawing.Point(0, 0);
             this.publicLoadBar1.Name = "publicLoadBar1";
-            this.publicLoadBar1.Size = new System.Drawing.Size(424, 99);
+            this.publicLoadBar1.Size = new System.Drawing.Size(419, 99);
             this.publicLoadBar1.TabIndex = 0;
             // 
             // publicVariableView1
@@ -147,7 +151,7 @@
             this.publicVariableView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.publicVariableView1.Location = new System.Drawing.Point(0, 0);
             this.publicVariableView1.Name = "publicVariableView1";
-            this.publicVariableView1.Size = new System.Drawing.Size(424, 361);
+            this.publicVariableView1.Size = new System.Drawing.Size(419, 361);
             this.publicVariableView1.TabIndex = 0;
             // 
             // publicLog1
@@ -155,7 +159,7 @@
             this.publicLog1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.publicLog1.Location = new System.Drawing.Point(0, 0);
             this.publicLog1.Name = "publicLog1";
-            this.publicLog1.Size = new System.Drawing.Size(511, 464);
+            this.publicLog1.Size = new System.Drawing.Size(516, 464);
             this.publicLog1.TabIndex = 0;
             // 
             // GuiTop
@@ -166,6 +170,7 @@
             this.Controls.Add(this.splitContainer1);
             this.Name = "GuiTop";
             this.Text = "GuiTop";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.GuiTop_FormClosing);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
@@ -195,5 +200,6 @@
         private Graph.PublicLoadBar publicLoadBar1;
         private Variable.PublicVariableView publicVariableView1;
         private Log.PublicLog publicLog1;
+        private System.Windows.Forms.Timer tm_Update;
     }
 }

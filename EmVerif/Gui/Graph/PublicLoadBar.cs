@@ -24,8 +24,6 @@ namespace EmVerif.Gui.Graph
             InitializeComponent();
             GenerateData();
             SetChart();
-            tm_UpdateBar.Interval = 100;
-            tm_UpdateBar.Start();
         }
 
         public void Set(IReadOnlyList<double> inDataList)
@@ -37,6 +35,32 @@ namespace EmVerif.Gui.Graph
                     _DataList = new List<double>(inDataList);
                     _DataListUpdate = true;
                 }
+            }
+        }
+
+        public void UpdateLoadBar()
+        {
+            Int32 col = 0;
+            List<double> dataList = new List<double>();
+            Boolean dataListUpdate;
+
+            lock (_DataLock)
+            {
+                if (_DataListUpdate)
+                {
+                    dataList = _DataList;
+                }
+                dataListUpdate = _DataListUpdate;
+                _DataListUpdate = false;
+            }
+            if (dataListUpdate)
+            {
+                foreach (double data in dataList)
+                {
+                    _DataSet.Tables[0].Rows[col][1] = data;
+                    col++;
+                }
+                chart_Bar.DataBind();
             }
         }
 
@@ -73,33 +97,5 @@ namespace EmVerif.Gui.Graph
             }
             chart_Bar.DataBind();
         }
-
-        #region イベント
-        private void Tm_UpdateBar_Tick(object sender, EventArgs e)
-        {
-            Int32 col = 0;
-            List<double> dataList = new List<double>();
-            Boolean dataListUpdate;
-
-            lock (_DataLock)
-            {
-                if (_DataListUpdate)
-                {
-                    dataList = _DataList;
-                }
-                dataListUpdate = _DataListUpdate;
-                _DataListUpdate = false;
-            }
-            if (dataListUpdate)
-            {
-                foreach (double data in dataList)
-                {
-                    _DataSet.Tables[0].Rows[col][1] = data;
-                    col++;
-                }
-                chart_Bar.DataBind();
-            }
-        }
-        #endregion
     }
 }

@@ -24,8 +24,6 @@ namespace EmVerif.Gui.Variable
         public PublicVariableView()
         {
             InitializeComponent();
-            tm_UpdateVariableView.Interval = 100;
-            tm_UpdateVariableView.Start();
         }
 
         public IReadOnlyDictionary<string, Decimal> GetUpdatedValue()
@@ -50,7 +48,7 @@ namespace EmVerif.Gui.Variable
             }
         }
 
-        private void tm_UpdateVariableView_Tick(object sender, EventArgs e)
+        public void UpdateVariableView()
         {
             Dictionary<string, Decimal> nameToValueDict;
             Dictionary<string, string> nameToFormulaDict;
