@@ -170,7 +170,7 @@ namespace EmVerif.Script
             List<Byte> Data,
             double RepTime,
             CanDataMask DataMask = null,
-            UInt32 ResponseCanId = 0xFFFFFFFF,
+            UInt32 ResponseCanId = CanSendCommand.NoResponseValue,
             string Stop = null
         )
         {

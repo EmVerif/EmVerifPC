@@ -17,18 +17,18 @@ namespace EmVerif.Gui.Graph
         public PublicGraphs()
         {
             InitializeComponent();
-            In6ChChart.Init("In " + EmVerif.Script.PublicConfig.InChNum + "Ch", EmVerif.Script.PublicConfig.InChNum);
-            MixOut4ChChart.Init("MixOut " + EmVerif.Script.PublicConfig.MixOutChNum + "Ch", EmVerif.Script.PublicConfig.MixOutChNum);
-            ThroughOut12ChChart.Init("ThroughOut " + EmVerif.Script.PublicConfig.ThroughOutChNum + "Ch", EmVerif.Script.PublicConfig.ThroughOutChNum);
+            InChart.Init("In " + EmVerif.Script.PublicConfig.InChNum + "Ch", EmVerif.Script.PublicConfig.InChNum);
+            MixOutChart.Init("MixOut " + EmVerif.Script.PublicConfig.MixOutChNum + "Ch", EmVerif.Script.PublicConfig.MixOutChNum);
+            ThroughOutChart.Init("ThroughOut " + EmVerif.Script.PublicConfig.ThroughOutChNum + "Ch", EmVerif.Script.PublicConfig.ThroughOutChNum);
         }
 
         public void Set(IReadOnlyList<double> inInDataList, IReadOnlyList<double> inMixOutDataList, IReadOnlyList<double> inThroughOutDataList)
         {
             lock(_dataLock)
             {
-                In6ChChart.SetData(inInDataList);
-                MixOut4ChChart.SetData(inMixOutDataList);
-                ThroughOut12ChChart.SetData(inThroughOutDataList);
+                InChart.SetData(inInDataList);
+                MixOutChart.SetData(inMixOutDataList);
+                ThroughOutChart.SetData(inThroughOutDataList);
             }
         }
 
@@ -36,13 +36,13 @@ namespace EmVerif.Gui.Graph
         {
             lock(_dataLock)
             {
-                In6ChChart.UpdateDataForSync();
-                MixOut4ChChart.UpdateDataForSync();
-                ThroughOut12ChChart.UpdateDataForSync();
+                InChart.UpdateDataForSync();
+                MixOutChart.UpdateDataForSync();
+                ThroughOutChart.UpdateDataForSync();
             }
-            In6ChChart.UpdateChart();
-            MixOut4ChChart.UpdateChart();
-            ThroughOut12ChChart.UpdateChart();
+            InChart.UpdateChart();
+            MixOutChart.UpdateChart();
+            ThroughOutChart.UpdateChart();
         }
     }
 }

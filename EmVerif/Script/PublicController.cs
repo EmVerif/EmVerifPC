@@ -297,8 +297,6 @@ namespace EmVerif.Script
 
         private void ConvertSignal()
         {
-            DataTable dt = new DataTable();
-
             for (int idx = 0; idx < (PublicConfig.ThroughOutChNum * PublicConfig.SignalBaseNum); idx++)
             {
                 if (_State.SineGainRef[idx] != null)
