@@ -30,6 +30,8 @@ namespace EmVerif.Script
         private double _MaxLoad;
         private double _CurLoad;
 
+        private Regex _VarNameRegex = new Regex(@"(?<VarName>[a-zA-Z_]\w*)");
+
         public IEnumerable<IPAddress> GetIpV4List()
         {
             return PublicCmd.Instance.GetIpV4List();
@@ -341,9 +343,8 @@ namespace EmVerif.Script
 
         private double ConvertFormula(string inOrgFormula)
         {
-            var varNameRegex = new Regex(@"(?<VarName>[a-zA-Z_]\w*)");
             DataTable dt = new DataTable();
-            var varNameMatches = varNameRegex.Matches(inOrgFormula);
+            var varNameMatches = _VarNameRegex.Matches(inOrgFormula);
             string resultStr = inOrgFormula;
 
             if (varNameMatches.Count != 0)
@@ -394,7 +395,11 @@ namespace EmVerif.Script
             {
                 _GuiTop.Invoke((Action)(() =>
                 {
-                    MessageBox.Show("通信障害発生\n受信エラー数：" + PublicCmd.Instance.PcRecvErrorCounter + "\n送信エラー数：" + PublicCmd.Instance.EcuRecvErrorCounter);
+                    MessageBox.Show(
+                        "通信障害発生\n" +
+                        "受信エラー数：" + PublicCmd.Instance.PcRecvErrorCounter + "\n" +
+                        "送信エラー数：" + PublicCmd.Instance.EcuRecvErrorCounter
+                    );
                     EndEvent?.Invoke(this, new EventArgs());
                 }));
             }

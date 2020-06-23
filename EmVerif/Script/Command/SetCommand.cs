@@ -148,6 +148,9 @@ namespace EmVerif.Script.Command
         private VirtualPath _VirtualPath;
         private PublicApis.SquareWave _SquareWave;
         private PublicApis.SetVar _SetVar;
+        private bool _IsNumeric;
+        private Decimal _Value;
+        private Regex _NumericRegex = new Regex(@"^\s*[0-9]+\.?[0-9]*\s*$");
 
         public SetCommand(
             PublicApis.Signal inSignal,
@@ -169,11 +172,18 @@ namespace EmVerif.Script.Command
             }
             _SquareWave = inSquareWave;
             _SetVar = inSetVar;
+            if (inSetVar != null)
+            {
+                _IsNumeric = _NumericRegex.IsMatch(_SetVar.Value);
+                if (_IsNumeric)
+                {
+                    _Value = Convert.ToDecimal(_SetVar.Value);
+                }
+            }
 
             CheckSignalParam();
             // CheckVirtualPathParam(); VirtualPathクラスのコンストラクタで実施済み。
             // CheckSquareWave(); チェックするパラメータ無し。
-            CheckSetVarParam();
         }
 
         public void Boot(ControllerState inState)
@@ -226,24 +236,6 @@ namespace EmVerif.Script.Command
                         throw new Exception(
                             "不明な信号タイプ⇒" + _Signal.GetType().Name + "\n" +
                             "使用可能なクラスは、SineWave/WhiteNoise。"
-                        );
-                }
-            }
-        }
-
-        private void CheckSetVarParam()
-        {
-            if (_SetVar != null)
-            {
-                switch (_SetVar.GetType().Name)
-                {
-                    case "SetConstVar":
-                    case "SetFormulaVar":
-                        break;
-                    default:
-                        throw new Exception(
-                            "不明な信号タイプ⇒" + _SetVar.GetType().Name + "\n" +
-                            "使用可能なクラスは、SetConstVar/SetFormulaVar。"
                         );
                 }
             }
@@ -327,16 +319,13 @@ namespace EmVerif.Script.Command
         {
             if (_SetVar != null)
             {
-                switch (_SetVar.GetType().Name)
+                if (_IsNumeric)
                 {
-                    case "SetConstVar":
-                        ioState.VariableDict[_SetVar.VarName] = ((PublicApis.SetConstVar)_SetVar).Value;
-                        break;
-                    case "SetFormulaVar":
-                        ioState.VariableFormulaDict[_SetVar.VarName] = ((PublicApis.SetFormulaVar)_SetVar).Formula;
-                        break;
-                    default:
-                        break;
+                    ioState.VariableDict[_SetVar.VarName] = _Value;
+                }
+                else
+                {
+                    ioState.VariableFormulaDict[_SetVar.VarName] = _SetVar.Value;
                 }
             }
         }

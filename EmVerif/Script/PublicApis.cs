@@ -57,27 +57,12 @@ namespace EmVerif.Script
         public class SetVar
         {
             public string VarName { get; set; }
-        }
+            public string Value { get; set; }
 
-        public class SetConstVar : SetVar
-        {
-            public Decimal Value { get; set; }
-
-            public SetConstVar()
+            public SetVar()
             {
                 VarName = "";
-                Value = 0;
-            }
-        }
-
-        public class SetFormulaVar : SetVar
-        {
-            public string Formula { get; set; }
-
-            public SetFormulaVar()
-            {
-                VarName = "";
-                Formula = "";
+                Value = "";
             }
         }
 
@@ -181,6 +166,23 @@ namespace EmVerif.Script
                 inResponseCanId: ResponseCanId,
                 inRepeatTime: RepTime,
                 inStopState: Stop
+            );
+
+            PublicController.Instance.Register(Trig, cmd);
+        }
+
+        public void SilenceCheck(
+            string Trig, string Stop,
+            string InId,
+            double Thresh = 0.01,
+            string Message = ""
+        )
+        {
+            SilenceCheckCommand cmd = new SilenceCheckCommand(
+                inStop: Stop,
+                inInId: InId,
+                inThresh: Thresh,
+                inMessage: Message
             );
 
             PublicController.Instance.Register(Trig, cmd);

@@ -241,11 +241,13 @@
     <Compile Include="Script\Command\GetWaveCommand.cs" />
     <Compile Include="Script\Command\ICommand.cs" />
     <Compile Include="Script\Command\SetCommand.cs" />
+    <Compile Include="Script\Command\SilenceCheckCommand.cs" />
     <Compile Include="Script\Command\WaitCommand.cs" />
     <Compile Include="Script\LogManager.cs" />
     <Compile Include="Script\PublicApis.cs" />
     <Compile Include="Script\PublicConfig.cs" />
     <Compile Include="Script\PublicController.cs" />
+    <Compile Include="Utility\Fourier.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

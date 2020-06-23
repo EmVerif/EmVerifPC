@@ -103,7 +103,7 @@ namespace EmVerif.Communication
             {
                 data.RemoveRange(PublicConfig.UserByteNum, count - PublicConfig.UserByteNum);
             }
-            data.InsertRange(0, new List<Byte>() { 0, 0 });
+            data.InsertRange(0, new List<Byte>() { 0 });
             InternalCmd.Instance.SendUserDataToEcu(data);
         }
 
@@ -218,7 +218,7 @@ namespace EmVerif.Communication
             {
                 List<Byte> recvDataList = new List<byte>(inRecvDataList);
 
-                recvDataList.RemoveRange(0, 2);
+                recvDataList.RemoveRange(0, 1);
                 GCHandle gch = GCHandle.Alloc(recvDataList.ToArray(), GCHandleType.Pinned);
                 UserDataFromEcu curUserData = (UserDataFromEcu)Marshal.PtrToStructure(gch.AddrOfPinnedObject(), typeof(UserDataFromEcu));
                 gch.Free();

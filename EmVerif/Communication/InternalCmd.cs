@@ -30,7 +30,7 @@ namespace EmVerif.Communication
             }
         }
 
-        private const UInt32 _IfVersion = 0x00000000;
+        private const UInt32 _IfVersion = 0x00000001;
 
         private const Byte _StartCmdId = 0x01;
         private const Byte _EndCmdId = 0x02;
@@ -53,8 +53,8 @@ namespace EmVerif.Communication
         private Boolean _StartCmdAckRecv;
         private Boolean _EndCmdAckRecv;
 
-        private Byte _PcEcuCmdCounter;
-        private Byte _EcuPcCmdCounter;
+        private UInt16 _PcEcuCmdCounter;
+        private UInt16 _EcuPcCmdCounter;
 
         public InternalCmd()
         {
@@ -167,17 +167,18 @@ namespace EmVerif.Communication
         #region 受信処理
         private void AnalyzeRecvData(byte[] inRecvData)
         {
-            if (inRecvData.Length >= 2)
+            if (inRecvData.Length >= 3)
             {
-                byte cmd = inRecvData[1];
+                byte cmd = inRecvData[2];
+                UInt16 counter = (UInt16)(((UInt16)inRecvData[0] << 8) | (UInt16)inRecvData[1]);
 
                 _CheckAliveEcuFlag = true;
-                if (inRecvData[0] != _EcuPcCmdCounter)
+                if (counter != _EcuPcCmdCounter)
                 {
                     PcRecvErrorCounter++;
-                    _EcuPcCmdCounter = inRecvData[0];
+                    _EcuPcCmdCounter = counter;
                 }
-                _RecvEvent[cmd]?.Invoke(inRecvData.Skip(2).ToList());
+                _RecvEvent[cmd]?.Invoke(inRecvData.Skip(3).ToList());
                 _EcuPcCmdCounter++;
             }
         }
@@ -192,7 +193,8 @@ namespace EmVerif.Communication
                 {
                     List<byte> cmdList = new List<byte>();
 
-                    cmdList.Add(_PcEcuCmdCounter);
+                    cmdList.Add((Byte)((_PcEcuCmdCounter >> 8 ) & 0xFF));
+                    cmdList.Add((Byte)(_PcEcuCmdCounter & 0xFF));
                     cmdList.AddRange(_SendCmdQueue[0]);
                     _SendCmdQueue.RemoveAt(0);
                     EtherCom.Instance.Send(cmdList.ToArray());
