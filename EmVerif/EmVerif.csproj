@@ -225,29 +225,32 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CustomRoslynHost.cs" />
-    <Compile Include="Gui\GuiTop.cs">
+    <Compile Include="Core\Gui\GuiTop.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Gui\GuiTop.Designer.cs">
+    <Compile Include="Core\Gui\GuiTop.Designer.cs">
       <DependentUpon>GuiTop.cs</DependentUpon>
     </Compile>
-    <Compile Include="Gui\Log\PublicLog.cs">
+    <Compile Include="Core\Gui\Log\PublicLog.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Gui\Log\PublicLog.Designer.cs">
+    <Compile Include="Core\Gui\Log\PublicLog.Designer.cs">
       <DependentUpon>PublicLog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Script\Command\CanSendCommand.cs" />
-    <Compile Include="Script\Command\GetWaveCommand.cs" />
-    <Compile Include="Script\Command\ICommand.cs" />
-    <Compile Include="Script\Command\SetCommand.cs" />
-    <Compile Include="Script\Command\SilenceCheckCommand.cs" />
-    <Compile Include="Script\Command\WaitCommand.cs" />
-    <Compile Include="Script\LogManager.cs" />
-    <Compile Include="Script\PublicApis.cs" />
-    <Compile Include="Script\PublicConfig.cs" />
-    <Compile Include="Script\PublicController.cs" />
-    <Compile Include="Utility\Fourier.cs" />
+    <Compile Include="MainWindowViewModel\MainWindowViewModel.cs" />
+    <Compile Include="MainWindowViewModel\StartStopCommand.cs" />
+    <Compile Include="Core\Script\Command\CanSendCommand.cs" />
+    <Compile Include="Core\Script\Command\FadeCommand.cs" />
+    <Compile Include="Core\Script\Command\GetWaveCommand.cs" />
+    <Compile Include="Core\Script\Command\IEmVerifCommand.cs" />
+    <Compile Include="Core\Script\Command\SetCommand.cs" />
+    <Compile Include="Core\Script\Command\SilenceCheckCommand.cs" />
+    <Compile Include="Core\Script\Command\WaitCommand.cs" />
+    <Compile Include="Core\Script\LogManager.cs" />
+    <Compile Include="Core\Script\PublicApis.cs" />
+    <Compile Include="Core\Script\PublicConfig.cs" />
+    <Compile Include="Core\Script\PublicController.cs" />
+    <Compile Include="Core\Utility\Fourier.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -256,40 +259,40 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Communication\EtherCom.cs" />
-    <Compile Include="Communication\InternalCmd.cs" />
-    <Compile Include="Communication\MmTimer.cs" />
-    <Compile Include="Communication\PublicCmd.cs" />
-    <Compile Include="Communication\PublicConfig.cs" />
-    <Compile Include="Communication\S3Analyzer.cs" />
-    <Compile Include="Gui\Graph\OneGraph.cs">
+    <Compile Include="Core\Communication\EtherCom.cs" />
+    <Compile Include="Core\Communication\InternalCmd.cs" />
+    <Compile Include="Core\Communication\MmTimer.cs" />
+    <Compile Include="Core\Communication\PublicCmd.cs" />
+    <Compile Include="Core\Communication\PublicConfig.cs" />
+    <Compile Include="Core\Communication\S3Analyzer.cs" />
+    <Compile Include="Core\Gui\Graph\OneGraph.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Gui\Graph\OneGraph.Designer.cs">
+    <Compile Include="Core\Gui\Graph\OneGraph.Designer.cs">
       <DependentUpon>OneGraph.cs</DependentUpon>
     </Compile>
-    <Compile Include="Gui\Graph\PublicGraphs.cs">
+    <Compile Include="Core\Gui\Graph\PublicGraphs.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Gui\Graph\PublicGraphs.Designer.cs">
+    <Compile Include="Core\Gui\Graph\PublicGraphs.Designer.cs">
       <DependentUpon>PublicGraphs.cs</DependentUpon>
     </Compile>
-    <Compile Include="Gui\Graph\PublicLoadBar.cs">
+    <Compile Include="Core\Gui\Graph\PublicLoadBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Gui\Graph\PublicLoadBar.Designer.cs">
+    <Compile Include="Core\Gui\Graph\PublicLoadBar.Designer.cs">
       <DependentUpon>PublicLoadBar.cs</DependentUpon>
     </Compile>
-    <Compile Include="Gui\Variable\OneCell.cs">
+    <Compile Include="Core\Gui\Variable\OneCell.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Gui\Variable\OneCell.Designer.cs">
+    <Compile Include="Core\Gui\Variable\OneCell.Designer.cs">
       <DependentUpon>OneCell.cs</DependentUpon>
     </Compile>
-    <Compile Include="Gui\Variable\PublicVariableView.cs">
+    <Compile Include="Core\Gui\Variable\PublicVariableView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Gui\Variable\PublicVariableView.Designer.cs">
+    <Compile Include="Core\Gui\Variable\PublicVariableView.Designer.cs">
       <DependentUpon>PublicVariableView.cs</DependentUpon>
     </Compile>
     <Compile Include="MainWindow.xaml.cs">
@@ -311,25 +314,25 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Gui\Graph\OneGraph.resx">
+    <EmbeddedResource Include="Core\Gui\Graph\OneGraph.resx">
       <DependentUpon>OneGraph.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Gui\Graph\PublicGraphs.resx">
+    <EmbeddedResource Include="Core\Gui\Graph\PublicGraphs.resx">
       <DependentUpon>PublicGraphs.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Gui\Graph\PublicLoadBar.resx">
+    <EmbeddedResource Include="Core\Gui\Graph\PublicLoadBar.resx">
       <DependentUpon>PublicLoadBar.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Gui\GuiTop.resx">
+    <EmbeddedResource Include="Core\Gui\GuiTop.resx">
       <DependentUpon>GuiTop.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Gui\Log\PublicLog.resx">
+    <EmbeddedResource Include="Core\Gui\Log\PublicLog.resx">
       <DependentUpon>PublicLog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Gui\Variable\OneCell.resx">
+    <EmbeddedResource Include="Core\Gui\Variable\OneCell.resx">
       <DependentUpon>OneCell.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Gui\Variable\PublicVariableView.resx">
+    <EmbeddedResource Include="Core\Gui\Variable\PublicVariableView.resx">
       <DependentUpon>PublicVariableView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

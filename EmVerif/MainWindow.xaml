@@ -5,11 +5,46 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:editor="clr-namespace:RoslynPad.Editor;assembly=RoslynPad.Editor.Windows"
         xmlns:local="clr-namespace:EmVerif"
+        xmlns:vm="clr-namespace:EmVerif.MainWindowViewModel"
         mc:Ignorable="d"
         Title="EmVerif" Height="450" Width="800" Closing="Window_Closing">
+    <Window.DataContext>
+        <vm:MainWindowViewModel x:Name="ViewModel"/>
+    </Window.DataContext>
     <Grid>
-        <editor:RoslynCodeEditor x:Name="roslynCodeEditor" Loaded="RoslynCodeEditor_Loaded" Margin="0,35,0,0"/>
-        <Button x:Name="button" Content="{Binding ButtonText}" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
-        <ComboBox x:Name="comboBox" ItemsSource="{Binding ItemsSource}" HorizontalAlignment="Left" Margin="90,8,0,0" VerticalAlignment="Top" Width="120"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="34"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Button Grid.Row="0"
+                x:Name="button"
+                Content="{Binding ButtonClickCommand.DisplayString}"
+                HorizontalAlignment="Left"
+                Margin="10,8,0,0"
+                VerticalAlignment="Top"
+                Width="75"
+                Command="{Binding ButtonClickCommand}"
+                Height="22"/>
+        <ComboBox Grid.Row="0"
+                  ItemsSource="{Binding IpAddressList}"
+                  SelectedValue="{Binding SelectedIpAddress, Mode=TwoWay}"
+                  HorizontalAlignment="Left"
+                  Margin="90,8,0,0"
+                  VerticalAlignment="Top"
+                  Width="120"
+                  Height="22"/>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition MinWidth="100" Width="229*"/>
+                <ColumnDefinition Width="Auto" MinWidth="5"/>
+                <ColumnDefinition MinWidth="100" Width="553*"/>
+            </Grid.ColumnDefinitions>
+            <TreeView Grid.Column="0"/>
+            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
+            <editor:RoslynCodeEditor
+                Grid.Column="2"
+                x:Name="roslynCodeEditor"
+                Document="{Binding Script}"/>
+        </Grid>
     </Grid>
 </Window>
