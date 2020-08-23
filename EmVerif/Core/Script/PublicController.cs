@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
@@ -20,9 +21,9 @@ namespace EmVerif.Core.Script
         static public PublicController Instance = new PublicController();
         public event EventHandler EndEvent;
 
-        private Dictionary<string, List<IEmVerifCommand>> _RegistrationListDict = new Dictionary<string, List<IEmVerifCommand>>();
-        private List<IEmVerifCommand> _ExecList = new List<IEmVerifCommand>();
-        private ControllerState _State = new ControllerState();
+        private Dictionary<string, List<IEmVerifCommand>> _RegistrationListDict;
+        private List<IEmVerifCommand> _ExecList;
+        private ControllerState _State;
 
         private GuiTop _GuiTop = null;
         private Task _ExecScript10MsTask;
@@ -37,11 +38,11 @@ namespace EmVerif.Core.Script
             return PublicCmd.Instance.GetIpV4List();
         }
 
-        public void Reset()
+        public void Reset(string inWorkFolder)
         {
             _RegistrationListDict = new Dictionary<string, List<IEmVerifCommand>>();
             _ExecList = new List<IEmVerifCommand>();
-            _State = new ControllerState();
+            _State = new ControllerState(inWorkFolder);
             _RegistrationListDict.Add(ControllerState.BootStr, new List<IEmVerifCommand>());
             _RegistrationListDict.Add(ControllerState.EndStr, new List<IEmVerifCommand>());
         }
@@ -69,6 +70,8 @@ namespace EmVerif.Core.Script
             {
                 UInt16 tmp;
 
+                Directory.CreateDirectory(_State.WorkFolder);
+                LogManager.Instance.Start(_State.WorkFolder + @".\log.txt", _GuiTop);
                 PublicCmd.Instance.Start(inIpAddress);
                 PublicCmd.Instance.SetCan(500, out tmp);
                 PublicCmd.Instance.SetSpi(4, 4000, true, out tmp);
@@ -83,7 +86,6 @@ namespace EmVerif.Core.Script
                 _GuiTop = null;
                 throw ex;
             }
-            LogManager.Instance.Start(@".\log.txt", _GuiTop);
 
             _ExecScript10MsTask = new Task(ExecScript10MsTask);
             _TaskTickCounterMs = 0;
@@ -194,28 +196,28 @@ namespace EmVerif.Core.Script
 
         private void SetGraph()
         {
-            List<double> currentInDataList = new List<double>();
-            List<double> currentMixOutDataList = new List<double>();
-            List<double> currentThroughOutDataList = new List<double>();
+            List<double> currentAdDataList = new List<double>();
+            List<double> currentPwmDataList = new List<double>();
+            List<double> currentSpioutDataList = new List<double>();
             foreach (var userDataFromEcuStructure in _State.UserDataFromEcuStructureList)
             {
-                foreach (var data in userDataFromEcuStructure.InVal)
+                foreach (var data in userDataFromEcuStructure.AdVal)
                 {
-                    currentInDataList.Add(((double)data - 32768) / 32768);
+                    currentAdDataList.Add(((double)data - 32768) / 32768);
                 }
-                foreach (var data in userDataFromEcuStructure.MixOutVal)
+                foreach (var data in userDataFromEcuStructure.PwmVal)
                 {
-                    currentMixOutDataList.Add(((double)data - 32768) / 32768);
+                    currentPwmDataList.Add(((double)data - 32768) / 32768);
                 }
-                foreach (var data in userDataFromEcuStructure.ThroughOutVal)
+                foreach (var data in userDataFromEcuStructure.SpioutVal)
                 {
-                    currentThroughOutDataList.Add(((double)data - 32768) / 32768);
+                    currentSpioutDataList.Add(((double)data - 32768) / 32768);
                 }
             }
-            _State.CurrentInDataList = currentInDataList;
-            _State.CurrentMixOutDataList = currentMixOutDataList;
-            _State.CurrentThroughOutDataList = currentThroughOutDataList;
-            _GuiTop.SetGraph(currentInDataList, currentMixOutDataList, currentThroughOutDataList);
+            _State.CurrentAdDataList = currentAdDataList;
+            _State.CurrentPwmDataList = currentPwmDataList;
+            _State.CurrentSpioutDataList = currentSpioutDataList;
+            _GuiTop.SetGraph(currentAdDataList, currentPwmDataList, currentSpioutDataList);
         }
 
         private void SetVariable()
@@ -299,45 +301,67 @@ namespace EmVerif.Core.Script
 
         private void ConvertSignal()
         {
-            for (int idx = 0; idx < (PublicConfig.ThroughOutChNum * PublicConfig.SignalBaseNum); idx++)
+            for (int idx = 0; idx < (PublicConfig.SpioutChNum * PublicConfig.SignalBaseNum); idx++)
             {
-                if (_State.SineGainRef[idx] != null)
+                if (_State.SpioutSineGain[idx] != null)
                 {
-                    _State.UserDataToEcuStructure.SineGain[idx] = (float)ConvertFormula(_State.SineGainRef[idx]);
+                    _State.UserDataToEcuStructure0.SpioutSineGain[idx] = (float)ConvertFormula(_State.SpioutSineGain[idx]);
                 }
-                if (_State.SineHzRef[idx] != null)
+                if (_State.SpioutSineHz[idx] != null)
                 {
-                    _State.UserDataToEcuStructure.SineHz[idx] = (float)ConvertFormula(_State.SineHzRef[idx]);
+                    _State.UserDataToEcuStructure0.SpioutSineHz[idx] = (float)ConvertFormula(_State.SpioutSineHz[idx]);
                 }
-                if (_State.SinePhaseRef[idx] != null)
+                if (_State.SpioutSinePhase[idx] != null)
                 {
-                    _State.UserDataToEcuStructure.SinePhase[idx] = (float)ConvertFormula(_State.SinePhaseRef[idx]);
+                    _State.UserDataToEcuStructure0.SpioutSinePhase[idx] = (float)ConvertFormula(_State.SpioutSinePhase[idx]);
                 }
             }
-            for (int idx = 0; idx < PublicConfig.ThroughOutChNum; idx++)
+            for (int idx = 0; idx < PublicConfig.SpioutChNum; idx++)
             {
-                if (_State.WhiteNoiseGainRef[idx] != null)
+                if (_State.SpioutWhiteNoiseGain[idx] != null)
                 {
-                    _State.UserDataToEcuStructure.WhiteNoiseGain[idx] = (float)ConvertFormula(_State.WhiteNoiseGainRef[idx]);
+                    _State.UserDataToEcuStructure0.SpioutWhiteNoiseGain[idx] = (float)ConvertFormula(_State.SpioutWhiteNoiseGain[idx]);
+                }
+            }
+            for (int idx = 0; idx < (PublicConfig.PwmChNum * PublicConfig.SignalBaseNum); idx++)
+            {
+                if (_State.PwmSineGain[idx] != null)
+                {
+                    _State.UserDataToEcuStructure0.PwmSineGain[idx] = (float)ConvertFormula(_State.PwmSineGain[idx]);
+                }
+                if (_State.PwmSineHz[idx] != null)
+                {
+                    _State.UserDataToEcuStructure0.PwmSineHz[idx] = (float)ConvertFormula(_State.PwmSineHz[idx]);
+                }
+                if (_State.PwmSinePhase[idx] != null)
+                {
+                    _State.UserDataToEcuStructure0.PwmSinePhase[idx] = (float)ConvertFormula(_State.PwmSinePhase[idx]);
+                }
+            }
+            for (int idx = 0; idx < PublicConfig.PwmChNum; idx++)
+            {
+                if (_State.PwmWhiteNoiseGain[idx] != null)
+                {
+                    _State.UserDataToEcuStructure0.PwmWhiteNoiseGain[idx] = (float)ConvertFormula(_State.PwmWhiteNoiseGain[idx]);
                 }
             }
         }
 
         private void ConvertSquareWave()
         {
-            if (_State.SquareWaveDenominatorCycleRef != null)
+            if (_State.SquareWaveDenominatorCycle != null)
             {
-                double val = ConvertFormula(_State.SquareWaveDenominatorCycleRef);
+                double val = ConvertFormula(_State.SquareWaveDenominatorCycle);
 
                 val = Math.Max(Math.Min(65535.0, val), 0);
-                _State.UserDataToEcuStructure.SquareWaveDenominatorCycle = (UInt16)val;
+                _State.UserDataToEcuStructure0.SquareWaveDenominatorCycle = (UInt16)val;
             }
-            if (_State.SquareWaveNumeratorCycleRef != null)
+            if (_State.SquareWaveNumeratorCycle != null)
             {
-                double val = ConvertFormula(_State.SquareWaveNumeratorCycleRef);
+                double val = ConvertFormula(_State.SquareWaveNumeratorCycle);
 
                 val = Math.Max(Math.Min(65535.0, val), 0);
-                _State.UserDataToEcuStructure.SquareWaveNumeratorCycle = (UInt16)val;
+                _State.UserDataToEcuStructure0.SquareWaveNumeratorCycle = (UInt16)val;
             }
         }
 
@@ -369,15 +393,8 @@ namespace EmVerif.Core.Script
 
         private void PostProcess()
         {
-            int size = Marshal.SizeOf(_State.UserDataToEcuStructure);
-            IntPtr ptr = Marshal.AllocHGlobal(size);
-            Marshal.StructureToPtr(_State.UserDataToEcuStructure, ptr, false);
-            byte[] bytes = new byte[size];
-            Marshal.Copy(ptr, bytes, 0, size);
-            Marshal.FreeHGlobal(ptr);
-
-            PublicCmd.Instance.SetUserData(bytes.ToList());
-            _State.UserDataToEcuStructure.CanSendNum = 0;
+            SendUserDataToEcuStructure0();
+            SendUserDataToEcuStructure1();
             if (
                 (_State.CurrentState == ControllerState.EndStr) ||
                 (_GuiTop.FormClosingRequest)
@@ -417,12 +434,40 @@ namespace EmVerif.Core.Script
             }
         }
 
+        private void SendUserDataToEcuStructure0()
+        {
+            int size = Marshal.SizeOf(_State.UserDataToEcuStructure0);
+            IntPtr ptr = Marshal.AllocHGlobal(size);
+            Marshal.StructureToPtr(_State.UserDataToEcuStructure0, ptr, false);
+            byte[] bytes = new byte[size];
+            Marshal.Copy(ptr, bytes, 0, size);
+            Marshal.FreeHGlobal(ptr);
+
+            PublicCmd.Instance.SetUserData(bytes.ToList());
+        }
+
+        private void SendUserDataToEcuStructure1()
+        {
+            if (_State.UserDataToEcuStructure1Update)
+            {
+                int size = Marshal.SizeOf(_State.UserDataToEcuStructure1);
+                IntPtr ptr = Marshal.AllocHGlobal(size);
+                Marshal.StructureToPtr(_State.UserDataToEcuStructure1, ptr, false);
+                byte[] bytes = new byte[size];
+                Marshal.Copy(ptr, bytes, 0, size);
+                Marshal.FreeHGlobal(ptr);
+
+                PublicCmd.Instance.SetUserData(bytes.ToList());
+                _State.UserDataToEcuStructure1Update = false;
+            }
+        }
+
         private void Finally()
         {
             List<IEmVerifCommand> finallyList = new List<IEmVerifCommand>();
 
             _RegistrationListDict.Keys.ToList().ForEach(stateName => finallyList.AddRange(_RegistrationListDict[stateName]));
-            finallyList.ForEach(cmd => cmd.Finally());
+            finallyList.ForEach(cmd => cmd.Finally(_State));
         }
     }
 
@@ -452,12 +497,12 @@ namespace EmVerif.Core.Script
 
         public UInt32 Timestamp;
 
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = EmVerif.Core.Communication.PublicConfig.SamplingKhz * PublicConfig.InChNum)]
-        public UInt16[] InVal;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = EmVerif.Core.Communication.PublicConfig.SamplingKhz * PublicConfig.MixOutChNum)]
-        public UInt16[] MixOutVal;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = EmVerif.Core.Communication.PublicConfig.SamplingKhz * PublicConfig.ThroughOutChNum)]
-        public UInt16[] ThroughOutVal;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = EmVerif.Core.Communication.PublicConfig.SamplingKhz * PublicConfig.AdChNum)]
+        public UInt16[] AdVal;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = EmVerif.Core.Communication.PublicConfig.SamplingKhz * PublicConfig.PwmChNum)]
+        public UInt16[] PwmVal;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = EmVerif.Core.Communication.PublicConfig.SamplingKhz * PublicConfig.SpioutChNum)]
+        public UInt16[] SpioutVal;
 
         public UserDataFromEcuStructure()
         {
@@ -472,39 +517,42 @@ namespace EmVerif.Core.Script
                 CanSendFinData[i].Data = new Byte[8];
             }
 
-            InVal = new UInt16[EmVerif.Core.Communication.PublicConfig.SamplingKhz * PublicConfig.InChNum];
-            MixOutVal = new UInt16[EmVerif.Core.Communication.PublicConfig.SamplingKhz * PublicConfig.MixOutChNum];
-            ThroughOutVal = new UInt16[EmVerif.Core.Communication.PublicConfig.SamplingKhz * PublicConfig.ThroughOutChNum];
+            AdVal = new UInt16[EmVerif.Core.Communication.PublicConfig.SamplingKhz * PublicConfig.AdChNum];
+            PwmVal = new UInt16[EmVerif.Core.Communication.PublicConfig.SamplingKhz * PublicConfig.PwmChNum];
+            SpioutVal = new UInt16[EmVerif.Core.Communication.PublicConfig.SamplingKhz * PublicConfig.SpioutChNum];
         }
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public class UserDataToEcuStructure
+    public class UserDataToEcuStructure0
     {
+        public Int32 Type = 0;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = EmVerif.Core.Communication.PublicConfig.MaxCanFifoNum)]
         public CanFormat[] CanSendData;
         public UInt32 CanSendNum;
 
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = PublicConfig.ThroughOutChNum * PublicConfig.SignalBaseNum)]
-        public float[] SineHz;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = PublicConfig.ThroughOutChNum * PublicConfig.SignalBaseNum)]
-        public float[] SineGain;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = PublicConfig.ThroughOutChNum * PublicConfig.SignalBaseNum)]
-        public float[] SinePhase;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = PublicConfig.ThroughOutChNum)]
-        public float[] WhiteNoiseGain;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = PublicConfig.MixOutChNum * PublicConfig.InChNum)]
-        public float[] FromInToMixOutGain;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = PublicConfig.MixOutChNum * PublicConfig.ThroughOutChNum)]
-        public float[] FromThroughOutToMixOutGain;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = PublicConfig.MixOutChNum * PublicConfig.InChNum)]
-        public Byte[] FromInToMixOutDelaySmp;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = PublicConfig.MixOutChNum * PublicConfig.ThroughOutChNum)]
-        public Byte[] FromThroughOutToMixOutDelaySmp;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = PublicConfig.PwmChNum * PublicConfig.SignalBaseNum)]
+        public float[] PwmSineHz;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = PublicConfig.PwmChNum * PublicConfig.SignalBaseNum)]
+        public float[] PwmSineGain;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = PublicConfig.PwmChNum * PublicConfig.SignalBaseNum)]
+        public float[] PwmSinePhase;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = PublicConfig.PwmChNum)]
+        public float[] PwmWhiteNoiseGain;
+
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = PublicConfig.SpioutChNum * PublicConfig.SignalBaseNum)]
+        public float[] SpioutSineHz;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = PublicConfig.SpioutChNum * PublicConfig.SignalBaseNum)]
+        public float[] SpioutSineGain;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = PublicConfig.SpioutChNum * PublicConfig.SignalBaseNum)]
+        public float[] SpioutSinePhase;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = PublicConfig.SpioutChNum)]
+        public float[] SpioutWhiteNoiseGain;
+
         public UInt16 SquareWaveNumeratorCycle;
         public UInt16 SquareWaveDenominatorCycle;
 
-        public UserDataToEcuStructure()
+        public UserDataToEcuStructure0()
         {
             CanSendData = new CanFormat[EmVerif.Core.Communication.PublicConfig.MaxCanFifoNum];
             for (int i = 0; i < CanSendData.Length; i++)
@@ -512,56 +560,104 @@ namespace EmVerif.Core.Script
                 CanSendData[i].Data = new Byte[8];
             }
 
-            SineHz = new float[PublicConfig.ThroughOutChNum * PublicConfig.SignalBaseNum];
-            SineGain = new float[PublicConfig.ThroughOutChNum * PublicConfig.SignalBaseNum];
-            SinePhase = new float[PublicConfig.ThroughOutChNum * PublicConfig.SignalBaseNum];
-            WhiteNoiseGain = new float[PublicConfig.ThroughOutChNum];
-            FromInToMixOutGain = new float[PublicConfig.MixOutChNum * PublicConfig.InChNum];
-            FromThroughOutToMixOutGain = new float[PublicConfig.MixOutChNum * PublicConfig.ThroughOutChNum];
-            FromInToMixOutDelaySmp = new Byte[PublicConfig.MixOutChNum * PublicConfig.InChNum];
-            FromThroughOutToMixOutDelaySmp = new Byte[PublicConfig.MixOutChNum * PublicConfig.ThroughOutChNum];
+            PwmSineHz = new float[PublicConfig.PwmChNum * PublicConfig.SignalBaseNum];
+            PwmSineGain = new float[PublicConfig.PwmChNum * PublicConfig.SignalBaseNum];
+            PwmSinePhase = new float[PublicConfig.PwmChNum * PublicConfig.SignalBaseNum];
+            PwmWhiteNoiseGain = new float[PublicConfig.PwmChNum];
+            
+            SpioutSineHz = new float[PublicConfig.SpioutChNum * PublicConfig.SignalBaseNum];
+            SpioutSineGain = new float[PublicConfig.SpioutChNum * PublicConfig.SignalBaseNum];
+            SpioutSinePhase = new float[PublicConfig.SpioutChNum * PublicConfig.SignalBaseNum];
+            SpioutWhiteNoiseGain = new float[PublicConfig.SpioutChNum];
+
             SquareWaveNumeratorCycle = UInt16.MaxValue / 2;
             SquareWaveDenominatorCycle = UInt16.MaxValue;
         }
     }
 
+    [StructLayout(LayoutKind.Sequential)]
+    public class UserDataToEcuStructure1
+    {
+        public Int32 Type = 1;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = PublicConfig.PwmChNum * PublicConfig.AdChNum)]
+        public float[] FromAdToPwmGain;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = PublicConfig.PwmChNum * PublicConfig.SpioutChNum)]
+        public float[] FromSpioutToPwmGain;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = PublicConfig.SpioutChNum * PublicConfig.AdChNum)]
+        public float[] FromAdToSpioutGain;
+
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = PublicConfig.PwmChNum * PublicConfig.AdChNum)]
+        public Byte[] FromAdToPwmDelaySmp;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = PublicConfig.PwmChNum * PublicConfig.SpioutChNum)]
+        public Byte[] FromSpioutToPwmDelaySmp;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = PublicConfig.SpioutChNum * PublicConfig.AdChNum)]
+        public Byte[] FromAdToSpioutDelaySmp;
+
+        public UserDataToEcuStructure1()
+        {
+            FromAdToPwmGain = new float[PublicConfig.PwmChNum * PublicConfig.AdChNum];
+            FromSpioutToPwmGain = new float[PublicConfig.PwmChNum * PublicConfig.SpioutChNum];
+            FromAdToSpioutGain = new float[PublicConfig.SpioutChNum * PublicConfig.AdChNum];
+
+            FromAdToPwmDelaySmp = new Byte[PublicConfig.PwmChNum * PublicConfig.AdChNum];
+            FromSpioutToPwmDelaySmp = new Byte[PublicConfig.PwmChNum * PublicConfig.SpioutChNum];
+            FromAdToSpioutDelaySmp = new Byte[PublicConfig.SpioutChNum * PublicConfig.AdChNum];
+        }
+    }
+
     public class ControllerState
     {
-        public UserDataToEcuStructure UserDataToEcuStructure;
+        public string WorkFolder { get; private set; }
+        public UserDataToEcuStructure0 UserDataToEcuStructure0;
+        public bool UserDataToEcuStructure1Update;
+        public UserDataToEcuStructure1 UserDataToEcuStructure1;
         public IReadOnlyList<UserDataFromEcuStructure> UserDataFromEcuStructureList;
         public string CurrentState;
         public string NextState;
         public UInt32 TimestampMs;
         public Dictionary<string, Decimal> VariableDict;
         public Dictionary<string, string> VariableFormulaDict;
-        public IReadOnlyList<double> CurrentInDataList;
-        public IReadOnlyList<double> CurrentMixOutDataList;
-        public IReadOnlyList<double> CurrentThroughOutDataList;
-        public string[] SineHzRef;
-        public string[] SineGainRef;
-        public string[] SinePhaseRef;
-        public string[] WhiteNoiseGainRef;
-        public string SquareWaveNumeratorCycleRef;
-        public string SquareWaveDenominatorCycleRef;
+        public IReadOnlyList<double> CurrentAdDataList;
+        public IReadOnlyList<double> CurrentPwmDataList;
+        public IReadOnlyList<double> CurrentSpioutDataList;
+        public string[] SpioutSineHz;
+        public string[] SpioutSineGain;
+        public string[] SpioutSinePhase;
+        public string[] SpioutWhiteNoiseGain;
+        public string[] PwmSineHz;
+        public string[] PwmSineGain;
+        public string[] PwmSinePhase;
+        public string[] PwmWhiteNoiseGain;
+        public string SquareWaveNumeratorCycle;
+        public string SquareWaveDenominatorCycle;
 
         public const string BootStr = "Boot";
         public const string EndStr = "End";
 
-        public ControllerState()
+        public ControllerState(string inWorkFolder)
         {
-            UserDataToEcuStructure = new UserDataToEcuStructure();
+            WorkFolder = inWorkFolder;
+            UserDataToEcuStructure0 = new UserDataToEcuStructure0();
+            UserDataToEcuStructure1Update = false;
+            UserDataToEcuStructure1 = new UserDataToEcuStructure1();
             CurrentState = "";
             NextState = BootStr;
             TimestampMs = 0;
             VariableDict = new Dictionary<string, Decimal>();
             VariableFormulaDict = new Dictionary<string, string>();
-            CurrentInDataList = new List<double>();
-            CurrentMixOutDataList = new List<double>();
-            CurrentThroughOutDataList = new List<double>();
-            SineHzRef = new string[PublicConfig.ThroughOutChNum * PublicConfig.SignalBaseNum];
-            SineGainRef = new string[PublicConfig.ThroughOutChNum * PublicConfig.SignalBaseNum];
-            SinePhaseRef = new string[PublicConfig.ThroughOutChNum * PublicConfig.SignalBaseNum];
-            WhiteNoiseGainRef = new string[PublicConfig.ThroughOutChNum];
+            CurrentAdDataList = new List<double>();
+            CurrentPwmDataList = new List<double>();
+            CurrentSpioutDataList = new List<double>();
+
+            SpioutSineHz = new string[PublicConfig.SpioutChNum * PublicConfig.SignalBaseNum];
+            SpioutSineGain = new string[PublicConfig.SpioutChNum * PublicConfig.SignalBaseNum];
+            SpioutSinePhase = new string[PublicConfig.SpioutChNum * PublicConfig.SignalBaseNum];
+            SpioutWhiteNoiseGain = new string[PublicConfig.SpioutChNum];
+
+            PwmSineHz = new string[PublicConfig.PwmChNum * PublicConfig.SignalBaseNum];
+            PwmSineGain = new string[PublicConfig.PwmChNum * PublicConfig.SignalBaseNum];
+            PwmSinePhase = new string[PublicConfig.PwmChNum * PublicConfig.SignalBaseNum];
+            PwmWhiteNoiseGain = new string[PublicConfig.PwmChNum];
         }
     }
 }

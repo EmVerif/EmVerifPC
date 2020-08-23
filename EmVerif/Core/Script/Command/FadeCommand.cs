@@ -26,7 +26,7 @@ namespace EmVerif.Core.Script.Command
             throw new NotImplementedException();
         }
 
-        public void Finally()
+        public void Finally(ControllerState inState)
         {
             throw new NotImplementedException();
         }

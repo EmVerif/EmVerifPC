@@ -1,0 +1,451 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfOneElement xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <OneElement>
+    <XmlIO>
+      <Children>
+        <OneElement>
+          <XmlIO>
+            <Children>
+              <OneElement>
+                <XmlIO>
+                  <Children />
+                  <IsExpanded>true</IsExpanded>
+                  <Title>待機</Title>
+                  <Explanation>
+①５秒待機後、②に遷移
+②１秒待機後、終了</Explanation>
+                  <ScriptContent>
+Wait(Trig: "Boot", Next: "②", Time: 5.0);
+Wait(Trig: "②", Next: "End", Time: 1.0);
+</ScriptContent>
+                </XmlIO>
+              </OneElement>
+            </Children>
+            <IsExpanded>true</IsExpanded>
+            <Title>待機</Title>
+            <Explanation>
+</Explanation>
+            <ScriptContent>
+</ScriptContent>
+          </XmlIO>
+        </OneElement>
+        <OneElement>
+          <XmlIO>
+            <Children>
+              <OneElement>
+                <XmlIO>
+                  <Children />
+                  <IsExpanded>true</IsExpanded>
+                  <Title>変数設定（固定）</Title>
+                  <Explanation>
+①RPM 1000、Torque 200、Accel 100に設定。
+　５秒待機後、②に遷移
+②RPM 2000、Torque 400、Accel 50に設定。
+　５秒待機後、終了
+</Explanation>
+                  <ScriptContent>
+Set(Trig: "Boot", SetVar: new SetVar() {VarName = "RPM", Value = "1000"});
+Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Torque", Value = "200"});
+Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Accel", Value = "100"});
+Wait(Trig: "Boot", Next: "②", Time: 5.0);
+
+Set(Trig: "②", SetVar: new SetVar() {VarName = "RPM", Value = "2000"});
+Set(Trig: "②", SetVar: new SetVar() {VarName = "Torque", Value = "400"});
+Set(Trig: "②", SetVar: new SetVar() {VarName = "Accel", Value = "50"});
+Wait(Trig: "②", Next: "End", Time: 5.0);
+</ScriptContent>
+                </XmlIO>
+              </OneElement>
+              <OneElement>
+                <XmlIO>
+                  <Children />
+                  <IsExpanded>true</IsExpanded>
+                  <Title>変数設定（式）</Title>
+                  <Explanation>
+①RPM 1000、Torque = RPM / 5、Accel 100000 / RPMに設定。
+　５秒待機後、②に遷移
+②RPM 2000に設定。
+　５秒待機後、終了
+</Explanation>
+                  <ScriptContent>
+Set(Trig: "Boot", SetVar: new SetVar() {VarName = "RPM", Value = "1000"});
+Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Torque", Value = "RPM / 5"});
+Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Accel", Value = "100000 / RPM"});
+Wait(Trig: "Boot", Next: "②", Time: 5.0);
+
+Set(Trig: "②", SetVar: new SetVar() {VarName = "RPM", Value = "2000"});
+Wait(Trig: "②", Next: "End", Time: 5.0);
+</ScriptContent>
+                </XmlIO>
+              </OneElement>
+            </Children>
+            <IsExpanded>true</IsExpanded>
+            <Title>変数設定</Title>
+            <Explanation>
+</Explanation>
+            <ScriptContent>
+</ScriptContent>
+          </XmlIO>
+        </OneElement>
+        <OneElement>
+          <XmlIO>
+            <Children>
+              <OneElement>
+                <XmlIO>
+                  <Children />
+                  <IsExpanded>true</IsExpanded>
+                  <Title>サイン波出力（固定、Spiout）</Title>
+                  <Explanation>
+①Ch0は、Gain 1、Freq 100に設定
+　Ch1は、Gain 0.5、Freq 200+Gain 0.5、Freq 300に設定
+　Ch2は、Gain 0.25、Freq 400に設定
+　Ch3は、Gain 0.125、Freq 800に設定
+　Ch11は、Gain 0.0625、Freq 1600に設定
+　５秒待機後、終了</Explanation>
+                  <ScriptContent>
+Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 0, Gain = "1.0", Freq = "100"});
+Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 1, Id = 0, Gain = "0.5", Freq = "200"});
+Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 1, Id = 1, Gain = "0.5", Freq = "300"});
+Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 2, Gain = "0.25", Freq = "400"});
+Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 3, Gain = "0.125", Freq = "800"});
+Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 11, Gain = "0.0625", Freq = "1600"});
+Wait(Trig: "Boot", Next: "End", Time: 5.0);
+</ScriptContent>
+                </XmlIO>
+              </OneElement>
+              <OneElement>
+                <XmlIO>
+                  <Children />
+                  <IsExpanded>true</IsExpanded>
+                  <Title>サイン波出力（式、Spiout）</Title>
+                  <Explanation>
+①RPM 1000、Torque 500、Accel 100に設定。
+　Ch0は、Gain Torque / 1000、Freq RPM / 60 * 2に設定
+　Ch1は、Gain Torque / 2000、Freq RPM / 60 * 3に設定
+　５秒待機後、②に遷移
+②RPM 2000、Torque 1000に設定。
+　５秒待機後、終了
+</Explanation>
+                  <ScriptContent>
+Set(Trig: "Boot", SetVar: new SetVar() {VarName = "RPM", Value = "1000"});
+Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Torque", Value = "500"});
+Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Accel", Value = "100"});
+Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 0, Gain = "Torque / 1000", Freq = "RPM / 60 * 2"});
+Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 1, Gain = "Torque / 2000", Freq = "RPM / 60 * 3"});
+Wait(Trig: "Boot", Next: "②", Time: 5.0);
+
+Set(Trig: "②", SetVar: new SetVar() {VarName = "RPM", Value = "2000"});
+Set(Trig: "②", SetVar: new SetVar() {VarName = "Torque", Value = "1000"});
+Wait(Trig: "②", Next: "End", Time: 5.0);
+</ScriptContent>
+                </XmlIO>
+              </OneElement>
+              <OneElement>
+                <XmlIO>
+                  <Children />
+                  <IsExpanded>true</IsExpanded>
+                  <Title>サイン波出力（固定、Pwm）</Title>
+                  <Explanation>
+①Ch0は、Gain 1、Freq 100に設定
+　Ch1は、Gain 0.5、Freq 200+Gain 0.5、Freq 300に設定
+　Ch2は、Gain 0.25、Freq 400に設定
+　Ch3は、Gain 0.125、Freq 800に設定
+　Ch5は、Gain 0.0625、Freq 1600に設定
+　５秒待機後、終了</Explanation>
+                  <ScriptContent>
+Set(Trig: "Boot", Signal: new PwmSineWave() {Ch = 0, Gain = "1.0", Freq = "100"});
+Set(Trig: "Boot", Signal: new PwmSineWave() {Ch = 1, Id = 0, Gain = "0.5", Freq = "200"});
+Set(Trig: "Boot", Signal: new PwmSineWave() {Ch = 1, Id = 1, Gain = "0.5", Freq = "300"});
+Set(Trig: "Boot", Signal: new PwmSineWave() {Ch = 2, Gain = "0.25", Freq = "400"});
+Set(Trig: "Boot", Signal: new PwmSineWave() {Ch = 3, Gain = "0.125", Freq = "800"});
+Set(Trig: "Boot", Signal: new PwmSineWave() {Ch = 5, Gain = "0.0625", Freq = "1600"});
+Wait(Trig: "Boot", Next: "End", Time: 5.0);
+</ScriptContent>
+                </XmlIO>
+              </OneElement>
+              <OneElement>
+                <XmlIO>
+                  <Children />
+                  <IsExpanded>true</IsExpanded>
+                  <Title>サイン波出力（式、Pwm）</Title>
+                  <Explanation>
+①RPM 1000、Torque 500、Accel 100に設定。
+　Ch0は、Gain Torque / 1000、Freq RPM / 60 * 2に設定
+　Ch1は、Gain Torque / 2000、Freq RPM / 60 * 3に設定
+　５秒待機後、②に遷移
+②RPM 2000、Torque 1000に設定。
+　５秒待機後、終了
+</Explanation>
+                  <ScriptContent>
+Set(Trig: "Boot", SetVar: new SetVar() {VarName = "RPM", Value = "1000"});
+Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Torque", Value = "500"});
+Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Accel", Value = "100"});
+Set(Trig: "Boot", Signal: new PwmSineWave() {Ch = 0, Gain = "Torque / 1000", Freq = "RPM / 60 * 2"});
+Set(Trig: "Boot", Signal: new PwmSineWave() {Ch = 1, Gain = "Torque / 2000", Freq = "RPM / 60 * 3"});
+Wait(Trig: "Boot", Next: "②", Time: 5.0);
+
+Set(Trig: "②", SetVar: new SetVar() {VarName = "RPM", Value = "2000"});
+Set(Trig: "②", SetVar: new SetVar() {VarName = "Torque", Value = "1000"});
+Wait(Trig: "②", Next: "End", Time: 5.0);
+</ScriptContent>
+                </XmlIO>
+              </OneElement>
+            </Children>
+            <IsExpanded>true</IsExpanded>
+            <Title>サイン波出力</Title>
+            <Explanation>
+</Explanation>
+            <ScriptContent>
+</ScriptContent>
+          </XmlIO>
+        </OneElement>
+        <OneElement>
+          <XmlIO>
+            <Children>
+              <OneElement>
+                <XmlIO>
+                  <Children />
+                  <IsExpanded>false</IsExpanded>
+                  <Title>SPIOut⇒PWM</Title>
+                  <Explanation>
+①Pwm Ch0 = Spiout Ch0 * 0.5
+　Pwm Ch5 = Spiout Ch0 * 0.25 + Spiout Ch11 * 0.5
+　RPM 1000、Torque 500、Accel 100に設定。
+　Spiout Ch0は、Gain Torque / 1000、Freq RPM / 60 * 2に設定
+　Spiout Ch11は、Gain Torque / 2000、Freq RPM / 60 * 3に設定
+　５秒待機後、②に遷移
+②RPM 2000、Torque 1000に設定。
+　５秒待機後、終了
+</Explanation>
+                  <ScriptContent>
+Set(Trig: "Boot", VirtualPath: new VirtualPath() {Gain = 0.5f, Path = "Spiout0_Pwm0"});
+Set(Trig: "Boot", VirtualPath: new VirtualPath() {Gain = 0.25f, Path = "Spiout0_Pwm5"});
+Set(Trig: "Boot", VirtualPath: new VirtualPath() {Gain = 0.5f, Path = "Spiout11_Pwm5"});
+Set(Trig: "Boot", SetVar: new SetVar() {VarName = "RPM", Value = "1000"});
+Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Torque", Value = "500"});
+Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Accel", Value = "100"});
+Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 0, Gain = "Torque / 1000", Freq = "RPM / 60 * 2"});
+Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 11, Gain = "Torque / 2000", Freq = "RPM / 60 * 3"});
+Wait(Trig: "Boot", Next: "②", Time: 5.0);
+
+Set(Trig: "②", SetVar: new SetVar() {VarName = "RPM", Value = "2000"});
+Set(Trig: "②", SetVar: new SetVar() {VarName = "Torque", Value = "1000"});
+Wait(Trig: "②", Next: "End", Time: 5.0);
+</ScriptContent>
+                </XmlIO>
+              </OneElement>
+              <OneElement>
+                <XmlIO>
+                  <Children />
+                  <IsExpanded>false</IsExpanded>
+                  <Title>AD⇒PWM</Title>
+                  <Explanation>
+</Explanation>
+                  <ScriptContent>
+</ScriptContent>
+                </XmlIO>
+              </OneElement>
+              <OneElement>
+                <XmlIO>
+                  <Children />
+                  <IsExpanded>true</IsExpanded>
+                  <Title>AD⇒SPIOut</Title>
+                  <Explanation>
+</Explanation>
+                  <ScriptContent>
+</ScriptContent>
+                </XmlIO>
+              </OneElement>
+            </Children>
+            <IsExpanded>true</IsExpanded>
+            <Title>バーチャルパス</Title>
+            <Explanation>
+</Explanation>
+            <ScriptContent>
+</ScriptContent>
+          </XmlIO>
+        </OneElement>
+        <OneElement>
+          <XmlIO>
+            <Children>
+              <OneElement>
+                <XmlIO>
+                  <Children />
+                  <IsExpanded>true</IsExpanded>
+                  <Title>波形取得</Title>
+                  <Explanation>
+①MixOut Ch0 = ThroughOut Ch0 * 0.5
+　MixOut Ch5 = ThroughOut Ch0 * 0.25 + ThroughOut Ch11 * 0.5
+　RPM 1000、Torque 500、Accel 100に設定。
+　Ch0は、Gain Torque / 1000、Freq RPM / 60 * 2に設定
+　Ch11は、Gain Torque / 2000、Freq RPM / 60 * 3に設定
+　In Ch0, 5、ThroughOut Ch0, 11の波形取得
+　５秒待機後、②に遷移
+②RPM 2000、Torque 1000に設定。
+　MixOut Ch0, 5の波形取得
+　５秒待機後、終了
+</Explanation>
+                  <ScriptContent>
+Set(Trig: "Boot", VirtualPath: new VirtualPath() {Gain = 0.5f, Path = "Spiout0_Pwm0"});
+Set(Trig: "Boot", VirtualPath: new VirtualPath() {Gain = 0.25f, Path = "Spiout0_Pwm5"});
+Set(Trig: "Boot", VirtualPath: new VirtualPath() {Gain = 0.5f, Path = "Spiout11_Pwm5"});
+Set(Trig: "Boot", SetVar: new SetVar() {VarName = "RPM", Value = "1000"});
+Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Torque", Value = "500"});
+Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Accel", Value = "100"});
+Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 0, Gain = "Torque / 1000", Freq = "RPM / 60 * 2"});
+Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 11, Gain = "Torque / 2000", Freq = "RPM / 60 * 3"});
+GetWave(Trig: "Boot", Stop: "②", FileName: "①.wav", AdId: "0, 5", SpioutId: "0, 11");
+Wait(Trig: "Boot", Next: "②", Time: 5.0);
+
+Set(Trig: "②", SetVar: new SetVar() {VarName = "RPM", Value = "2000"});
+Set(Trig: "②", SetVar: new SetVar() {VarName = "Torque", Value = "1000"});
+GetWave(Trig: "②", Stop: "End", FileName: "②.wav", PwmId: "0, 5");
+Wait(Trig: "②", Next: "End", Time: 5.0);
+</ScriptContent>
+                </XmlIO>
+              </OneElement>
+            </Children>
+            <IsExpanded>true</IsExpanded>
+            <Title>波形取得</Title>
+            <Explanation>
+</Explanation>
+            <ScriptContent>
+</ScriptContent>
+          </XmlIO>
+        </OneElement>
+        <OneElement>
+          <XmlIO>
+            <Children>
+              <OneElement>
+                <XmlIO>
+                  <Children />
+                  <IsExpanded>true</IsExpanded>
+                  <Title>単発送信</Title>
+                  <Explanation>
+①CAN ID 0x100 で、0x00, 0xAA, 0xFF ３バイト送信し、②へ遷移。
+②CAN ID 0x200 で、0xAA, 0xFF, 0x00 ３バイト送信し、終了。
+</Explanation>
+                  <ScriptContent>
+CanSend( Trig: "Boot", SendCanId: 0x100, Data: new List&lt;byte&gt;() { 0x00, 0xAA, 0xFF }, Next: "②");
+CanSend( Trig: "②", SendCanId: 0x200, Data: new List&lt;byte&gt;() { 0xAA, 0xFF, 0x00 }, Next: "End");
+</ScriptContent>
+                </XmlIO>
+              </OneElement>
+              <OneElement>
+                <XmlIO>
+                  <Children />
+                  <IsExpanded>true</IsExpanded>
+                  <Title>周期送信</Title>
+                  <Explanation>
+①CAN ID 0x100 で、0x00, 0xAA, 0xFF ３バイトを200ms周期で送信。
+　５秒後、②に遷移。
+②CAN ID 0x100 停止。
+　CAN ID 0x200 で、0xAA, 0xFF, 0x00 ３バイトを100ms周期で送信。
+　５秒後、終了。
+</Explanation>
+                  <ScriptContent>
+CanRepSend(Trig: "Boot", Stop: "②", SendCanId: 0x100, RepTime: 0.2, Data: new List&lt;byte&gt;() {0x00, 0xAA, 0xFF});
+Wait(Trig: "Boot", Next: "②", Time: 5);
+
+CanRepSend(Trig: "②", SendCanId: 0x200, RepTime: 0.1, Data: new List&lt;byte&gt;() {0xAA, 0xFF, 0x00});
+Wait(Trig: "②", Next: "End", Time: 5);
+</ScriptContent>
+                </XmlIO>
+              </OneElement>
+              <OneElement>
+                <XmlIO>
+                  <Children />
+                  <IsExpanded>true</IsExpanded>
+                  <Title>データに同期した送信</Title>
+                  <Explanation>
+①CAN ID 0x100 で、0xXX, 0xXX, 0xFF ３バイトを200ms周期で送信。
+　先頭から１６ビットには、RPM / 10を設定して送信。
+　５秒後、終了。
+</Explanation>
+                  <ScriptContent>
+Set(Trig: "Boot", SetVar: new SetVar() {VarName = "RPM", Value = "1000"});
+CanRepSend(
+    Trig: "Boot", SendCanId: 0x100, RepTime: 0.2,
+    Data: new List&lt;byte&gt;() {0x00, 0xAA, 0xFF},
+    DataMask: new CanDataMask() { BitLen = 16, BitPos = 0, BytePos = 1, RefVar = "RPM / 10"}
+);
+Wait(Trig: "Boot", Next: "End", Time: 5);
+</ScriptContent>
+                </XmlIO>
+              </OneElement>
+              <OneElement>
+                <XmlIO>
+                  <Children />
+                  <IsExpanded>true</IsExpanded>
+                  <Title>ダイアグ送信</Title>
+                  <Explanation>
+</Explanation>
+                  <ScriptContent>
+</ScriptContent>
+                </XmlIO>
+              </OneElement>
+            </Children>
+            <IsExpanded>true</IsExpanded>
+            <Title>CAN</Title>
+            <Explanation>
+</Explanation>
+            <ScriptContent>
+</ScriptContent>
+          </XmlIO>
+        </OneElement>
+        <OneElement>
+          <XmlIO>
+            <Children>
+              <OneElement>
+                <XmlIO>
+                  <Children />
+                  <IsExpanded>true</IsExpanded>
+                  <Title>無音チェック</Title>
+                  <Explanation>
+</Explanation>
+                  <ScriptContent>
+</ScriptContent>
+                </XmlIO>
+              </OneElement>
+            </Children>
+            <IsExpanded>true</IsExpanded>
+            <Title>チェック</Title>
+            <Explanation>
+</Explanation>
+            <ScriptContent>
+</ScriptContent>
+          </XmlIO>
+        </OneElement>
+        <OneElement>
+          <XmlIO>
+            <Children>
+              <OneElement>
+                <XmlIO>
+                  <Children />
+                  <IsExpanded>true</IsExpanded>
+                  <Title>新規</Title>
+                  <Explanation>
+</Explanation>
+                  <ScriptContent>
+</ScriptContent>
+                </XmlIO>
+              </OneElement>
+            </Children>
+            <IsExpanded>true</IsExpanded>
+            <Title>一階層上のインクルード</Title>
+            <Explanation>
+</Explanation>
+            <ScriptContent>
+</ScriptContent>
+          </XmlIO>
+        </OneElement>
+      </Children>
+      <IsExpanded>true</IsExpanded>
+      <Title>トップ</Title>
+      <Explanation>
+</Explanation>
+      <ScriptContent>
+</ScriptContent>
+    </XmlIO>
+  </OneElement>
+</ArrayOfOneElement>

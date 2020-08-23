@@ -9,27 +9,27 @@ namespace EmVerif.Core.Script.Command
     class SilenceCheckCommand : IEmVerifCommand
     {
         private string _StopState;
-        private List<Int32> _InIdList;
-        private List<double> _InDataList;
+        private List<Int32> _AdIdList;
+        private List<double> _AdDataList;
         private double _Thresh;
         private string _Message;
 
-        public SilenceCheckCommand(string inStop, string inInId, double inThresh, string inMessage)
+        public SilenceCheckCommand(string inStop, string inAdId, double inThresh, string inMessage)
         {
             _StopState = inStop;
-            _InDataList = new List<double>();
-            if (inInId != null)
+            _AdDataList = new List<double>();
+            if (inAdId != null)
             {
-                _InIdList = inInId.Split(',').ToList().Select(id => Convert.ToInt32(id)).ToList();
+                _AdIdList = inAdId.Split(',').ToList().Select(id => Convert.ToInt32(id)).ToList();
             }
-            _InIdList = new List<Int32>();
+            _AdIdList = new List<Int32>();
             _Thresh = inThresh;
             _Message = inMessage;
         }
 
         public void Boot(ControllerState inState)
         {
-            _InDataList = new List<double>();
+            _AdDataList = new List<double>();
         }
 
         public string ExecPer10Ms(ControllerState ioState, out bool outFinFlag)
@@ -40,24 +40,24 @@ namespace EmVerif.Core.Script.Command
             }
             else
             {
-                _InDataList.AddRange(ioState.CurrentInDataList);
+                _AdDataList.AddRange(ioState.CurrentAdDataList);
                 outFinFlag = false;
             }
 
             return null;
         }
 
-        public void Finally()
+        public void Finally(ControllerState inState)
         {
-            Int32 smpNum = _InDataList.Count / PublicConfig.InChNum;
+            Int32 smpNum = _AdDataList.Count / PublicConfig.AdChNum;
             List<double> dataList = new List<double>();
             Boolean isSilent = true;
 
             for (int smp = 0; smp < smpNum; smp++)
             {
-                foreach (var id in _InIdList)
+                foreach (var id in _AdIdList)
                 {
-                    if (Math.Abs(_InDataList[PublicConfig.InChNum * smp + (int)id]) >= _Thresh)
+                    if (Math.Abs(_AdDataList[PublicConfig.AdChNum * smp + (int)id]) >= _Thresh)
                     {
                         isSilent = false;
                         break;

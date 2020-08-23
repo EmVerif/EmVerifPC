@@ -3,13 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:editor="clr-namespace:RoslynPad.Editor;assembly=RoslynPad.Editor.Windows"
         xmlns:local="clr-namespace:EmVerif"
+        xmlns:MyCtrl="clr-namespace:EmVerif.MyControl"
         xmlns:vm="clr-namespace:EmVerif.MainWindowViewModel"
         mc:Ignorable="d"
-        Title="EmVerif" Height="450" Width="800" Closing="Window_Closing">
+        Title="EmVerif" Height="800" Width="1000" Closing="Window_Closing" PreviewKeyDown="Window_PreviewKeyDown">
     <Window.DataContext>
-        <vm:MainWindowViewModel x:Name="ViewModel"/>
+        <vm:ViewModel x:Name="_ViewModel"/>
     </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
@@ -17,34 +17,82 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Button Grid.Row="0"
-                x:Name="button"
-                Content="{Binding ButtonClickCommand.DisplayString}"
+                Content="{Binding StartStopButtonInstance.DisplayString}"
                 HorizontalAlignment="Left"
-                Margin="10,8,0,0"
-                VerticalAlignment="Top"
+                Margin="10,8,0,4"
                 Width="75"
-                Command="{Binding ButtonClickCommand}"
-                Height="22"/>
+                Command="{Binding StartStopButtonInstance}"/>
         <ComboBox Grid.Row="0"
                   ItemsSource="{Binding IpAddressList}"
                   SelectedValue="{Binding SelectedIpAddress, Mode=TwoWay}"
                   HorizontalAlignment="Left"
-                  Margin="90,8,0,0"
-                  VerticalAlignment="Top"
-                  Width="120"
-                  Height="22"/>
+                  Margin="90,8,0,4"
+                  Width="120"/>
+        <Button Grid.Row="0"
+                Content="セーブ"
+                Margin="0,8,10,4"
+                HorizontalAlignment="Right"
+                Width="75"
+                Command="{Binding SaveButtonInstance}"/>
+        <Button Grid.Row="0"
+                Content="ロード"
+                Margin="0,8,90,4"
+                HorizontalAlignment="Right"
+                Width="75"
+                Command="{Binding LoadButtonInstance}" RenderTransformOrigin="-1.347,0.318"/>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition MinWidth="100" Width="229*"/>
-                <ColumnDefinition Width="Auto" MinWidth="5"/>
-                <ColumnDefinition MinWidth="100" Width="553*"/>
+                <ColumnDefinition MinWidth="100" Width="250*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition MinWidth="100" Width="500*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition MinWidth="100" Width="500*"/>
             </Grid.ColumnDefinitions>
-            <TreeView Grid.Column="0"/>
+            <TreeView x:Name="_TreeView"
+                      Grid.Column="0"
+                      ItemsSource="{Binding TreeViewList}"
+                      SelectedItemChanged="TreeView_SelectedItemChanged">
+                <TreeView.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="追加" Command="{Binding AddElementContextMenu}"/>
+                        <MenuItem Header="削除" Command="{Binding DelElementContextMenu}"/>
+                        <MenuItem Header="上へ移動" Command="{Binding MoveElementContextMenu}" CommandParameter="Up"/>
+                        <MenuItem Header="下へ移動" Command="{Binding MoveElementContextMenu}" CommandParameter="Down"/>
+                    </ContextMenu>
+                </TreeView.ContextMenu>
+                <TreeView.Resources>
+                    <Style TargetType="TreeViewItem">
+                        <Setter Property="IsExpanded" Value="{Binding Path=IsExpanded, Mode=TwoWay}"/>
+                    </Style>
+                </TreeView.Resources>
+                <TreeView.ItemTemplate>
+                    <HierarchicalDataTemplate DataType="vm:OneElement" ItemsSource="{Binding Children}">
+                        <TextBlock Text="{Binding Title.Content, Mode=TwoWay}"
+                                   IsEnabled="False"
+                                   />
+                    </HierarchicalDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
             <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
-            <editor:RoslynCodeEditor
-                Grid.Column="2"
-                x:Name="roslynCodeEditor"
-                Document="{Binding Script}"/>
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="34"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBox Grid.Row="0"
+                         TextWrapping="Wrap"
+                         Text="{Binding SelectedElement.Title.Content, Mode=TwoWay}"
+                         IsReadOnly="{Binding SelectedElement.IsReadOnly}"/>
+                <MyCtrl:MyTextBox Grid.Row="1"
+                                  TextWrapping="Wrap"
+                                  MyText="{Binding SelectedElement.Explanation, Mode=TwoWay}"
+                                  AcceptsReturn="True"
+                                  IsReadOnly="{Binding SelectedElement.IsReadOnly}"/>
+            </Grid>
+            <GridSplitter Grid.Column="3" HorizontalAlignment="Stretch" />
+            <MyCtrl:MyRoslynCodeEditor Grid.Column="4"
+                                       x:Name="roslynCodeEditor"
+                                       MyText="{Binding SelectedElement.ScriptContent, Mode=TwoWay}"/>
         </Grid>
     </Grid>
 </Window>

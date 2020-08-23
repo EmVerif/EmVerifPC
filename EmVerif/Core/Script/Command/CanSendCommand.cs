@@ -137,7 +137,7 @@ namespace EmVerif.Core.Script.Command
             return _NextState;
         }
 
-        public void Finally()
+        public void Finally(ControllerState inState)
         {
         }
 
@@ -215,7 +215,7 @@ namespace EmVerif.Core.Script.Command
             if (ioState.UserDataFromEcuStructureList.Count != 0)
             {
                 UInt32 sendPossibleNum = ioState.UserDataFromEcuStructureList.Last().CanSendPossibleNum;
-                UInt32 sendNum = ioState.UserDataToEcuStructure.CanSendNum;
+                UInt32 sendNum = ioState.UserDataToEcuStructure0.CanSendNum;
 
                 if ((sendPossibleNum > sendNum) && (_TimingMs >= _RepeatTimeMs))
                 {
@@ -225,12 +225,12 @@ namespace EmVerif.Core.Script.Command
                     {
                         sendData = ConvertFormula(ioState, _DataMask.RefVar, sendData, _DataMask.Mask, _DataMask.LShift);
                     }
-                    ioState.UserDataToEcuStructure.CanSendData[sendNum].CanId = _SendCanId;
-                    ioState.UserDataToEcuStructure.CanSendData[sendNum].IsExtendedId = 0;
-                    ioState.UserDataToEcuStructure.CanSendData[sendNum].IsRemoteFrame = 0;
-                    ioState.UserDataToEcuStructure.CanSendData[sendNum].Data = ConvertTo8ByteArray(sendData);
-                    ioState.UserDataToEcuStructure.CanSendData[sendNum].DataLen = (Byte)_SendDataLen;
-                    ioState.UserDataToEcuStructure.CanSendNum++;
+                    ioState.UserDataToEcuStructure0.CanSendData[sendNum].CanId = _SendCanId;
+                    ioState.UserDataToEcuStructure0.CanSendData[sendNum].IsExtendedId = 0;
+                    ioState.UserDataToEcuStructure0.CanSendData[sendNum].IsRemoteFrame = 0;
+                    ioState.UserDataToEcuStructure0.CanSendData[sendNum].Data = ConvertTo8ByteArray(sendData);
+                    ioState.UserDataToEcuStructure0.CanSendData[sendNum].DataLen = (Byte)_SendDataLen;
+                    ioState.UserDataToEcuStructure0.CanSendNum++;
                     _TimingMs = _TimingMs - _RepeatTimeMs;
                     ret = true;
                 }

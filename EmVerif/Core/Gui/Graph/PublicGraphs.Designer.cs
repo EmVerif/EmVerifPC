@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.InChart = new EmVerif.Core.Gui.Graph.OneGraph();
+            this.AdChart = new EmVerif.Core.Gui.Graph.OneGraph();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.ThroughOutChart = new EmVerif.Core.Gui.Graph.OneGraph();
-            this.MixOutChart = new EmVerif.Core.Gui.Graph.OneGraph();
+            this.SpioutChart = new EmVerif.Core.Gui.Graph.OneGraph();
+            this.PwmChart = new EmVerif.Core.Gui.Graph.OneGraph();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -53,7 +53,7 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.InChart);
+            this.splitContainer1.Panel1.Controls.Add(this.AdChart);
             // 
             // splitContainer1.Panel2
             // 
@@ -62,13 +62,13 @@
             this.splitContainer1.SplitterDistance = 200;
             this.splitContainer1.TabIndex = 0;
             // 
-            // In6ChChart
+            // Ad6ChChart
             // 
-            this.InChart.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.InChart.Location = new System.Drawing.Point(0, 0);
-            this.InChart.Name = "In6ChChart";
-            this.InChart.Size = new System.Drawing.Size(514, 200);
-            this.InChart.TabIndex = 0;
+            this.AdChart.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.AdChart.Location = new System.Drawing.Point(0, 0);
+            this.AdChart.Name = "Ad6ChChart";
+            this.AdChart.Size = new System.Drawing.Size(514, 200);
+            this.AdChart.TabIndex = 0;
             // 
             // splitContainer2
             // 
@@ -80,30 +80,30 @@
             // 
             // splitContainer2.Panel1
             // 
-            this.splitContainer2.Panel1.Controls.Add(this.ThroughOutChart);
+            this.splitContainer2.Panel1.Controls.Add(this.SpioutChart);
             // 
             // splitContainer2.Panel2
             // 
-            this.splitContainer2.Panel2.Controls.Add(this.MixOutChart);
+            this.splitContainer2.Panel2.Controls.Add(this.PwmChart);
             this.splitContainer2.Size = new System.Drawing.Size(514, 396);
             this.splitContainer2.SplitterDistance = 200;
             this.splitContainer2.TabIndex = 0;
             // 
-            // ThroughOut12ChChart
+            // Spiout12ChChart
             // 
-            this.ThroughOutChart.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ThroughOutChart.Location = new System.Drawing.Point(0, 0);
-            this.ThroughOutChart.Name = "ThroughOut12ChChart";
-            this.ThroughOutChart.Size = new System.Drawing.Size(514, 200);
-            this.ThroughOutChart.TabIndex = 0;
+            this.SpioutChart.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.SpioutChart.Location = new System.Drawing.Point(0, 0);
+            this.SpioutChart.Name = "Spiout12ChChart";
+            this.SpioutChart.Size = new System.Drawing.Size(514, 200);
+            this.SpioutChart.TabIndex = 0;
             // 
-            // MixOut4ChChart
+            // Pwm6ChChart
             // 
-            this.MixOutChart.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MixOutChart.Location = new System.Drawing.Point(0, 0);
-            this.MixOutChart.Name = "MixOut4ChChart";
-            this.MixOutChart.Size = new System.Drawing.Size(514, 192);
-            this.MixOutChart.TabIndex = 0;
+            this.PwmChart.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.PwmChart.Location = new System.Drawing.Point(0, 0);
+            this.PwmChart.Name = "Pwm6ChChart";
+            this.PwmChart.Size = new System.Drawing.Size(514, 192);
+            this.PwmChart.TabIndex = 0;
             // 
             // PublicGraphs
             // 
@@ -127,9 +127,9 @@
         #endregion
 
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private OneGraph InChart;
+        private OneGraph AdChart;
         private System.Windows.Forms.SplitContainer splitContainer2;
-        private OneGraph MixOutChart;
-        private OneGraph ThroughOutChart;
+        private OneGraph PwmChart;
+        private OneGraph SpioutChart;
     }
 }

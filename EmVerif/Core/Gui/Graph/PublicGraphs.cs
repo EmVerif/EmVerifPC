@@ -17,18 +17,18 @@ namespace EmVerif.Core.Gui.Graph
         public PublicGraphs()
         {
             InitializeComponent();
-            InChart.Init("In " + EmVerif.Core.Script.PublicConfig.InChNum + "Ch", EmVerif.Core.Script.PublicConfig.InChNum);
-            MixOutChart.Init("MixOut " + EmVerif.Core.Script.PublicConfig.MixOutChNum + "Ch", EmVerif.Core.Script.PublicConfig.MixOutChNum);
-            ThroughOutChart.Init("ThroughOut " + EmVerif.Core.Script.PublicConfig.ThroughOutChNum + "Ch", EmVerif.Core.Script.PublicConfig.ThroughOutChNum);
+            AdChart.Init("AD " + EmVerif.Core.Script.PublicConfig.AdChNum + "Ch", EmVerif.Core.Script.PublicConfig.AdChNum);
+            PwmChart.Init("PWM " + EmVerif.Core.Script.PublicConfig.PwmChNum + "Ch", EmVerif.Core.Script.PublicConfig.PwmChNum);
+            SpioutChart.Init("SPIOut " + EmVerif.Core.Script.PublicConfig.SpioutChNum + "Ch", EmVerif.Core.Script.PublicConfig.SpioutChNum);
         }
 
-        public void Set(IReadOnlyList<double> inInDataList, IReadOnlyList<double> inMixOutDataList, IReadOnlyList<double> inThroughOutDataList)
+        public void Set(IReadOnlyList<double> inAdDataList, IReadOnlyList<double> inPwmDataList, IReadOnlyList<double> inSpioutDataList)
         {
             lock(_dataLock)
             {
-                InChart.SetData(inInDataList);
-                MixOutChart.SetData(inMixOutDataList);
-                ThroughOutChart.SetData(inThroughOutDataList);
+                AdChart.SetData(inAdDataList);
+                PwmChart.SetData(inPwmDataList);
+                SpioutChart.SetData(inSpioutDataList);
             }
         }
 
@@ -36,13 +36,13 @@ namespace EmVerif.Core.Gui.Graph
         {
             lock(_dataLock)
             {
-                InChart.UpdateDataForSync();
-                MixOutChart.UpdateDataForSync();
-                ThroughOutChart.UpdateDataForSync();
+                AdChart.UpdateDataForSync();
+                PwmChart.UpdateDataForSync();
+                SpioutChart.UpdateDataForSync();
             }
-            InChart.UpdateChart();
-            MixOutChart.UpdateChart();
-            ThroughOutChart.UpdateChart();
+            AdChart.UpdateChart();
+            PwmChart.UpdateChart();
+            SpioutChart.UpdateChart();
         }
     }
 }

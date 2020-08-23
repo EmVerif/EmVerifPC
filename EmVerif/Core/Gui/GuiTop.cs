@@ -23,9 +23,9 @@ namespace EmVerif.Core.Gui
             tm_Update.Start();
         }
 
-        public void SetGraph(IReadOnlyList<double> inInDataList, IReadOnlyList<double> inMixOutDataList, IReadOnlyList<double> inThroughOutDataList)
+        public void SetGraph(IReadOnlyList<double> inAdDataList, IReadOnlyList<double> inPwmDataList, IReadOnlyList<double> inSpioutDataList)
         {
-            publicGraphs1.Set(inInDataList, inMixOutDataList, inThroughOutDataList);
+            publicGraphs1.Set(inAdDataList, inPwmDataList, inSpioutDataList);
         }
 
         public void SetLoadBar(IReadOnlyList<double> inDataList)

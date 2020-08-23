@@ -13,7 +13,7 @@ using Microsoft.CodeAnalysis.Scripting;
 
 namespace EmVerif.MainWindowViewModel
 {
-    class StartStopCommand : ICommand, INotifyPropertyChanged
+    class StartStopButton : ICommand, INotifyPropertyChanged
     {
         public event EventHandler CanExecuteChanged;
         public event PropertyChangedEventHandler PropertyChanged;
@@ -31,11 +31,11 @@ namespace EmVerif.MainWindowViewModel
         }
         private string _DisplayString;
 
-        private MainWindowViewModel _RefViewModel;
+        private ViewModel _RefViewModel;
         private const string _StartStr = "開始";
         private const string _StopStr = "停止";
 
-        public StartStopCommand(MainWindowViewModel vm)
+        public StartStopButton(ViewModel vm)
         {
             _RefViewModel = vm;
             DisplayString = _StartStr;
@@ -54,7 +54,16 @@ namespace EmVerif.MainWindowViewModel
             }
             else
             {
-                StartScript(_RefViewModel.Script.Text, _RefViewModel.SelectedIpAddress);
+                string workFolder = "";
+                OneElement oneElement = _RefViewModel.SelectedElement;
+
+                while (oneElement.Parent != null)
+                {
+                    workFolder = @"\" + oneElement.Title.Content + workFolder;
+                    oneElement = oneElement.Parent;
+                }
+                workFolder = @".\" + oneElement.Title.Content + workFolder;
+                StartScript(_RefViewModel.SelectedElement.ScriptContent.Content, _RefViewModel.SelectedIpAddress, workFolder);
             }
         }
 
@@ -71,12 +80,12 @@ namespace EmVerif.MainWindowViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
         }
 
-        async private void StartScript(string inRoslynText, IPAddress inIpAddress)
+        async private void StartScript(string inRoslynText, IPAddress inIpAddress, string inWorkFolder)
         {
             try
             {
                 ScriptOptions options = ScriptOptions.Default.WithImports("System", "System.Collections.Generic");
-                PublicController.Instance.Reset();
+                PublicController.Instance.Reset(inWorkFolder);
                 Script<object> script = CSharpScript.Create(inRoslynText, options, typeof(PublicApis));
                 await script.RunAsync(new PublicApis());
                 PublicController.Instance.EndEvent += StopScript;

@@ -15,22 +15,47 @@ namespace EmVerif.Core.Script
             public string Gain { get; set; }
         }
 
-        public class WhiteNoise : Signal
+        public class PwmWhiteNoise : Signal
         {
-            public WhiteNoise()
+            public PwmWhiteNoise()
             {
                 Ch = 0;
                 Gain = "0";
             }
         }
 
-        public class SineWave : Signal
+        public class SpioutWhiteNoise : Signal
+        {
+            public SpioutWhiteNoise()
+            {
+                Ch = 0;
+                Gain = "0";
+            }
+        }
+
+        public class PwmSineWave : Signal
         {
             public Byte Id { get; set; }
             public string Freq { get; set; }
             public string Phase { get; set; }
 
-            public SineWave()
+            public PwmSineWave()
+            {
+                Ch = 0;
+                Id = 0;
+                Freq = "0";
+                Gain = "0";
+                Phase = "0";
+            }
+        }
+
+        public class SpioutSineWave : Signal
+        {
+            public Byte Id { get; set; }
+            public string Freq { get; set; }
+            public string Phase { get; set; }
+
+            public SpioutSineWave()
             {
                 Ch = 0;
                 Id = 0;
@@ -48,7 +73,7 @@ namespace EmVerif.Core.Script
 
             public VirtualPath()
             {
-                Path = "In0_MixOut0";
+                Path = "Ad0_Pwm0";
                 Gain = 0;
                 Delay = 0;
             }
@@ -119,17 +144,17 @@ namespace EmVerif.Core.Script
         public void GetWave(
             string Trig, string Stop,
             string FileName,
-            string InId = null,
-            string ThroughOutId = null,
-            string MixOutId = null
+            string AdId = null,
+            string SpioutId = null,
+            string PwmId = null
         )
         {
             GetWaveCommand cmd = new GetWaveCommand(
                 inStop: Stop,
                 inFileName: FileName,
-                inInId: InId,
-                inThroughOutId: ThroughOutId,
-                inMixOutId: MixOutId
+                inAdId: AdId,
+                inSpioutId: SpioutId,
+                inPwmId: PwmId
             );
 
             PublicController.Instance.Register(Trig, cmd);
@@ -179,14 +204,14 @@ namespace EmVerif.Core.Script
 
         public void SilenceCheck(
             string Trig, string Stop,
-            string InId,
+            string AdId,
             double Thresh = 0.01,
             string Message = ""
         )
         {
             SilenceCheckCommand cmd = new SilenceCheckCommand(
                 inStop: Stop,
-                inInId: InId,
+                inAdId: AdId,
                 inThresh: Thresh,
                 inMessage: Message
             );

@@ -10,44 +10,44 @@ namespace EmVerif.Core.Script.Command
     class GetWaveCommand : IEmVerifCommand
     {
         private string _StopState;
-        private List<Int32> _InIdList;
-        private List<Int32> _MixOutIdList;
-        private List<Int32> _ThroughOutIdList;
+        private List<Int32> _AdIdList;
+        private List<Int32> _PwmIdList;
+        private List<Int32> _SpioutIdList;
         private string _FileName;
-        private List<double> _InDataList;
-        private List<double> _MixOutDataList;
-        private List<double> _ThroughOutDataList;
+        private List<double> _AdDataList;
+        private List<double> _PwmDataList;
+        private List<double> _SpioutDataList;
 
-        public GetWaveCommand(string inStop, string inFileName, string inInId, string inThroughOutId, string inMixOutId)
+        public GetWaveCommand(string inStop, string inFileName, string inAdId, string inSpioutId, string inPwmId)
         {
             _StopState = inStop;
-            _InIdList = new List<Int32>();
-            _MixOutIdList = new List<Int32>();
-            _ThroughOutIdList = new List<Int32>();
-            if (inInId != null)
+            _AdIdList = new List<Int32>();
+            _PwmIdList = new List<Int32>();
+            _SpioutIdList = new List<Int32>();
+            if (inAdId != null)
             {
-                _InIdList = inInId.Split(',').ToList().Select(id => Convert.ToInt32(id)).ToList();
+                _AdIdList = inAdId.Split(',').ToList().Select(id => Convert.ToInt32(id)).ToList();
             }
-            if (inMixOutId != null)
+            if (inPwmId != null)
             {
-                _MixOutIdList = inMixOutId.Split(',').ToList().Select(id => Convert.ToInt32(id)).ToList();
+                _PwmIdList = inPwmId.Split(',').ToList().Select(id => Convert.ToInt32(id)).ToList();
             }
-            if (inThroughOutId != null)
+            if (inSpioutId != null)
             {
-                _ThroughOutIdList = inThroughOutId.Split(',').ToList().Select(id => Convert.ToInt32(id)).ToList();
+                _SpioutIdList = inSpioutId.Split(',').ToList().Select(id => Convert.ToInt32(id)).ToList();
             }
-            CheckParam(inInId, inMixOutId, inThroughOutId);
+            CheckParam(inAdId, inPwmId, inSpioutId);
             _FileName = inFileName;
-            _InDataList = new List<double>();
-            _MixOutDataList = new List<double>();
-            _ThroughOutDataList = new List<double>();
+            _AdDataList = new List<double>();
+            _PwmDataList = new List<double>();
+            _SpioutDataList = new List<double>();
         }
 
         public void Boot(ControllerState inState)
         {
-            _InDataList = new List<double>();
-            _MixOutDataList = new List<double>();
-            _ThroughOutDataList = new List<double>();
+            _AdDataList = new List<double>();
+            _PwmDataList = new List<double>();
+            _SpioutDataList = new List<double>();
         }
 
         public string ExecPer10Ms(ControllerState ioState, out bool outFinFlag)
@@ -58,18 +58,18 @@ namespace EmVerif.Core.Script.Command
             }
             else
             {
-                _InDataList.AddRange(ioState.CurrentInDataList);
-                _MixOutDataList.AddRange(ioState.CurrentMixOutDataList);
-                _ThroughOutDataList.AddRange(ioState.CurrentThroughOutDataList);
+                _AdDataList.AddRange(ioState.CurrentAdDataList);
+                _PwmDataList.AddRange(ioState.CurrentPwmDataList);
+                _SpioutDataList.AddRange(ioState.CurrentSpioutDataList);
                 outFinFlag = false;
             }
 
             return null;
         }
 
-        public void Finally()
+        public void Finally(ControllerState inState)
         {
-            using (FileStream filStream = new FileStream(_FileName, FileMode.Create, FileAccess.Write))
+            using (FileStream filStream = new FileStream(inState.WorkFolder + @"\" + _FileName, FileMode.Create, FileAccess.Write))
             using (BinaryWriter binWriter = new BinaryWriter(filStream))
             {
                 binWriter.Write(CreateHeader());
@@ -77,35 +77,35 @@ namespace EmVerif.Core.Script.Command
             }
         }
 
-        private void CheckParam(string inInId, string inMixOutId, string inThroughOutId)
+        private void CheckParam(string inAdId, string inPwmId, string inSpioutId)
         {
-            foreach (var id in _InIdList)
+            foreach (var id in _AdIdList)
             {
-                if (PublicConfig.InChNum <= id)
+                if (PublicConfig.AdChNum <= id)
                 {
                     throw new Exception(
-                        "GetWave コマンド内 InId 設定エラー⇒" + inInId + "\n" +
-                        "InId 設定値範囲は 0 以上 " + PublicConfig.InChNum + " 未満。"
+                        "GetWave コマンド内 AdId 設定エラー⇒" + inAdId + "\n" +
+                        "AdId 設定値範囲は 0 以上 " + PublicConfig.AdChNum + " 未満。"
                     );
                 }
             }
-            foreach (var id in _MixOutIdList)
+            foreach (var id in _PwmIdList)
             {
-                if (PublicConfig.MixOutChNum <= id)
+                if (PublicConfig.PwmChNum <= id)
                 {
                     throw new Exception(
-                        "GetWave コマンド内 MixOutId 設定エラー⇒" + inMixOutId + "\n" +
-                        "MixOutId 設定値範囲は 0 以上 " + PublicConfig.MixOutChNum + " 未満。"
+                        "GetWave コマンド内 PwmId 設定エラー⇒" + inPwmId + "\n" +
+                        "PwmId 設定値範囲は 0 以上 " + PublicConfig.PwmChNum + " 未満。"
                     );
                 }
             }
-            foreach (var id in _ThroughOutIdList)
+            foreach (var id in _SpioutIdList)
             {
-                if (PublicConfig.ThroughOutChNum <= id)
+                if (PublicConfig.SpioutChNum <= id)
                 {
                     throw new Exception(
-                        "GetWave コマンド内 ThroughOutId 設定エラー⇒" + inThroughOutId + "\n" +
-                        "ThroughOutId 設定値範囲は 0 以上 " + PublicConfig.ThroughOutChNum + " 未満。"
+                        "GetWave コマンド内 SpioutId 設定エラー⇒" + inSpioutId + "\n" +
+                        "SpioutId 設定値範囲は 0 以上 " + PublicConfig.SpioutChNum + " 未満。"
                     );
                 }
             }
@@ -113,22 +113,22 @@ namespace EmVerif.Core.Script.Command
 
         private byte[] CreateWaveData()
         {
-            Int32 smpNum = _InDataList.Count / PublicConfig.InChNum;
+            Int32 smpNum = _AdDataList.Count / PublicConfig.AdChNum;
             List<double> dataList = new List<double>();
 
             for (int smp = 0; smp < smpNum; smp++)
             {
-                foreach (var id in _InIdList)
+                foreach (var id in _AdIdList)
                 {
-                    dataList.Add(_InDataList[PublicConfig.InChNum * smp + (int)id]);
+                    dataList.Add(_AdDataList[PublicConfig.AdChNum * smp + (int)id]);
                 }
-                foreach (var id in _ThroughOutIdList)
+                foreach (var id in _SpioutIdList)
                 {
-                    dataList.Add(_ThroughOutDataList[PublicConfig.ThroughOutChNum * smp + (int)id]);
+                    dataList.Add(_SpioutDataList[PublicConfig.SpioutChNum * smp + (int)id]);
                 }
-                foreach (var id in _MixOutIdList)
+                foreach (var id in _PwmIdList)
                 {
-                    dataList.Add(_MixOutDataList[PublicConfig.MixOutChNum * smp + (int)id]);
+                    dataList.Add(_PwmDataList[PublicConfig.PwmChNum * smp + (int)id]);
                 }
             }
 
@@ -145,9 +145,9 @@ namespace EmVerif.Core.Script.Command
         private byte[] CreateHeader()
         {
             byte[] Datas = new byte[44];
-            Int32 chNum = _InIdList.Count + _MixOutIdList.Count + _ThroughOutIdList.Count;
+            Int32 chNum = _AdIdList.Count + _PwmIdList.Count + _SpioutIdList.Count;
             Int32 samplingHz = EmVerif.Core.Communication.PublicConfig.SamplingKhz * 1000;
-            Int32 fileSize = 2 * (_InDataList.Count / PublicConfig.InChNum) * chNum + 44;
+            Int32 fileSize = 2 * (_AdDataList.Count / PublicConfig.AdChNum) * chNum + 44;
 
             Array.Copy(Encoding.ASCII.GetBytes("RIFF"), 0, Datas, 0, 4);
             Array.Copy(BitConverter.GetBytes(fileSize - 8), 0, Datas, 4, 4);

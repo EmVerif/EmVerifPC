@@ -10,6 +10,6 @@ namespace EmVerif.Core.Script.Command
     {
         void Boot(ControllerState inState);
         string ExecPer10Ms(ControllerState ioState, out Boolean outFinFlag);
-        void Finally();
+        void Finally(ControllerState inState);
     }
 }

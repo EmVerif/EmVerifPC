@@ -46,7 +46,7 @@ namespace EmVerif.Core.Script.Command
             return retState;
         }
 
-        public void Finally()
+        public void Finally(ControllerState inState)
         {
         }
     }
