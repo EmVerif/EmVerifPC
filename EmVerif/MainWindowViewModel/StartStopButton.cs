@@ -59,11 +59,11 @@ namespace EmVerif.MainWindowViewModel
 
                 while (oneElement.Parent != null)
                 {
-                    workFolder = @"\" + oneElement.Title.Content + workFolder;
+                    workFolder = @"\" + oneElement.Title + workFolder;
                     oneElement = oneElement.Parent;
                 }
-                workFolder = @".\" + oneElement.Title.Content + workFolder;
-                StartScript(_RefViewModel.SelectedElement.ScriptContent.Content, _RefViewModel.SelectedIpAddress, workFolder);
+                workFolder = @".\" + oneElement.Title + workFolder;
+                StartScript(_RefViewModel.SelectedElement.Script, _RefViewModel.SelectedIpAddress, workFolder);
             }
         }
 

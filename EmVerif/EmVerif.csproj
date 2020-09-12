@@ -302,9 +302,6 @@
     <Compile Include="MainWindowViewModel\SaveButton.cs" />
     <Compile Include="MainWindowViewModel\StartStopButton.cs" />
     <Compile Include="MainWindowViewModel\ViewModel.cs" />
-    <Compile Include="MyControl\MyRoslynCodeEditor.cs" />
-    <Compile Include="MyControl\MyString.cs" />
-    <Compile Include="MyControl\MyTextBox.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

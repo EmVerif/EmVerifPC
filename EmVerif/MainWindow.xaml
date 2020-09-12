@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:EmVerif"
-        xmlns:MyCtrl="clr-namespace:EmVerif.MyControl"
+        xmlns:editor="clr-namespace:RoslynPad.Editor;assembly=RoslynPad.Editor.Windows"
         xmlns:vm="clr-namespace:EmVerif.MainWindowViewModel"
         mc:Ignorable="d"
         Title="EmVerif" Height="800" Width="1000" Closing="Window_Closing">
@@ -67,7 +67,7 @@
                 </TreeView.Resources>
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate DataType="vm:OneElement" ItemsSource="{Binding Children}">
-                        <TextBlock Text="{Binding Title.Content, Mode=TwoWay}"
+                        <TextBlock Text="{Binding Title, Mode=TwoWay}"
                                    IsEnabled="False"
                                    />
                     </HierarchicalDataTemplate>
@@ -82,18 +82,17 @@
                 </Grid.RowDefinitions>
                 <TextBox Grid.Row="0"
                          TextWrapping="Wrap"
-                         Text="{Binding SelectedElement.Title.Content, Mode=TwoWay}"
+                         Text="{Binding SelectedElement.Title, Mode=TwoWay}"
                          IsReadOnly="{Binding SelectedElement.IsReadOnly}"/>
-                <MyCtrl:MyTextBox Grid.Row="1"
-                                  TextWrapping="Wrap"
-                                  MyText="{Binding SelectedElement.Explanation, Mode=TwoWay}"
-                                  AcceptsReturn="True"
-                                  IsReadOnly="{Binding SelectedElement.IsReadOnly}"/>
+                <TextBox Grid.Row="1"
+                         TextWrapping="Wrap"
+                         Text="{Binding SelectedElement.Explanation, Mode=TwoWay}"
+                         AcceptsReturn="True"
+                         IsReadOnly="{Binding SelectedElement.IsReadOnly}"/>
             </Grid>
             <GridSplitter Grid.Column="3" HorizontalAlignment="Stretch" />
-            <MyCtrl:MyRoslynCodeEditor Grid.Column="4"
-                                       x:Name="roslynCodeEditor"
-                                       MyText="{Binding SelectedElement.ScriptContent, Mode=TwoWay}"/>
+            <editor:RoslynCodeEditor Grid.Column="4"
+                                     x:Name="roslynCodeEditor"/>
         </Grid>
     </Grid>
 </Window>

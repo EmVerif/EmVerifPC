@@ -19,6 +19,7 @@ namespace EmVerif.MainWindowViewModel
     class ViewModel : INotifyPropertyChanged
     {
         public ObservableCollection<OneElement> TreeViewList { get; set; } = new ObservableCollection<OneElement>();
+        private OneElement _SelectedElement = new OneElement();
         public OneElement SelectedElement
         {
             get
@@ -31,9 +32,20 @@ namespace EmVerif.MainWindowViewModel
                 OnPropertyChanged("SelectedElement");
             }
         }
-        private OneElement _SelectedElement = new OneElement();
         public IEnumerable<IPAddress> IpAddressList { get; private set; }
-        public IPAddress SelectedIpAddress { get; set; }
+        private IPAddress _SelectedIpAddress;
+        public IPAddress SelectedIpAddress
+        {
+            get
+            {
+                return _SelectedIpAddress;
+            }
+            set
+            {
+                _SelectedIpAddress = value;
+                OnPropertyChanged("SelectedIpAddress");
+            }
+        }
         public StartStopButton StartStopButtonInstance { get; private set; }
         public SaveButton SaveButtonInstance { get; private set; }
         public LoadButton LoadButtonInstance { get; private set; }

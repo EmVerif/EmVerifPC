@@ -116,7 +116,7 @@ Wait(Trig: "Boot", Next: "End", Time: 5.0);
               <OneElement>
                 <XmlIO>
                   <Children />
-                  <IsExpanded>true</IsExpanded>
+                  <IsExpanded>false</IsExpanded>
                   <Title>サイン波出力（式、Spiout）</Title>
                   <Explanation>
 ①RPM 1000、Torque 500、Accel 100に設定。
@@ -432,7 +432,7 @@ Wait(Trig: "Boot", Next: "End", Time: 5);
               </OneElement>
             </Children>
             <IsExpanded>true</IsExpanded>
-            <Title>一階層上のインクルード</Title>
+            <Title>一階層上のスクリプトを取得</Title>
             <Explanation>
 </Explanation>
             <ScriptContent>

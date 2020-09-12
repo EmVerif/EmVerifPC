@@ -19,6 +19,8 @@ namespace EmVerif
     public partial class MainWindow : Window
     {
         private CustomRoslynHost _Host;
+        private bool _SelectedChangedLock = false;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -56,28 +58,27 @@ namespace EmVerif
             }
         }
 
-        private bool _SelectedChangedLock = false;
-        private async void TreeView_KeyUp(object sender, KeyEventArgs e)
+        private void TreeView_KeyUp(object sender, KeyEventArgs e)
         {
-            if (_SelectedChangedLock)
-            {
-                return;
-            }
-            _SelectedChangedLock = true;
-            await Task.Delay(500);
-            _ViewModel.SelectedElement = (OneElement)((TreeView)sender).SelectedItem;
-            _SelectedChangedLock = false;
+            SetSelectedElement((TreeView)sender);
         }
 
-        private async void TreeView_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void TreeView_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (_SelectedChangedLock)
+            SetSelectedElement((TreeView)sender);
+        }
+
+        private async void SetSelectedElement(TreeView sender)
+        {
+            if ((_SelectedChangedLock) || (sender.SelectedItem == null))
             {
                 return;
             }
             _SelectedChangedLock = true;
-            await Task.Delay(500);
-            _ViewModel.SelectedElement = (OneElement)((TreeView)sender).SelectedItem;
+            await Task.Delay(300);
+            _ViewModel.SelectedElement.Script = roslynCodeEditor.Text;
+            _ViewModel.SelectedElement = (OneElement)sender.SelectedItem;
+            roslynCodeEditor.Text = _ViewModel.SelectedElement.Script;
             _SelectedChangedLock = false;
         }
     }

@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using EmVerif.MyControl;
 
 namespace EmVerif.MainWindowViewModel
 {
@@ -23,9 +22,45 @@ namespace EmVerif.MainWindowViewModel
         public ObservableCollection<OneElement> Children { get; private set; } = new ObservableCollection<OneElement>();
         public OneElement Parent { get; private set; } = null;
         public bool IsExpanded { get; set; } = true;
-        public MyString Title { get; set; } = new MyString();
-        public MyString Explanation { get; set; } = new MyString();
-        public MyString ScriptContent { get; set; } = new MyString();
+        private string _Title = "";
+        public string Title
+        {
+            get
+            {
+                return _Title;
+            }
+            set
+            {
+                _Title = value;
+                OnPropertyChanged("Title");
+            }
+        }
+        private string _Explanation = "";
+        public string Explanation
+        {
+            get
+            {
+                return _Explanation;
+            }
+            set
+            {
+                _Explanation = value;
+                OnPropertyChanged("Explanation");
+            }
+        }
+        private string _ScriptContent = "";
+        public string Script
+        {
+            get
+            {
+                return _ScriptContent;
+            }
+            set
+            {
+                _ScriptContent = value;
+                OnPropertyChanged("ScriptContent");
+            }
+        }
         public bool IsReadOnly
         {
             get
@@ -49,13 +84,13 @@ namespace EmVerif.MainWindowViewModel
 
         public OneElement()
         {
-            Title.Content = "トップ";
+            Title = "トップ";
         }
 
         public OneElement(OneElement inParent)
         {
             Parent = inParent;
-            Title.Content = "新規";
+            Title = "新規";
         }
 
         private void OnPropertyChanged(string info)
@@ -86,9 +121,9 @@ namespace EmVerif.MainWindowViewModel
                 {
                     Children = xmlIO.Children;
                     IsExpanded = xmlIO.IsExpanded;
-                    Title.Content = xmlIO.Title;
-                    Explanation.Content = xmlIO.Explanation.TrimStart();
-                    ScriptContent.Content = xmlIO.ScriptContent.TrimStart();
+                    Title = xmlIO.Title;
+                    Explanation = xmlIO.Explanation.TrimStart();
+                    Script = xmlIO.ScriptContent.TrimStart();
                 }
             }
             reader.Read();
@@ -101,9 +136,9 @@ namespace EmVerif.MainWindowViewModel
 
             xmlIO.Children = Children;
             xmlIO.IsExpanded = IsExpanded;
-            xmlIO.Title = Title.Content;
-            xmlIO.Explanation = "\r\n" + Explanation.Content;
-            xmlIO.ScriptContent = "\r\n" + ScriptContent.Content;
+            xmlIO.Title = Title;
+            xmlIO.Explanation = "\r\n" + Explanation;
+            xmlIO.ScriptContent = "\r\n" + Script;
 
             serializer.Serialize(writer, xmlIO);
         }
