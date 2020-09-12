@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -37,11 +38,6 @@ namespace EmVerif
             _ViewModel.CloseWindow();
         }
 
-        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            _ViewModel.SelectedElement = (OneElement)((TreeView)sender).SelectedItem;
-        }
-
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (Keyboard.Modifiers == ModifierKeys.Control)
@@ -58,6 +54,31 @@ namespace EmVerif
                         break;
                 }
             }
+        }
+
+        private bool _SelectedChangedLock = false;
+        private async void TreeView_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (_SelectedChangedLock)
+            {
+                return;
+            }
+            _SelectedChangedLock = true;
+            await Task.Delay(500);
+            _ViewModel.SelectedElement = (OneElement)((TreeView)sender).SelectedItem;
+            _SelectedChangedLock = false;
+        }
+
+        private async void TreeView_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (_SelectedChangedLock)
+            {
+                return;
+            }
+            _SelectedChangedLock = true;
+            await Task.Delay(500);
+            _ViewModel.SelectedElement = (OneElement)((TreeView)sender).SelectedItem;
+            _SelectedChangedLock = false;
         }
     }
 }

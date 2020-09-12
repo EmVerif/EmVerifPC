@@ -7,7 +7,7 @@
         xmlns:MyCtrl="clr-namespace:EmVerif.MyControl"
         xmlns:vm="clr-namespace:EmVerif.MainWindowViewModel"
         mc:Ignorable="d"
-        Title="EmVerif" Height="800" Width="1000" Closing="Window_Closing" PreviewKeyDown="Window_PreviewKeyDown">
+        Title="EmVerif" Height="800" Width="1000" Closing="Window_Closing">
     <Window.DataContext>
         <vm:ViewModel x:Name="_ViewModel"/>
     </Window.DataContext>
@@ -48,10 +48,10 @@
                 <ColumnDefinition Width="5"/>
                 <ColumnDefinition MinWidth="100" Width="500*"/>
             </Grid.ColumnDefinitions>
-            <TreeView x:Name="_TreeView"
+            <TreeView x:Name="TreeView"
                       Grid.Column="0"
                       ItemsSource="{Binding TreeViewList}"
-                      SelectedItemChanged="TreeView_SelectedItemChanged">
+                      KeyUp="TreeView_KeyUp" MouseLeftButtonUp="TreeView_MouseLeftButtonUp">
                 <TreeView.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="追加" Command="{Binding AddElementContextMenu}"/>
@@ -73,6 +73,7 @@
                     </HierarchicalDataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>
+
             <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
             <Grid Grid.Column="2">
                 <Grid.RowDefinitions>
