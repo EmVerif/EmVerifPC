@@ -100,6 +100,7 @@ Wait(Trig: "②", Next: "End", Time: 5.0);
 　Ch1は、Gain 0.5、Freq 200+Gain 0.5、Freq 300に設定
 　Ch2は、Gain 0.25、Freq 400に設定
 　Ch3は、Gain 0.125、Freq 800に設定
+　Ch4は、Gain 1のランダムノイズ
 　Ch11は、Gain 0.0625、Freq 1600に設定
 　５秒待機後、終了</Explanation>
                   <ScriptContent>
@@ -108,6 +109,7 @@ Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 1, Id = 0, Gain = "0.5", Fr
 Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 1, Id = 1, Gain = "0.5", Freq = "300"});
 Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 2, Gain = "0.25", Freq = "400"});
 Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 3, Gain = "0.125", Freq = "800"});
+Set(Trig: "Boot", Signal: new SpioutWhiteNoise() {Ch = 4, Gain = "1.0"});
 Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 11, Gain = "0.0625", Freq = "1600"});
 Wait(Trig: "Boot", Next: "End", Time: 5.0);
 </ScriptContent>
@@ -150,6 +152,7 @@ Wait(Trig: "②", Next: "End", Time: 5.0);
 　Ch1は、Gain 0.5、Freq 200+Gain 0.5、Freq 300に設定
 　Ch2は、Gain 0.25、Freq 400に設定
 　Ch3は、Gain 0.125、Freq 800に設定
+　Ch4は、Gain 1のランダムノイズ
 　Ch5は、Gain 0.0625、Freq 1600に設定
 　５秒待機後、終了</Explanation>
                   <ScriptContent>
@@ -158,6 +161,7 @@ Set(Trig: "Boot", Signal: new PwmSineWave() {Ch = 1, Id = 0, Gain = "0.5", Freq 
 Set(Trig: "Boot", Signal: new PwmSineWave() {Ch = 1, Id = 1, Gain = "0.5", Freq = "300"});
 Set(Trig: "Boot", Signal: new PwmSineWave() {Ch = 2, Gain = "0.25", Freq = "400"});
 Set(Trig: "Boot", Signal: new PwmSineWave() {Ch = 3, Gain = "0.125", Freq = "800"});
+Set(Trig: "Boot", Signal: new PwmWhiteNoise() {Ch = 4, Gain = "1.0"});
 Set(Trig: "Boot", Signal: new PwmSineWave() {Ch = 5, Gain = "0.0625", Freq = "1600"});
 Wait(Trig: "Boot", Next: "End", Time: 5.0);
 </ScriptContent>
@@ -219,8 +223,8 @@ Wait(Trig: "②", Next: "End", Time: 5.0);
 </Explanation>
                   <ScriptContent>
 Set(Trig: "Boot", VirtualPath: new VirtualPath() {Gain = 0.5f, Path = "Spiout0_Pwm0"});
-Set(Trig: "Boot", VirtualPath: new VirtualPath() {Gain = 0.25f, Path = "Spiout0_Pwm5"});
-Set(Trig: "Boot", VirtualPath: new VirtualPath() {Gain = 0.5f, Path = "Spiout11_Pwm5"});
+Set(Trig: "Boot", VirtualPath: new VirtualPath() {Gain = 0.25f, Path = "Spiout0_Pwm5", Delay = 50});
+Set(Trig: "Boot", VirtualPath: new VirtualPath() {Gain = 0.5f, Path = "Spiout11_Pwm5", Delay = 100});
 Set(Trig: "Boot", SetVar: new SetVar() {VarName = "RPM", Value = "1000"});
 Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Torque", Value = "500"});
 Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Accel", Value = "100"});
@@ -231,6 +235,8 @@ Wait(Trig: "Boot", Next: "②", Time: 5.0);
 Set(Trig: "②", SetVar: new SetVar() {VarName = "RPM", Value = "2000"});
 Set(Trig: "②", SetVar: new SetVar() {VarName = "Torque", Value = "1000"});
 Wait(Trig: "②", Next: "End", Time: 5.0);
+
+GetWave(Trig: "Boot", Stop: "End", FileName: "All.wav", SpioutId: "0, 11", PwmId: "0, 5");
 </ScriptContent>
                 </XmlIO>
               </OneElement>
@@ -259,54 +265,6 @@ Wait(Trig: "②", Next: "End", Time: 5.0);
             </Children>
             <IsExpanded>true</IsExpanded>
             <Title>バーチャルパス</Title>
-            <Explanation>
-</Explanation>
-            <ScriptContent>
-</ScriptContent>
-          </XmlIO>
-        </OneElement>
-        <OneElement>
-          <XmlIO>
-            <Children>
-              <OneElement>
-                <XmlIO>
-                  <Children />
-                  <IsExpanded>true</IsExpanded>
-                  <Title>波形取得</Title>
-                  <Explanation>
-①MixOut Ch0 = ThroughOut Ch0 * 0.5
-　MixOut Ch5 = ThroughOut Ch0 * 0.25 + ThroughOut Ch11 * 0.5
-　RPM 1000、Torque 500、Accel 100に設定。
-　Ch0は、Gain Torque / 1000、Freq RPM / 60 * 2に設定
-　Ch11は、Gain Torque / 2000、Freq RPM / 60 * 3に設定
-　In Ch0, 5、ThroughOut Ch0, 11の波形取得
-　５秒待機後、②に遷移
-②RPM 2000、Torque 1000に設定。
-　MixOut Ch0, 5の波形取得
-　５秒待機後、終了
-</Explanation>
-                  <ScriptContent>
-Set(Trig: "Boot", VirtualPath: new VirtualPath() {Gain = 0.5f, Path = "Spiout0_Pwm0"});
-Set(Trig: "Boot", VirtualPath: new VirtualPath() {Gain = 0.25f, Path = "Spiout0_Pwm5"});
-Set(Trig: "Boot", VirtualPath: new VirtualPath() {Gain = 0.5f, Path = "Spiout11_Pwm5"});
-Set(Trig: "Boot", SetVar: new SetVar() {VarName = "RPM", Value = "1000"});
-Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Torque", Value = "500"});
-Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Accel", Value = "100"});
-Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 0, Gain = "Torque / 1000", Freq = "RPM / 60 * 2"});
-Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 11, Gain = "Torque / 2000", Freq = "RPM / 60 * 3"});
-GetWave(Trig: "Boot", Stop: "②", FileName: "①.wav", AdId: "0, 5", SpioutId: "0, 11");
-Wait(Trig: "Boot", Next: "②", Time: 5.0);
-
-Set(Trig: "②", SetVar: new SetVar() {VarName = "RPM", Value = "2000"});
-Set(Trig: "②", SetVar: new SetVar() {VarName = "Torque", Value = "1000"});
-GetWave(Trig: "②", Stop: "End", FileName: "②.wav", PwmId: "0, 5");
-Wait(Trig: "②", Next: "End", Time: 5.0);
-</ScriptContent>
-                </XmlIO>
-              </OneElement>
-            </Children>
-            <IsExpanded>true</IsExpanded>
-            <Title>波形取得</Title>
             <Explanation>
 </Explanation>
             <ScriptContent>
@@ -423,16 +381,95 @@ Wait(Trig: "Boot", Next: "End", Time: 5);
                 <XmlIO>
                   <Children />
                   <IsExpanded>true</IsExpanded>
-                  <Title>新規</Title>
+                  <Title>矩形波出力</Title>
                   <Explanation>
+①P04_04から周期 1kHz、Duty 50%の矩形波を出力
+　５秒後終了</Explanation>
+                  <ScriptContent>
+Set(Trig: "Boot", SquareWave: new SquareWave() { DenominatorCycle = "33333333 / 128 / 1000", NumeratorCycle = "33333333 / 128 / 2000"});
+Wait(Trig: "Boot", Time: 5.0, Next: "End");
+GetWave(Trig: "Boot", Stop: "End", FileName: "①.wav", AdId: "0");
+</ScriptContent>
+                </XmlIO>
+              </OneElement>
+              <OneElement>
+                <XmlIO>
+                  <Children />
+                  <IsExpanded>true</IsExpanded>
+                  <Title>ポート出力</Title>
+                  <Explanation>
+①P03_15をACCとして扱う
+　ACC ON
+　５秒待機後、②に遷移
+②ACC OFF
+　５秒待機後、③に遷移
+①ACC OFF
+　５秒待機後、終了</Explanation>
+                  <ScriptContent>
+Set(Trig: "Boot", SetVar: new SetVar() {VarName = "ACC", Value = "1"});
+Set(Trig: "Boot", PortOut: "ACC * 128");
+Wait(Trig: "Boot", Time: 5.0, Next: "②");
+
+Set(Trig: "②", SetVar: new SetVar() {VarName = "ACC", Value = "0"});
+Wait(Trig: "②", Time: 5.0, Next: "③");
+
+Set(Trig: "③", SetVar: new SetVar() {VarName = "ACC", Value = "1"});
+Wait(Trig: "③", Time: 5.0, Next: "End");
+GetWave(Trig: "Boot", Stop: "End", FileName: "①.wav", AdId: "0");
+</ScriptContent>
+                </XmlIO>
+              </OneElement>
+              <OneElement>
+                <XmlIO>
+                  <Children />
+                  <IsExpanded>true</IsExpanded>
+                  <Title>バッチ実行</Title>
+                  <Explanation>
+①バッチ実行後、終了</Explanation>
+                  <ScriptContent>
+ExecBatch(Trig: "Boot", Cmd: @"..\..\..\SampleBatch.bat", Next: "End");
+</ScriptContent>
+                </XmlIO>
+              </OneElement>
+              <OneElement>
+                <XmlIO>
+                  <Children />
+                  <IsExpanded>true</IsExpanded>
+                  <Title>波形取得</Title>
+                  <Explanation>
+①MixOut Ch0 = ThroughOut Ch0 * 0.5
+　MixOut Ch5 = ThroughOut Ch0 * 0.25 + ThroughOut Ch11 * 0.5
+　RPM 1000、Torque 500、Accel 100に設定。
+　Ch0は、Gain Torque / 1000、Freq RPM / 60 * 2に設定
+　Ch11は、Gain Torque / 2000、Freq RPM / 60 * 3に設定
+　In Ch0, 5、ThroughOut Ch0, 11の波形取得
+　５秒待機後、②に遷移
+②RPM 2000、Torque 1000に設定。
+　MixOut Ch0, 5の波形取得
+　５秒待機後、終了
 </Explanation>
                   <ScriptContent>
+Set(Trig: "Boot", VirtualPath: new VirtualPath() {Gain = 0.5f, Path = "Spiout0_Pwm0"});
+Set(Trig: "Boot", VirtualPath: new VirtualPath() {Gain = 0.25f, Path = "Spiout0_Pwm5"});
+Set(Trig: "Boot", VirtualPath: new VirtualPath() {Gain = 0.5f, Path = "Spiout11_Pwm5"});
+Set(Trig: "Boot", SetVar: new SetVar() {VarName = "RPM", Value = "1000"});
+Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Torque", Value = "500"});
+Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Accel", Value = "100"});
+Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 0, Gain = "Torque / 1000", Freq = "RPM / 60 * 2"});
+Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 11, Gain = "Torque / 2000", Freq = "RPM / 60 * 3"});
+GetWave(Trig: "Boot", Stop: "②", FileName: "①.wav", AdId: "0, 5", SpioutId: "0, 11");
+Wait(Trig: "Boot", Next: "②", Time: 5.0);
+
+Set(Trig: "②", SetVar: new SetVar() {VarName = "RPM", Value = "2000"});
+Set(Trig: "②", SetVar: new SetVar() {VarName = "Torque", Value = "1000"});
+GetWave(Trig: "②", Stop: "End", FileName: "②.wav", PwmId: "0, 5");
+Wait(Trig: "②", Next: "End", Time: 5.0);
 </ScriptContent>
                 </XmlIO>
               </OneElement>
             </Children>
             <IsExpanded>true</IsExpanded>
-            <Title>一階層上のスクリプトを取得</Title>
+            <Title>その他</Title>
             <Explanation>
 </Explanation>
             <ScriptContent>

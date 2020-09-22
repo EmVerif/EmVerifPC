@@ -92,7 +92,7 @@
             </Grid>
             <GridSplitter Grid.Column="3" HorizontalAlignment="Stretch" />
             <editor:RoslynCodeEditor Grid.Column="4"
-                                     x:Name="roslynCodeEditor"/>
+                                     x:Name="roslynCodeEditor" TextChanged="roslynCodeEditor_TextChanged"/>
         </Grid>
     </Grid>
 </Window>

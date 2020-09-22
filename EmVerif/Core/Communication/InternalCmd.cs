@@ -16,7 +16,8 @@ namespace EmVerif.Core.Communication
             ProgExecCmdId = 0x06,
             AuthCmdId = 0x08,
             SetCanCmdId = 0x09,
-            SetSpiCmdId = 0x0A
+            SetSpiCmdId = 0x0A,
+            SetGpioCmdId = 0x0B
         }
 
         public static InternalCmd Instance = new InternalCmd();
@@ -30,7 +31,7 @@ namespace EmVerif.Core.Communication
             }
         }
 
-        private const UInt32 _IfVersion = 0x00000001;
+        private const UInt32 _IfVersion = 0x00000002;
 
         private const Byte _StartCmdId = 0x01;
         private const Byte _EndCmdId = 0x02;

@@ -160,6 +160,16 @@ namespace EmVerif.Core.Communication
             );
         }
 
+        public void SetGpio(Byte inIoFlag)
+        {
+            List<Byte> data = new List<byte>();
+
+            data.Add(inIoFlag);
+            _AckRecvFlag[(Byte)InternalCmd.PublicCmdId.SetGpioCmdId] = false;
+            InternalCmd.Instance.ExecCmd(InternalCmd.PublicCmdId.SetGpioCmdId, data, RecvSetGpioCmdAck);
+            WaitSetGpioCmdAck();
+        }
+
         public void End()
         {
             InternalCmd.Instance.End();
@@ -275,6 +285,29 @@ namespace EmVerif.Core.Communication
                 if (timeoutCounter <= 0)
                 {
                     throw new Exception("Can't set SPI.");
+                }
+                timeoutCounter--;
+                System.Threading.Thread.Sleep(10);
+            }
+        }
+        #endregion
+
+        #region GPIO 設定処理
+        private void RecvSetGpioCmdAck(IReadOnlyList<byte> inRecvDataList)
+        {
+            _RecvDataList[(Byte)InternalCmd.PublicCmdId.SetGpioCmdId] = inRecvDataList;
+            _AckRecvFlag[(Byte)InternalCmd.PublicCmdId.SetGpioCmdId] = true;
+        }
+
+        private void WaitSetGpioCmdAck()
+        {
+            int timeoutCounter = 10;
+
+            while (!_AckRecvFlag[(Byte)InternalCmd.PublicCmdId.SetGpioCmdId])
+            {
+                if (timeoutCounter <= 0)
+                {
+                    throw new Exception("Can't set GPIO.");
                 }
                 timeoutCounter--;
                 System.Threading.Thread.Sleep(10);

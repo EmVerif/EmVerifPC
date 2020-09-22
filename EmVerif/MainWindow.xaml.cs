@@ -75,11 +75,16 @@ namespace EmVerif
                 return;
             }
             _SelectedChangedLock = true;
-            await Task.Delay(300);
+            await Task.Delay(500);
             _ViewModel.SelectedElement.Script = roslynCodeEditor.Text;
             _ViewModel.SelectedElement = (OneElement)sender.SelectedItem;
             roslynCodeEditor.Text = _ViewModel.SelectedElement.Script;
             _SelectedChangedLock = false;
+        }
+
+        private void roslynCodeEditor_TextChanged(object sender, EventArgs e)
+        {
+            _ViewModel.SelectedElement.Script = roslynCodeEditor.Text;
         }
     }
 }

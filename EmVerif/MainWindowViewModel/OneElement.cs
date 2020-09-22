@@ -48,16 +48,16 @@ namespace EmVerif.MainWindowViewModel
                 OnPropertyChanged("Explanation");
             }
         }
-        private string _ScriptContent = "";
+        private string _Script = "";
         public string Script
         {
             get
             {
-                return _ScriptContent;
+                return _Script;
             }
             set
             {
-                _ScriptContent = value;
+                _Script = value;
                 OnPropertyChanged("ScriptContent");
             }
         }
@@ -79,7 +79,6 @@ namespace EmVerif.MainWindowViewModel
                 return ret;
             }
         }
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         public OneElement()

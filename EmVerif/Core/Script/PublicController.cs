@@ -12,6 +12,7 @@ using System.Windows;
 using System.Windows.Threading;
 using EmVerif.Core.Communication;
 using EmVerif.Core.Gui;
+using EmVerif.Core.Gui.Variable;
 using EmVerif.Core.Script.Command;
 
 namespace EmVerif.Core.Script
@@ -289,6 +290,7 @@ namespace EmVerif.Core.Script
             ConvertFormulaVar();
             ConvertSignal();
             ConvertSquareWave();
+            ConvertPortOut();
         }
 
         private void ConvertFormulaVar()
@@ -362,6 +364,17 @@ namespace EmVerif.Core.Script
 
                 val = Math.Max(Math.Min(65535.0, val), 0);
                 _State.UserDataToEcuStructure0.SquareWaveNumeratorCycle = (UInt16)val;
+            }
+        }
+
+        private void ConvertPortOut()
+        {
+            if (_State.PortOut != null)
+            {
+                double val = ConvertFormula(_State.PortOut);
+
+                val = Math.Max(Math.Min(255, val), 0);
+                _State.UserDataToEcuStructure0.PortOut = (Byte)val;
             }
         }
 
@@ -552,6 +565,8 @@ namespace EmVerif.Core.Script
         public UInt16 SquareWaveNumeratorCycle;
         public UInt16 SquareWaveDenominatorCycle;
 
+        public Byte PortOut = 0x00;
+
         public UserDataToEcuStructure0()
         {
             CanSendData = new CanFormat[EmVerif.Core.Communication.PublicConfig.MaxCanFifoNum];
@@ -593,6 +608,8 @@ namespace EmVerif.Core.Script
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = PublicConfig.SpioutChNum * PublicConfig.AdChNum)]
         public Byte[] FromAdToSpioutDelaySmp;
 
+        public Byte DcCutFlag = 1;
+
         public UserDataToEcuStructure1()
         {
             FromAdToPwmGain = new float[PublicConfig.PwmChNum * PublicConfig.AdChNum];
@@ -630,6 +647,7 @@ namespace EmVerif.Core.Script
         public string[] PwmWhiteNoiseGain;
         public string SquareWaveNumeratorCycle;
         public string SquareWaveDenominatorCycle;
+        public string PortOut;
 
         public const string BootStr = "Boot";
         public const string EndStr = "End";
@@ -638,7 +656,7 @@ namespace EmVerif.Core.Script
         {
             WorkFolder = inWorkFolder;
             UserDataToEcuStructure0 = new UserDataToEcuStructure0();
-            UserDataToEcuStructure1Update = false;
+            UserDataToEcuStructure1Update = true;
             UserDataToEcuStructure1 = new UserDataToEcuStructure1();
             CurrentState = "";
             NextState = BootStr;

@@ -127,6 +127,7 @@ namespace EmVerif.Core.Script
             VirtualPath VirtualPath = null,
             SquareWave SquareWave = null,
             SetVar SetVar = null,
+            string PortOut = null,
             string Next = null
         )
         {
@@ -135,6 +136,7 @@ namespace EmVerif.Core.Script
                 inVirtualPath: VirtualPath,
                 inSquareWave: SquareWave,
                 inSetVar: SetVar,
+                inPortOut: PortOut,
                 inNextState: Next
             );
 
@@ -214,6 +216,20 @@ namespace EmVerif.Core.Script
                 inAdId: AdId,
                 inThresh: Thresh,
                 inMessage: Message
+            );
+
+            PublicController.Instance.Register(Trig, cmd);
+        }
+
+        public void ExecBatch(
+            string Trig,
+            string Cmd,
+            string Next = null
+        )
+        {
+            ExecBatchCommand cmd = new ExecBatchCommand(
+                inCmd: Cmd,
+                inNext: Next
             );
 
             PublicController.Instance.Register(Trig, cmd);

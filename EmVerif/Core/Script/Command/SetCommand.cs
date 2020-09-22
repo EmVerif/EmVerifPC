@@ -201,6 +201,7 @@ namespace EmVerif.Core.Script.Command
         private PublicApis.SquareWave _SquareWave;
         private PublicApis.SetVar _SetVar;
         private bool _IsNumeric;
+        private string _PortOut;
         private Decimal _Value;
         private Regex _NumericRegex = new Regex(@"^\s*[0-9]+\.?[0-9]*\s*$");
 
@@ -209,6 +210,7 @@ namespace EmVerif.Core.Script.Command
             PublicApis.VirtualPath inVirtualPath,
             PublicApis.SquareWave inSquareWave,
             PublicApis.SetVar inSetVar,
+            string inPortOut,
             string inNextState
         )
         {
@@ -232,6 +234,7 @@ namespace EmVerif.Core.Script.Command
                     _Value = Convert.ToDecimal(_SetVar.Value);
                 }
             }
+            _PortOut = inPortOut;
 
             CheckSignalParam();
             // CheckVirtualPathParam(); VirtualPathクラスのコンストラクタで実施済み。
@@ -248,6 +251,7 @@ namespace EmVerif.Core.Script.Command
             ExecVirtualPathSetting(ioState);
             ExecSquareWaveSetting(ioState);
             ExecSetVarSetting(ioState);
+            ExecPortOut(ioState);
             outFinFlag = true;
 
             return _NextState;
@@ -445,6 +449,14 @@ namespace EmVerif.Core.Script.Command
                 {
                     ioState.VariableFormulaDict[_SetVar.VarName] = _SetVar.Value;
                 }
+            }
+        }
+
+        private void ExecPortOut(ControllerState ioState)
+        {
+            if (_PortOut != null)
+            {
+                ioState.PortOut = _PortOut;
             }
         }
     }
