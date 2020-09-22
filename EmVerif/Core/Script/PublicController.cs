@@ -608,7 +608,7 @@ namespace EmVerif.Core.Script
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = PublicConfig.SpioutChNum * PublicConfig.AdChNum)]
         public Byte[] FromAdToSpioutDelaySmp;
 
-        public Byte DcCutFlag = 1;
+        public Byte DcCutFlag = 0;
 
         public UserDataToEcuStructure1()
         {

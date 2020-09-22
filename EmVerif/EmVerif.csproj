@@ -276,6 +276,7 @@
       <DependentUpon>PublicVariableView.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\Script\Command\CanSendCommand.cs" />
+    <Compile Include="Core\Script\Command\DcCutCommand.cs" />
     <Compile Include="Core\Script\Command\ExecBatchCommand.cs" />
     <Compile Include="Core\Script\Command\FadeCommand.cs" />
     <Compile Include="Core\Script\Command\GetWaveCommand.cs" />

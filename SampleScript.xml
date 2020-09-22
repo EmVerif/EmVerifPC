@@ -467,6 +467,49 @@ Wait(Trig: "②", Next: "End", Time: 5.0);
 </ScriptContent>
                 </XmlIO>
               </OneElement>
+              <OneElement>
+                <XmlIO>
+                  <Children />
+                  <IsExpanded>true</IsExpanded>
+                  <Title>DC Cut</Title>
+                  <Explanation>
+①DC Cutオフ設定
+　５秒後に②へ遷移
+②DC Cutオン設定
+　５秒後に③へ遷移
+③DC Cutオフ設定
+　５秒後に終了</Explanation>
+                  <ScriptContent>
+DcCut(Trig: "Boot", OnOff: false);
+Wait(Trig: "Boot", Time: 5.0, Next: "②");
+
+DcCut(Trig: "②", OnOff: true);
+Wait(Trig: "②", Time: 5.0, Next: "③");
+
+DcCut(Trig: "③", OnOff: false);
+Wait(Trig: "③", Time: 5.0, Next: "End");
+</ScriptContent>
+                </XmlIO>
+              </OneElement>
+              <OneElement>
+                <XmlIO>
+                  <Children />
+                  <IsExpanded>true</IsExpanded>
+                  <Title>Fade</Title>
+                  <Explanation>
+①RPM変数を、５秒かけて1000から100へ変更
+②RPM変数を、２秒かけて100から1000へ変更
+③５秒待機後、終了</Explanation>
+                  <ScriptContent>
+Set(Trig: "Boot", SetVar: new SetVar() {VarName = "RPM", Value = "1000"});
+Fade(Trig: "Boot", VarName: "RPM", Target: 100, Time: 5.0, Next: "②");
+
+Fade(Trig: "②", VarName: "RPM", Target: 1000, Time: 2.0, Next: "③");
+
+Wait(Trig: "③", Time: 5.0, Next: "End");
+</ScriptContent>
+                </XmlIO>
+              </OneElement>
             </Children>
             <IsExpanded>true</IsExpanded>
             <Title>その他</Title>

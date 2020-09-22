@@ -234,5 +234,35 @@ namespace EmVerif.Core.Script
 
             PublicController.Instance.Register(Trig, cmd);
         }
+
+        public void DcCut(
+            string Trig,
+            Boolean OnOff
+        )
+        {
+            DcCutCommand cmd = new DcCutCommand(
+                inOnOff: OnOff
+            );
+
+            PublicController.Instance.Register(Trig, cmd);
+        }
+
+        public void Fade(
+            string Trig,
+            string VarName,
+            Decimal Target,
+            double Time,
+            string Next = null
+        )
+        {
+            FadeCommand cmd = new FadeCommand(
+                inVarName: VarName,
+                inTarget: Target,
+                inTime: Time,
+                inNext: Next
+            );
+
+            PublicController.Instance.Register(Trig, cmd);
+        }
     }
 }

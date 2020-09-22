@@ -8,7 +8,7 @@ namespace EmVerif.Core.Script.Command
 {
     public interface IEmVerifCommand
     {
-        void Boot(ControllerState inState);
+        void Boot(ControllerState ioState);
         string ExecPer10Ms(ControllerState ioState, out Boolean outFinFlag);
         void Finally(ControllerState inState);
     }

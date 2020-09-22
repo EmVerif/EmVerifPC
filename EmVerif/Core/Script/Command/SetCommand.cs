@@ -241,8 +241,9 @@ namespace EmVerif.Core.Script.Command
             // CheckSquareWave(); チェックするパラメータ無し。
         }
 
-        public void Boot(ControllerState inState)
+        public void Boot(ControllerState ioState)
         {
+            ExecSetVarSetting(ioState);
         }
 
         public string ExecPer10Ms(ControllerState ioState, out Boolean outFinFlag)
@@ -250,7 +251,6 @@ namespace EmVerif.Core.Script.Command
             ExecSignalSetting(ioState);
             ExecVirtualPathSetting(ioState);
             ExecSquareWaveSetting(ioState);
-            ExecSetVarSetting(ioState);
             ExecPortOut(ioState);
             outFinFlag = true;
 
@@ -444,6 +444,7 @@ namespace EmVerif.Core.Script.Command
                 if (_IsNumeric)
                 {
                     ioState.VariableDict[_SetVar.VarName] = _Value;
+                    ioState.VariableFormulaDict.Remove(_SetVar.VarName);
                 }
                 else
                 {
