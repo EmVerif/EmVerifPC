@@ -93,8 +93,8 @@ namespace EmVerif.Core.Script
 
         public class SquareWave
         {
-            public string NumeratorCycle;
-            public string DenominatorCycle;
+            public string NumeratorCycle { get; set; }
+            public string DenominatorCycle { get; set; }
 
             public SquareWave()
             {
@@ -167,6 +167,7 @@ namespace EmVerif.Core.Script
             UInt32 SendCanId,
             List<Byte> Data,
             CanDataMask DataMask = null,
+            List<CanDataMask> DataMaskList = null,
             UInt32 ResponseCanId = CanSendCommand.NoResponseValue,
             string Next = null
         )
@@ -175,6 +176,7 @@ namespace EmVerif.Core.Script
                 inSendCanId: SendCanId,
                 inSendDataList: Data,
                 inDataMask: DataMask,
+                inDataMaskList: DataMaskList,
                 inResponseCanId: ResponseCanId,
                 inNextState: Next
             );
@@ -188,6 +190,7 @@ namespace EmVerif.Core.Script
             List<Byte> Data,
             double RepTime,
             CanDataMask DataMask = null,
+            List<CanDataMask> DataMaskList = null,
             UInt32 ResponseCanId = CanSendCommand.NoResponseValue,
             string Stop = null
         )
@@ -196,6 +199,7 @@ namespace EmVerif.Core.Script
                 inSendCanId: SendCanId,
                 inSendDataList: Data,
                 inDataMask: DataMask,
+                inDataMaskList: DataMaskList,
                 inResponseCanId: ResponseCanId,
                 inRepeatTime: RepTime,
                 inStopState: Stop
@@ -260,6 +264,37 @@ namespace EmVerif.Core.Script
                 inTarget: Target,
                 inTime: Time,
                 inNext: Next
+            );
+
+            PublicController.Instance.Register(Trig, cmd);
+        }
+
+        public void CalcFft(
+            string Trig, string Stop,
+            List<double> InspectFreqList,
+            List<double> InspectFreqDeltaList = null,
+            Int32 FftNum = 32768,
+            string AmpResultArrayName = null,
+            string PhaseResultArrayName = null,
+            string OtherAmpResultVarName = null,
+            UInt32 AdId = CalcFftCommand.NoSelectValue,
+            UInt32 SpioutId = CalcFftCommand.NoSelectValue,
+            UInt32 PwmId = CalcFftCommand.NoSelectValue,
+            string Message = null
+        )
+        {
+            CalcFftCommand cmd = new CalcFftCommand(
+                inStop: Stop,
+                inInspectFreqList: InspectFreqList,
+                inInspectFreqDeltaList: InspectFreqDeltaList,
+                inFftNum: FftNum,
+                inAmpResultArrayName: AmpResultArrayName,
+                inPhaseResultArrayName: PhaseResultArrayName,
+                inOtherAmpResultVarName: OtherAmpResultVarName,
+                inAdId: AdId,
+                inSpioutId: SpioutId,
+                inPwmId: PwmId,
+                inMessage: Message
             );
 
             PublicController.Instance.Register(Trig, cmd);

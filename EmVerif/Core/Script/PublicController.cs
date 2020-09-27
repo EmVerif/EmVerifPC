@@ -337,7 +337,7 @@ namespace EmVerif.Core.Script
                 }
                 if (_State.PwmSinePhase[idx] != null)
                 {
-                    _State.UserDataToEcuStructure0.PwmSinePhase[idx] = (float)ConvertFormula(_State.PwmSinePhase[idx]);
+                    _State.UserDataToEcuStructure0.PwmSinePhase[idx] = (float)(ConvertFormula(_State.PwmSinePhase[idx]) / 180 * Math.PI);
                 }
             }
             for (int idx = 0; idx < PublicConfig.PwmChNum; idx++)
@@ -480,7 +480,13 @@ namespace EmVerif.Core.Script
             List<IEmVerifCommand> finallyList = new List<IEmVerifCommand>();
 
             _RegistrationListDict.Keys.ToList().ForEach(stateName => finallyList.AddRange(_RegistrationListDict[stateName]));
-            finallyList.ForEach(cmd => cmd.Finally(_State));
+            try
+            {
+                finallyList.ForEach(cmd => cmd.Finally(_State));
+            }
+            catch
+            {
+            }
         }
     }
 

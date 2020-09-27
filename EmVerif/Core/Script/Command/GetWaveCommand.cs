@@ -10,9 +10,9 @@ namespace EmVerif.Core.Script.Command
     class GetWaveCommand : IEmVerifCommand
     {
         private string _StopState;
-        private List<Int32> _AdIdList;
-        private List<Int32> _PwmIdList;
-        private List<Int32> _SpioutIdList;
+        private List<UInt32> _AdIdList;
+        private List<UInt32> _PwmIdList;
+        private List<UInt32> _SpioutIdList;
         private string _FileName;
         private List<double> _AdDataList;
         private List<double> _PwmDataList;
@@ -21,20 +21,20 @@ namespace EmVerif.Core.Script.Command
         public GetWaveCommand(string inStop, string inFileName, string inAdId, string inSpioutId, string inPwmId)
         {
             _StopState = inStop;
-            _AdIdList = new List<Int32>();
-            _PwmIdList = new List<Int32>();
-            _SpioutIdList = new List<Int32>();
+            _AdIdList = new List<UInt32>();
+            _PwmIdList = new List<UInt32>();
+            _SpioutIdList = new List<UInt32>();
             if (inAdId != null)
             {
-                _AdIdList = inAdId.Split(',').ToList().Select(id => Convert.ToInt32(id)).ToList();
+                _AdIdList = inAdId.Split(',').ToList().Select(id => Convert.ToUInt32(id)).ToList();
             }
             if (inPwmId != null)
             {
-                _PwmIdList = inPwmId.Split(',').ToList().Select(id => Convert.ToInt32(id)).ToList();
+                _PwmIdList = inPwmId.Split(',').ToList().Select(id => Convert.ToUInt32(id)).ToList();
             }
             if (inSpioutId != null)
             {
-                _SpioutIdList = inSpioutId.Split(',').ToList().Select(id => Convert.ToInt32(id)).ToList();
+                _SpioutIdList = inSpioutId.Split(',').ToList().Select(id => Convert.ToUInt32(id)).ToList();
             }
             CheckParam(inAdId, inPwmId, inSpioutId);
             _FileName = inFileName;

@@ -275,6 +275,7 @@
     <Compile Include="Core\Gui\Variable\PublicVariableView.Designer.cs">
       <DependentUpon>PublicVariableView.cs</DependentUpon>
     </Compile>
+    <Compile Include="Core\Script\Command\CalcFftCommand.cs" />
     <Compile Include="Core\Script\Command\CanSendCommand.cs" />
     <Compile Include="Core\Script\Command\DcCutCommand.cs" />
     <Compile Include="Core\Script\Command\ExecBatchCommand.cs" />

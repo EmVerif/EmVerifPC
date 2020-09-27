@@ -365,6 +365,77 @@ Wait(Trig: "Boot", Next: "End", Time: 5);
 </ScriptContent>
                 </XmlIO>
               </OneElement>
+              <OneElement>
+                <XmlIO>
+                  <Children />
+                  <IsExpanded>true</IsExpanded>
+                  <Title>周波数チェック</Title>
+                  <Explanation>
+①Spiout Ch0は、Gain 1、Freq 100に設定
+　Spiout Ch1は、Gain 0.5、Freq 200+Gain 0.5、Freq 300に設定
+　Pwm Ch0は、Gain 1、Freq 100、Phase 180に設定
+　Pwm Ch1は、Gain 0.5、Freq 250+Gain 0.5、Freq 350に設定
+　１秒待機後、②に遷移
+
+②Spiout Ch0はFFT実行後、100[Hz]±0.5[Hz]の最大振幅を取得
+　Spiout Ch1はFFT実行後、200[Hz]±0.5[Hz]、300[Hz]±0.5[Hz]の最大振幅を取得
+　Pwm Ch0はFFT実行後、100[Hz]±0.5[Hz]の最大振幅を取得
+　Pwm Ch1はFFT実行後、250[Hz]±0.5[Hz]の最大振幅を取得
+　５秒待機後、③に遷移
+
+③１秒待機後、終了
+</Explanation>
+                  <ScriptContent>
+Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 0, Gain = "1.0", Freq = "100"});
+Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 1, Id = 0, Gain = "0.5", Freq = "200"});
+Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 1, Id = 1, Gain = "0.5", Freq = "300"});
+Set(Trig: "Boot", Signal: new PwmSineWave() {Ch = 0, Gain = "1.0", Freq = "100", Phase = "180"});
+Set(Trig: "Boot", Signal: new PwmSineWave() {Ch = 1, Id = 0, Gain = "0.5", Freq = "250"});
+Set(Trig: "Boot", Signal: new PwmSineWave() {Ch = 1, Id = 1, Gain = "0.5", Freq = "350"});
+Wait(Trig: "Boot", Time: 1, Next: "②");
+
+CalcFft(
+    Trig: "②", Stop: "③",
+    //FftNum: 16384,
+    SpioutId: 0,
+    InspectFreqList: new List&lt;double&gt;() {100},
+    InspectFreqDeltaList: new List&lt;double&gt;(){1},
+    AmpResultArrayName: "SpioutCh0Amp", PhaseResultArrayName: "SpioutCh0Phase", OtherAmpResultVarName: "SpioutCh0OtherAmp",
+    Message: "Spiout Ch0 FFT 計算"
+);
+CalcFft(
+    Trig: "②", Stop: "③",
+    //FftNum: 16384,
+    SpioutId: 1,
+    InspectFreqList: new List&lt;double&gt;() {200, 300},
+    InspectFreqDeltaList: new List&lt;double&gt;(){1, 1},
+    AmpResultArrayName: "SpioutCh1Amp", PhaseResultArrayName: "SpioutCh1Phase", OtherAmpResultVarName: "SpioutCh1OtherAmp",
+    Message: "Spiout Ch1 FFT 計算"
+);
+CalcFft(
+    Trig: "②", Stop: "③",
+    //FftNum: 16384,
+    PwmId: 0,
+    InspectFreqList: new List&lt;double&gt;() {100},
+    InspectFreqDeltaList: new List&lt;double&gt;(){1},
+    AmpResultArrayName: "PwmCh0Amp", PhaseResultArrayName: "PwmCh0Phase", OtherAmpResultVarName: "PwmCh0OtherAmp",
+    Message: "Pwm Ch0 FFT 計算"
+);
+CalcFft(
+    Trig: "②", Stop: "③",
+    //FftNum: 16384,
+    PwmId: 1,
+    InspectFreqList: new List&lt;double&gt;() {250},
+    InspectFreqDeltaList: new List&lt;double&gt;(){1},
+    AmpResultArrayName: "PwmCh1Amp", PhaseResultArrayName: "PwmCh1Phase", OtherAmpResultVarName: "PwmCh1OtherAmp",
+    Message: "Pwm Ch1 FFT 計算"
+);
+Wait(Trig: "②", Time: 5, Next: "③");
+
+Wait(Trig: "③", Time: 1, Next: "End");
+</ScriptContent>
+                </XmlIO>
+              </OneElement>
             </Children>
             <IsExpanded>true</IsExpanded>
             <Title>チェック</Title>
@@ -386,7 +457,8 @@ Wait(Trig: "Boot", Next: "End", Time: 5);
 ①P04_04から周期 1kHz、Duty 50%の矩形波を出力
 　５秒後終了</Explanation>
                   <ScriptContent>
-Set(Trig: "Boot", SquareWave: new SquareWave() { DenominatorCycle = "33333333 / 128 / 1000", NumeratorCycle = "33333333 / 128 / 2000"});
+Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Freq", Value = "1000"});
+Set(Trig: "Boot", SquareWave: new SquareWave() { DenominatorCycle = "33333333 / 128 / Freq", NumeratorCycle = "33333333 / 128 / Freq / 2"});
 Wait(Trig: "Boot", Time: 5.0, Next: "End");
 GetWave(Trig: "Boot", Stop: "End", FileName: "①.wav", AdId: "0");
 </ScriptContent>

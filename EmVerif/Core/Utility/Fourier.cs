@@ -11,7 +11,7 @@ namespace EmVerif.Core.Utility
     {
         public static FourierTransform Instance = new FourierTransform();
 
-        public void Fft(Complex[] compSrc, ref Complex[] compDst, double id = 1.0)
+        public void Fft(Complex[] compSrc, out Complex[] compDst, double id = 1.0)
         {
             // データ個数
             int n = compSrc.Length;

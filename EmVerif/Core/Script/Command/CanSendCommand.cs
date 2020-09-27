@@ -43,7 +43,7 @@ namespace EmVerif.Core.Script.Command
         private UInt32 _SendCanId;
         private UInt64 _SendData;
         private Int32 _SendDataLen;
-        private DataMask _DataMask;
+        private List<DataMask> _DataMaskList;
         private UInt32 _ResponseCanId;
         private UInt32 _RepeatTimeMs;
 
@@ -57,6 +57,7 @@ namespace EmVerif.Core.Script.Command
             UInt32 inSendCanId,
             IReadOnlyList<Byte> inSendDataList,
             PublicApis.CanDataMask inDataMask,
+            List<PublicApis.CanDataMask> inDataMaskList,
             UInt32 inResponseCanId,
             string inNextState
         )
@@ -66,13 +67,17 @@ namespace EmVerif.Core.Script.Command
             _SendCanId = inSendCanId;
             _SendData = ConvertToUInt64(inSendDataList);
             _SendDataLen = inSendDataList.Count;
+            _DataMaskList = new List<DataMask>();
             if (inDataMask != null)
             {
-                _DataMask = new DataMask(inDataMask);
+                _DataMaskList.Add(new DataMask(inDataMask));
             }
-            else
+            if (inDataMaskList != null)
             {
-                _DataMask = null;
+                foreach (var dataMask in inDataMaskList)
+                {
+                    _DataMaskList.Add(new DataMask(dataMask));
+                }
             }
             _ResponseCanId = inResponseCanId;
             _RepeatTimeMs = 0;
@@ -84,6 +89,7 @@ namespace EmVerif.Core.Script.Command
             UInt32 inSendCanId,
             IReadOnlyList<Byte> inSendDataList,
             PublicApis.CanDataMask inDataMask,
+            List<PublicApis.CanDataMask> inDataMaskList,
             UInt32 inResponseCanId,
             double inRepeatTime,
             string inStopState
@@ -94,13 +100,17 @@ namespace EmVerif.Core.Script.Command
             _SendCanId = inSendCanId;
             _SendData = ConvertToUInt64(inSendDataList);
             _SendDataLen = inSendDataList.Count;
+            _DataMaskList = new List<DataMask>();
             if (inDataMask != null)
             {
-                _DataMask = new DataMask(inDataMask);
+                _DataMaskList.Add(new DataMask(inDataMask));
             }
-            else
+            if (inDataMaskList != null)
             {
-                _DataMask = null;
+                foreach (var dataMask in inDataMaskList)
+                {
+                    _DataMaskList.Add(new DataMask(dataMask));
+                }
             }
             _ResponseCanId = inResponseCanId;
             _RepeatTimeMs = (UInt32)(inRepeatTime * 1000);
@@ -221,9 +231,9 @@ namespace EmVerif.Core.Script.Command
                 {
                     UInt64 sendData = _SendData;
 
-                    if (_DataMask != null)
+                    foreach (var dataMask in _DataMaskList)
                     {
-                        sendData = ConvertFormula(ioState, _DataMask.RefVar, sendData, _DataMask.Mask, _DataMask.LShift);
+                        sendData = ConvertFormula(ioState, dataMask.RefVar, sendData, dataMask.Mask, dataMask.LShift);
                     }
                     ioState.UserDataToEcuStructure0.CanSendData[sendNum].CanId = _SendCanId;
                     ioState.UserDataToEcuStructure0.CanSendData[sendNum].IsExtendedId = 0;
