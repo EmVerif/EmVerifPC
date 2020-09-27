@@ -369,7 +369,7 @@ Wait(Trig: "Boot", Next: "End", Time: 5);
                 <XmlIO>
                   <Children />
                   <IsExpanded>true</IsExpanded>
-                  <Title>周波数チェック</Title>
+                  <Title>周波数チェックOK</Title>
                   <Explanation>
 ①Spiout Ch0は、Gain 1、Freq 100に設定
 　Spiout Ch1は、Gain 0.5、Freq 200+Gain 0.5、Freq 300に設定
@@ -438,6 +438,44 @@ ValueCheck(CheckValue: "SpioutCh1Amp[0]", ExpValueMax: (Decimal)0.5, ExpValueMin
 ValueCheck(CheckValue: "SpioutCh1Amp[1]", ExpValueMax: (Decimal)0.5, ExpValueMin: (Decimal)0.45, Message: @"Spiout Ch1 300[Hz] 振幅確認");
 ValueCheck(CheckValue: "SpioutCh1OtherAmp", ExpValueMax: (Decimal)0.01, ExpValueMin: 0, Message: @"Spiout Ch1 200, 300[Hz] 以外の振幅確認");
 ValueCheck(CheckValue: "SpioutCh0Amp[0] / PwmCh0Amp[0]", ExpValueMax: (Decimal)1.05, ExpValueMin: (Decimal)0.95, Message: @"Spiout Ch0 と Pwm Ch0 の 100[Hz] 振幅比確認");
+</ScriptContent>
+                </XmlIO>
+              </OneElement>
+              <OneElement>
+                <XmlIO>
+                  <Children />
+                  <IsExpanded>true</IsExpanded>
+                  <Title>周波数チェックNG</Title>
+                  <Explanation>
+</Explanation>
+                  <ScriptContent>
+Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Gain", Value = "1.0"});
+Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 0, Gain = "Gain", Freq = "100"});
+Wait(Trig: "Boot", Time: 1, Next: "②");
+
+Wait(Trig: "②", Time: 5, Next: "③");
+
+Set(Trig: "③", SetVar: new SetVar() {VarName = "Gain", Value = "0"});
+Wait(Trig: "③", Time: 0.01, Next: "④");
+
+Set(Trig: "④", SetVar: new SetVar() {VarName = "Gain", Value = "1.0"});
+Wait(Trig: "④", Time: 5, Next: "⑤");
+
+Wait(Trig: "⑤", Time: 1, Next: "End");
+
+CalcFft(
+    Trig: "②", Stop: "⑤",
+    FftNum: 16384,
+    SpioutId: 0,
+    InspectFreqList: new List&lt;double&gt;() {100},
+    InspectFreqDeltaList: new List&lt;double&gt;(){4},
+    AmpResultArrayName: "SpioutCh0Amp", OtherAmpResultVarName: "SpioutCh0OtherAmp",
+    Message: "Spiout Ch0 FFT 計算"
+);
+GetWave(Trig: "②", Stop: "⑤", FileName: "SpioutCh0.wav", SpioutId: "0");
+
+ValueCheck(CheckValue: "SpioutCh0Amp[0]", ExpValueMax: (Decimal)1, ExpValueMin: (Decimal)0.90, Message: @"Spiout Ch0 100[Hz] 振幅確認");
+ValueCheck(CheckValue: "SpioutCh0OtherAmp", ExpValueMax: (Decimal)0.01, ExpValueMin: 0, Message: @"Spiout Ch0 100[Hz] 以外の振幅確認");
 </ScriptContent>
                 </XmlIO>
               </OneElement>
