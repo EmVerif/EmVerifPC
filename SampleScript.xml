@@ -377,10 +377,10 @@ Wait(Trig: "Boot", Next: "End", Time: 5);
 　Pwm Ch1は、Gain 0.5、Freq 250+Gain 0.5、Freq 350に設定
 　１秒待機後、②に遷移
 
-②Spiout Ch0はFFT実行後、100[Hz]±0.5[Hz]の最大振幅を取得
-　Spiout Ch1はFFT実行後、200[Hz]±0.5[Hz]、300[Hz]±0.5[Hz]の最大振幅を取得
-　Pwm Ch0はFFT実行後、100[Hz]±0.5[Hz]の最大振幅を取得
-　Pwm Ch1はFFT実行後、250[Hz]±0.5[Hz]の最大振幅を取得
+②Spiout Ch0はFFT実行後、100±2[Hz]の最大振幅を取得
+　Spiout Ch1はFFT実行後、200±2[Hz]、300[Hz]±2[Hz]の最大振幅を取得
+　Pwm Ch0はFFT実行後、100±2[Hz]の最大振幅を取得
+　Pwm Ch1はFFT実行後、250[Hz]の最大振幅を取得
 　５秒待機後、③に遷移
 
 ③１秒待機後、終了
@@ -396,10 +396,10 @@ Wait(Trig: "Boot", Time: 1, Next: "②");
 
 CalcFft(
     Trig: "②", Stop: "③",
-    //FftNum: 16384,
+    FftNum: 16384,
     SpioutId: 0,
     InspectFreqList: new List&lt;double&gt;() {100},
-    InspectFreqDeltaList: new List&lt;double&gt;(){1},
+    InspectFreqDeltaList: new List&lt;double&gt;(){4},
     AmpResultArrayName: "SpioutCh0Amp", PhaseResultArrayName: "SpioutCh0Phase", OtherAmpResultVarName: "SpioutCh0OtherAmp",
     Message: "Spiout Ch0 FFT 計算"
 );
@@ -408,16 +408,16 @@ CalcFft(
     //FftNum: 16384,
     SpioutId: 1,
     InspectFreqList: new List&lt;double&gt;() {200, 300},
-    InspectFreqDeltaList: new List&lt;double&gt;(){1, 1},
-    AmpResultArrayName: "SpioutCh1Amp", PhaseResultArrayName: "SpioutCh1Phase", OtherAmpResultVarName: "SpioutCh1OtherAmp",
+    InspectFreqDeltaList: new List&lt;double&gt;(){4, 4},
+    AmpResultArrayName: "SpioutCh1Amp", OtherAmpResultVarName: "SpioutCh1OtherAmp",
     Message: "Spiout Ch1 FFT 計算"
 );
 CalcFft(
     Trig: "②", Stop: "③",
-    //FftNum: 16384,
+    FftNum: 16384,
     PwmId: 0,
     InspectFreqList: new List&lt;double&gt;() {100},
-    InspectFreqDeltaList: new List&lt;double&gt;(){1},
+    InspectFreqDeltaList: new List&lt;double&gt;(){4},
     AmpResultArrayName: "PwmCh0Amp", PhaseResultArrayName: "PwmCh0Phase", OtherAmpResultVarName: "PwmCh0OtherAmp",
     Message: "Pwm Ch0 FFT 計算"
 );
@@ -426,13 +426,18 @@ CalcFft(
     //FftNum: 16384,
     PwmId: 1,
     InspectFreqList: new List&lt;double&gt;() {250},
-    InspectFreqDeltaList: new List&lt;double&gt;(){1},
-    AmpResultArrayName: "PwmCh1Amp", PhaseResultArrayName: "PwmCh1Phase", OtherAmpResultVarName: "PwmCh1OtherAmp",
     Message: "Pwm Ch1 FFT 計算"
 );
 Wait(Trig: "②", Time: 5, Next: "③");
 
 Wait(Trig: "③", Time: 1, Next: "End");
+
+ValueCheck(CheckValue: "SpioutCh0Amp[0]", ExpValueMax: (Decimal)1, ExpValueMin: (Decimal)0.90, Message: @"Spiout Ch0 100[Hz] 振幅確認");
+ValueCheck(CheckValue: "SpioutCh0OtherAmp", ExpValueMax: (Decimal)0.01, ExpValueMin: 0, Message: @"Spiout Ch0 100[Hz] 以外の振幅確認");
+ValueCheck(CheckValue: "SpioutCh1Amp[0]", ExpValueMax: (Decimal)0.5, ExpValueMin: (Decimal)0.45, Message: @"Spiout Ch1 200[Hz] 振幅確認");
+ValueCheck(CheckValue: "SpioutCh1Amp[1]", ExpValueMax: (Decimal)0.5, ExpValueMin: (Decimal)0.45, Message: @"Spiout Ch1 300[Hz] 振幅確認");
+ValueCheck(CheckValue: "SpioutCh1OtherAmp", ExpValueMax: (Decimal)0.01, ExpValueMin: 0, Message: @"Spiout Ch1 200, 300[Hz] 以外の振幅確認");
+ValueCheck(CheckValue: "SpioutCh0Amp[0] / PwmCh0Amp[0]", ExpValueMax: (Decimal)1.05, ExpValueMin: (Decimal)0.95, Message: @"Spiout Ch0 と Pwm Ch0 の 100[Hz] 振幅比確認");
 </ScriptContent>
                 </XmlIO>
               </OneElement>

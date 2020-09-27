@@ -284,6 +284,7 @@
     <Compile Include="Core\Script\Command\IEmVerifCommand.cs" />
     <Compile Include="Core\Script\Command\SetCommand.cs" />
     <Compile Include="Core\Script\Command\SilenceCheckCommand.cs" />
+    <Compile Include="Core\Script\Command\ValueCheckCommand.cs" />
     <Compile Include="Core\Script\Command\WaitCommand.cs" />
     <Compile Include="Core\Script\LogManager.cs" />
     <Compile Include="Core\Script\PublicApis.cs" />

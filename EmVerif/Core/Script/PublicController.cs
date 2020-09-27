@@ -32,7 +32,7 @@ namespace EmVerif.Core.Script
         private double _MaxLoad;
         private double _CurLoad;
 
-        private Regex _VarNameRegex = new Regex(@"(?<VarName>[a-zA-Z_]\w*)");
+        private Regex _VarNameRegex = new Regex(@"(?<VarName>[a-zA-Z_][\w\[\]]*)");
 
         public IEnumerable<IPAddress> GetIpV4List()
         {
@@ -479,13 +479,23 @@ namespace EmVerif.Core.Script
         {
             List<IEmVerifCommand> finallyList = new List<IEmVerifCommand>();
 
-            _RegistrationListDict.Keys.ToList().ForEach(stateName => finallyList.AddRange(_RegistrationListDict[stateName]));
-            try
+            foreach (var key in _RegistrationListDict.Keys.ToList())
             {
-                finallyList.ForEach(cmd => cmd.Finally(_State));
+                if (key != ControllerState.EndStr)
+                {
+                    finallyList.AddRange(_RegistrationListDict[key]);
+                }
             }
-            catch
+            finallyList.AddRange(_RegistrationListDict[ControllerState.EndStr]);
+            foreach (var cmd in finallyList)
             {
+                try
+                {
+                    cmd.Finally(_State);
+                }
+                catch
+                {
+                }
             }
         }
     }

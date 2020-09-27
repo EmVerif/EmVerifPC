@@ -47,7 +47,7 @@ namespace EmVerif.Core.Script.Command
         private UInt32 _ResponseCanId;
         private UInt32 _RepeatTimeMs;
 
-        private Regex _VarNameRegex = new Regex(@"(?<VarName>[a-zA-Z_]\w*)");
+        private Regex _VarNameRegex = new Regex(@"(?<VarName>[a-zA-Z_][\w\[\]]*)");
         private State _State;
         private Mode _Mode;
         private UInt32 _PrevTimestampMs;
@@ -296,7 +296,7 @@ namespace EmVerif.Core.Script.Command
             return retList.ToArray();
         }
 
-        private UInt64 ConvertFormula(ControllerState ioState, string inOrgFormula, UInt64 inOrgData, UInt64 inMask, Int32 inLShift)
+        private UInt64 ConvertFormula(ControllerState inState, string inOrgFormula, UInt64 inOrgData, UInt64 inMask, Int32 inLShift)
         {
             DataTable dt = new DataTable();
             var varNameMatches = _VarNameRegex.Matches(inOrgFormula);
@@ -308,7 +308,7 @@ namespace EmVerif.Core.Script.Command
                 {
                     string varName = (string)varNameMatch.Groups["VarName"].Value;
 
-                    resultStr = resultStr.Replace(varName, ioState.VariableDict[varName].ToString());
+                    resultStr = resultStr.Replace(varName, inState.VariableDict[varName].ToString());
                 }
             }
 

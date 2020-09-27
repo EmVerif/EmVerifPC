@@ -299,5 +299,22 @@ namespace EmVerif.Core.Script
 
             PublicController.Instance.Register(Trig, cmd);
         }
+
+        public void ValueCheck(
+            string CheckValue,
+            Decimal ExpValueMax,
+            Decimal ExpValueMin,
+            string Message = null
+        )
+        {
+            ValueCheckCommand cmd = new ValueCheckCommand(
+                inCheckValue: CheckValue,
+                inExpValueMax: ExpValueMax,
+                inExpValueMin: ExpValueMin,
+                inMessage: Message
+            );
+
+            PublicController.Instance.Register("", cmd);
+        }
     }
 }
