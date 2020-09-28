@@ -92,39 +92,69 @@ namespace EmVerif.Core.Utility
             }
         }
 
-        public void Hamming(Complex[] data)
+        public void Hamming(Complex[] data, Boolean normalize = false)
         {
             int dataCount = data.Length;
 
             var radTemp = 2.0 * Math.PI / (double)dataCount;
 
-            for (int i = 0; i < dataCount; i++)
+            if (normalize)
             {
-                data[i] *= (0.54 - 0.46 * Math.Cos(radTemp * (double)i));
+                for (int i = 0; i < dataCount; i++)
+                {
+                    data[i] *= (1 - (0.46 / 0.54) * Math.Cos(radTemp * (double)i));
+                }
+            }
+            else
+            {
+                for (int i = 0; i < dataCount; i++)
+                {
+                    data[i] *= (0.54 - 0.46 * Math.Cos(radTemp * (double)i));
+                }
             }
         }
 
-        public void Hanning(Complex[] data)
+        public void Hanning(Complex[] data, Boolean normalize = false)
         {
             int dataCount = data.Length;
 
             var radTemp = 2.0 * Math.PI / (double)dataCount;
 
-            for (int i = 0; i < dataCount; i++)
+            if (normalize)
             {
-                data[i] *= (0.5 * (1.0 - Math.Cos(radTemp * (double)i)));
+                for (int i = 0; i < dataCount; i++)
+                {
+                    data[i] *= (1.0 * (1.0 - Math.Cos(radTemp * (double)i)));
+                }
+            }
+            else
+            {
+                for (int i = 0; i < dataCount; i++)
+                {
+                    data[i] *= (0.5 * (1.0 - Math.Cos(radTemp * (double)i)));
+                }
             }
         }
 
-        public void Blackman(Complex[] data)
+        public void Blackman(Complex[] data, Boolean normalize = false)
         {
             int dataCount = data.Length;
 
             var radTemp = 2.0 * Math.PI / (double)dataCount;
 
-            for (int i = 0; i < dataCount; i++)
+            if (normalize)
             {
-                data[i] *= (0.42 - 0.5 * Math.Cos(radTemp * (double)i) + 0.08 * Math.Cos(2.0 * radTemp * (double)i));
+                for (int i = 0; i < dataCount; i++)
+                {
+                    data[i] *= (1.0 - (0.5 / 0.42) * Math.Cos(radTemp * (double)i) + (0.08 / 0.42) * Math.Cos(2.0 * radTemp * (double)i));
+                }
+            }
+            else
+            {
+                for (int i = 0; i < dataCount; i++)
+                {
+                    data[i] *= (0.42 - 0.5 * Math.Cos(radTemp * (double)i) + 0.08 * Math.Cos(2.0 * radTemp * (double)i));
+                }
             }
         }
     }

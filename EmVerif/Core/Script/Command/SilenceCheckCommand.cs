@@ -64,13 +64,17 @@ namespace EmVerif.Core.Script.Command
                     }
                 }
             }
+            if (_Message != null)
+            {
+                LogManager.Instance.Set(_Message);
+            }
             if (isSilent)
             {
-                LogManager.Instance.Set(_Message + "OK");
+                LogManager.Instance.Set("\tOK");
             }
             else
             {
-                LogManager.Instance.Set(_Message + "NG");
+                LogManager.Instance.Set("\tNG");
             }
         }
     }

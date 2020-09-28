@@ -206,12 +206,12 @@ namespace EmVerif.Core.Script.Command
                     src[idx] = new Complex(_DataList[idx], 0);
                 }
                 _DataList.RemoveRange(0, _FftNum / 2);
-                Utility.FourierTransform.Instance.Hamming(src);
+                Utility.FourierTransform.Instance.Hamming(src, true);
                 Utility.FourierTransform.Instance.Fft(src, out dst);
 
                 for (int idx = 0; idx < (_FftNum / 2); idx++)
                 {
-                    double amp = dst[idx].Magnitude / 0.54 * 2 / _FftNum;
+                    double amp = dst[idx].Magnitude * 2 / _FftNum;
 
                     averageReal[idx] += dst[idx].Real;
                     averageImaginary[idx] += dst[idx].Imaginary;

@@ -212,7 +212,7 @@ namespace EmVerif.Core.Script
             string Trig, string Stop,
             string AdId,
             double Thresh = 0.01,
-            string Message = ""
+            string Message = null
         )
         {
             SilenceCheckCommand cmd = new SilenceCheckCommand(
@@ -314,7 +314,7 @@ namespace EmVerif.Core.Script
                 inMessage: Message
             );
 
-            PublicController.Instance.Register("", cmd);
+            PublicController.Instance.Register("End", cmd);
         }
     }
 }

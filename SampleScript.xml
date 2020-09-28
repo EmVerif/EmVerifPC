@@ -112,6 +112,8 @@ Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 3, Gain = "0.125", Freq = "
 Set(Trig: "Boot", Signal: new SpioutWhiteNoise() {Ch = 4, Gain = "1.0"});
 Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 11, Gain = "0.0625", Freq = "1600"});
 Wait(Trig: "Boot", Next: "End", Time: 5.0);
+
+GetWave(Trig: "Boot", Stop: "End", SpioutId: "0, 1, 2, 3, 4, 11", FileName: "Spiout.wav");
 </ScriptContent>
                 </XmlIO>
               </OneElement>
@@ -139,6 +141,8 @@ Wait(Trig: "Boot", Next: "②", Time: 5.0);
 Set(Trig: "②", SetVar: new SetVar() {VarName = "RPM", Value = "2000"});
 Set(Trig: "②", SetVar: new SetVar() {VarName = "Torque", Value = "1000"});
 Wait(Trig: "②", Next: "End", Time: 5.0);
+
+GetWave(Trig: "Boot", Stop: "End", SpioutId: "0, 1", FileName: "Spiout.wav");
 </ScriptContent>
                 </XmlIO>
               </OneElement>
@@ -164,6 +168,8 @@ Set(Trig: "Boot", Signal: new PwmSineWave() {Ch = 3, Gain = "0.125", Freq = "800
 Set(Trig: "Boot", Signal: new PwmWhiteNoise() {Ch = 4, Gain = "1.0"});
 Set(Trig: "Boot", Signal: new PwmSineWave() {Ch = 5, Gain = "0.0625", Freq = "1600"});
 Wait(Trig: "Boot", Next: "End", Time: 5.0);
+
+GetWave(Trig: "Boot", Stop: "End", PwmId: "0, 1, 2, 3, 4, 5", FileName: "Pwm.wav");
 </ScriptContent>
                 </XmlIO>
               </OneElement>
@@ -191,6 +197,8 @@ Wait(Trig: "Boot", Next: "②", Time: 5.0);
 Set(Trig: "②", SetVar: new SetVar() {VarName = "RPM", Value = "2000"});
 Set(Trig: "②", SetVar: new SetVar() {VarName = "Torque", Value = "1000"});
 Wait(Trig: "②", Next: "End", Time: 5.0);
+
+GetWave(Trig: "Boot", Stop: "End", PwmId: "0, 1", FileName: "Pwm.wav");
 </ScriptContent>
                 </XmlIO>
               </OneElement>
@@ -362,6 +370,11 @@ Wait(Trig: "Boot", Next: "End", Time: 5);
                   <Explanation>
 </Explanation>
                   <ScriptContent>
+DcCut(Trig: "Boot", OnOff: true);
+Wait(Trig: "Boot", Time: 5.0, Next: "②");
+
+SilenceCheck(Trig: "②", Stop: "End", AdId: "0, 1, 2, 3", Message: "AD Ch0/1/2/3の無音確認");
+Wait(Trig: "②", Time: 5, Next: "End");
 </ScriptContent>
                 </XmlIO>
               </OneElement>
@@ -405,7 +418,6 @@ CalcFft(
 );
 CalcFft(
     Trig: "②", Stop: "③",
-    //FftNum: 16384,
     SpioutId: 1,
     InspectFreqList: new List&lt;double&gt;() {200, 300},
     InspectFreqDeltaList: new List&lt;double&gt;(){4, 4},
@@ -423,7 +435,6 @@ CalcFft(
 );
 CalcFft(
     Trig: "②", Stop: "③",
-    //FftNum: 16384,
     PwmId: 1,
     InspectFreqList: new List&lt;double&gt;() {250},
     Message: "Pwm Ch1 FFT 計算"
@@ -447,6 +458,19 @@ ValueCheck(CheckValue: "SpioutCh0Amp[0] / PwmCh0Amp[0]", ExpValueMax: (Decimal)1
                   <IsExpanded>true</IsExpanded>
                   <Title>周波数チェックNG</Title>
                   <Explanation>
+①Spiout Ch0は、Gain 1、Freq 100に設定
+　１秒待機後、②に遷移
+
+②５秒待機後、③に遷移
+
+③Spiout Ch0は、Gain 0、Freq 100に設定
+　１０ミリ秒後、④に遷移
+
+④Spiout Ch0は、Gain 1、Freq 100に設定
+　５秒待機後、⑤に遷移
+
+⑤Spiout Ch0は②~⑤間のFFT実行後、100±2[Hz]の最大振幅を取得
+　１秒待機後、終了
 </Explanation>
                   <ScriptContent>
 Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Gain", Value = "1.0"});
