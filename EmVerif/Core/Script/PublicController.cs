@@ -39,7 +39,7 @@ namespace EmVerif.Core.Script
             return PublicCmd.Instance.GetIpV4List();
         }
 
-        public void Reset(string inWorkFolder)
+        public void Reset(in string inWorkFolder)
         {
             _RegistrationListDict = new Dictionary<string, List<IEmVerifCommand>>();
             _ExecList = new List<IEmVerifCommand>();
@@ -48,7 +48,7 @@ namespace EmVerif.Core.Script
             _RegistrationListDict.Add(ControllerState.EndStr, new List<IEmVerifCommand>());
         }
 
-        public void Register(string inTrigger, IEmVerifCommand inCmd)
+        public void Register(in string inTrigger, in IEmVerifCommand inCmd)
         {
             if (_RegistrationListDict.ContainsKey(inTrigger))
             {
@@ -61,7 +61,7 @@ namespace EmVerif.Core.Script
             }
         }
 
-        public void StartScript(IPAddress inIpAddress)
+        public void StartScript(in IPAddress inIpAddress)
         {
             List<IEmVerifCommand> bootCmdList = _RegistrationListDict[ControllerState.BootStr];
 
@@ -73,6 +73,7 @@ namespace EmVerif.Core.Script
 
                 Directory.CreateDirectory(_State.WorkFolder);
                 LogManager.Instance.Start(_State.WorkFolder + @".\log.txt", _GuiTop);
+                CanDiagProtocol.Instance.Initialize();
                 PublicCmd.Instance.Start(inIpAddress);
                 PublicCmd.Instance.SetCan(500, out tmp);
                 PublicCmd.Instance.SetSpi(4, 4000, true, out tmp);
@@ -158,9 +159,8 @@ namespace EmVerif.Core.Script
 
             foreach (var userDataFromEcu in userDataFromEcuList)
             {
-                _CurLoad = userDataFromEcu.CurLoad1k * 100 / 33330;
-                _MaxLoad = Math.Max(_MaxLoad, (double)userDataFromEcu.MaxLoad1k * 100 / 33330);
-                _MaxLoad = Math.Max(_MaxLoad, (double)userDataFromEcu.MaxLoad10k * 100 / 3333);
+                _CurLoad = Math.Max((double)userDataFromEcu.CurLoad1k * 100 / 33330, (double)userDataFromEcu.MaxLoad10k * 100 / 3333);
+                _MaxLoad = Math.Max(_MaxLoad, _CurLoad);
 
                 GCHandle gch = GCHandle.Alloc(userDataFromEcu.UserData, GCHandleType.Pinned);
                 var userDataFromEcuStructure = (UserDataFromEcuStructure)Marshal.PtrToStructure(gch.AddrOfPinnedObject(), typeof(UserDataFromEcuStructure));
@@ -378,7 +378,7 @@ namespace EmVerif.Core.Script
             }
         }
 
-        private double ConvertFormula(string inOrgFormula)
+        private double ConvertFormula(in string inOrgFormula)
         {
             DataTable dt = new DataTable();
             var varNameMatches = _VarNameRegex.Matches(inOrgFormula);
@@ -406,6 +406,7 @@ namespace EmVerif.Core.Script
 
         private void PostProcess()
         {
+            CanDiagProtocol.Instance.Process(ref _State.UserDataToEcuStructure0);
             SendUserDataToEcuStructure0();
             SendUserDataToEcuStructure1();
             if (
@@ -668,7 +669,7 @@ namespace EmVerif.Core.Script
         public const string BootStr = "Boot";
         public const string EndStr = "End";
 
-        public ControllerState(string inWorkFolder)
+        public ControllerState(in string inWorkFolder)
         {
             WorkFolder = inWorkFolder;
             UserDataToEcuStructure0 = new UserDataToEcuStructure0();

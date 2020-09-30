@@ -32,19 +32,16 @@ namespace EmVerif.Core.Script.Command
 
         public string ExecPer10Ms(ControllerState ioState, out bool outFinFlag)
         {
-            string retState = null;
-
             if (_Process.HasExited)
             {
                 outFinFlag = true;
-                retState = _NextState;
             }
             else
             {
                 outFinFlag = false;
             }
 
-            return retState;
+            return _NextState;
         }
 
         public void Finally(ControllerState inState)

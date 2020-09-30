@@ -5,7 +5,7 @@ using System.Net;
 
 namespace EmVerif.Core.Communication
 {
-    delegate void Dg_Recv(IReadOnlyList<byte> inRecvDataList);
+    delegate void Dg_Recv(in IReadOnlyList<byte> inRecvDataList);
 
     class InternalCmd
     {
@@ -87,7 +87,7 @@ namespace EmVerif.Core.Communication
             return EtherCom.Instance.GetIpV4List();
         }
 
-        public void Start(IPAddress inIpAddr)
+        public void Start(in IPAddress inIpAddr)
         {
             if (EtherCom.Instance.GetRecvTaskBusy())
             {
@@ -118,12 +118,12 @@ namespace EmVerif.Core.Communication
             }
         }
 
-        public void SetRecvUserDataFromEcuEvent(Dg_Recv inRecvEvent)
+        public void SetRecvUserDataFromEcuEvent(in Dg_Recv inRecvEvent)
         {
             _RecvEvent[_SendUserDataFromEcuCmdId] = inRecvEvent;
         }
 
-        public void SendUserDataToEcu(IEnumerable<Byte> inData)
+        public void SendUserDataToEcu(in IEnumerable<Byte> inData)
         {
             List<byte> cmd = new List<byte>();
 
@@ -135,7 +135,7 @@ namespace EmVerif.Core.Communication
             }
         }
 
-        public void ExecCmd(PublicCmdId inCmdId, IEnumerable<Byte> inData, Dg_Recv inRecvEvent)
+        public void ExecCmd(in PublicCmdId inCmdId, in IEnumerable<Byte> inData, in Dg_Recv inRecvEvent)
         {
             List<byte> cmd = new List<byte>();
 
@@ -166,7 +166,7 @@ namespace EmVerif.Core.Communication
         }
 
         #region 受信処理
-        private void AnalyzeRecvData(byte[] inRecvData)
+        private void AnalyzeRecvData(in byte[] inRecvData)
         {
             if (inRecvData.Length >= 3)
             {
@@ -269,7 +269,7 @@ namespace EmVerif.Core.Communication
             }
         }
 
-        private void RecvStartCmdAck(IReadOnlyList<byte> inRecvDataList)
+        private void RecvStartCmdAck(in IReadOnlyList<byte> inRecvDataList)
         {
             UInt32 ifVersion;
 
@@ -324,7 +324,7 @@ namespace EmVerif.Core.Communication
             }
         }
 
-        private void RecvEndCmdAck(IReadOnlyList<byte> inRecvDataList)
+        private void RecvEndCmdAck(in IReadOnlyList<byte> inRecvDataList)
         {
             _EndCmdAckRecv = true;
         }
@@ -345,7 +345,7 @@ namespace EmVerif.Core.Communication
         }
         #endregion
 
-        private void RecvEcuAliveCmd(IReadOnlyList<byte> inRecvDataList)
+        private void RecvEcuAliveCmd(in IReadOnlyList<byte> inRecvDataList)
         {
             if (inRecvDataList.Count >= 4)
             {

@@ -51,14 +51,14 @@ namespace EmVerif.Core.Communication
             return InternalCmd.Instance.GetIpV4List();
         }
 
-        public void Start(IPAddress inIpAddr)
+        public void Start(in IPAddress inIpAddr)
         {
             _UserDataList = new List<UserDataFromEcu>();
             InternalCmd.Instance.SetRecvUserDataFromEcuEvent(RecvUserData);
             InternalCmd.Instance.Start(inIpAddr);
         }
 
-        public void UploadProg(string inS3FileName)
+        public void UploadProg(in string inS3FileName)
         {
             UInt32 curAddr;
             UInt32 restSize;
@@ -94,7 +94,7 @@ namespace EmVerif.Core.Communication
             WaitProgExecCmdAck();
         }
 
-        public void SetUserData(IEnumerable<Byte> inData)
+        public void SetUserData(in IEnumerable<Byte> inData)
         {
             List<Byte> data = new List<byte>(inData);
             int count = data.Count;
@@ -120,7 +120,7 @@ namespace EmVerif.Core.Communication
             return ret;
         }
 
-        public void SetCan(UInt16 inKbps, out UInt16 outKbps)
+        public void SetCan(in UInt16 inKbps, out UInt16 outKbps)
         {
             List<Byte> data = new List<byte>();
 
@@ -136,7 +136,7 @@ namespace EmVerif.Core.Communication
             );
         }
 
-        public void SetSpi(Byte inDataLen, UInt16 inKbps, Boolean inIs10khz, out UInt16 outKbps)
+        public void SetSpi(in Byte inDataLen, in UInt16 inKbps, in Boolean inIs10khz, out UInt16 outKbps)
         {
             List<Byte> data = new List<byte>();
 
@@ -160,7 +160,7 @@ namespace EmVerif.Core.Communication
             );
         }
 
-        public void SetGpio(Byte inIoFlag)
+        public void SetGpio(in Byte inIoFlag)
         {
             List<Byte> data = new List<byte>();
 
@@ -176,7 +176,7 @@ namespace EmVerif.Core.Communication
         }
 
         #region プログラムアップロード処理
-        private void RecvUploadProgCmdAck(IReadOnlyList<byte> inRecvDataList)
+        private void RecvUploadProgCmdAck(in IReadOnlyList<byte> inRecvDataList)
         {
             _RecvDataList[(Byte)InternalCmd.PublicCmdId.UploadProgCmdId]= inRecvDataList;
             _AckRecvFlag[(Byte)InternalCmd.PublicCmdId.UploadProgCmdId] = true;
@@ -199,7 +199,7 @@ namespace EmVerif.Core.Communication
         #endregion
 
         #region プログラム実行開始処理
-        private void RecvProgExecCmdAck(IReadOnlyList<byte> inRecvDataList)
+        private void RecvProgExecCmdAck(in IReadOnlyList<byte> inRecvDataList)
         {
             _RecvDataList[(Byte)InternalCmd.PublicCmdId.ProgExecCmdId] = inRecvDataList;
             _AckRecvFlag[(Byte)InternalCmd.PublicCmdId.ProgExecCmdId] = true;
@@ -222,7 +222,7 @@ namespace EmVerif.Core.Communication
         #endregion
 
         #region ユーザーデータ処理
-        private void RecvUserData(IReadOnlyList<byte> inRecvDataList)
+        private void RecvUserData(in IReadOnlyList<byte> inRecvDataList)
         {
             if (_UserDataList.Count < 1000)
             {
@@ -241,7 +241,7 @@ namespace EmVerif.Core.Communication
         #endregion
 
         #region CAN 設定処理
-        private void RecvSetCanCmdAck(IReadOnlyList<byte> inRecvDataList)
+        private void RecvSetCanCmdAck(in IReadOnlyList<byte> inRecvDataList)
         {
             _RecvDataList[(Byte)InternalCmd.PublicCmdId.SetCanCmdId] = inRecvDataList;
             if (inRecvDataList.Count >= 2)
@@ -267,7 +267,7 @@ namespace EmVerif.Core.Communication
         #endregion
 
         #region SPI 設定処理
-        private void RecvSetSpiCmdAck(IReadOnlyList<byte> inRecvDataList)
+        private void RecvSetSpiCmdAck(in IReadOnlyList<byte> inRecvDataList)
         {
             _RecvDataList[(Byte)InternalCmd.PublicCmdId.SetSpiCmdId] = inRecvDataList;
             if (inRecvDataList.Count >= 2)
@@ -293,7 +293,7 @@ namespace EmVerif.Core.Communication
         #endregion
 
         #region GPIO 設定処理
-        private void RecvSetGpioCmdAck(IReadOnlyList<byte> inRecvDataList)
+        private void RecvSetGpioCmdAck(in IReadOnlyList<byte> inRecvDataList)
         {
             _RecvDataList[(Byte)InternalCmd.PublicCmdId.SetGpioCmdId] = inRecvDataList;
             _AckRecvFlag[(Byte)InternalCmd.PublicCmdId.SetGpioCmdId] = true;

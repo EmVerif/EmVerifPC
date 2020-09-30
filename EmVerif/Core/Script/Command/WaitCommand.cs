@@ -31,19 +31,16 @@ namespace EmVerif.Core.Script.Command
 
         public string ExecPer10Ms(ControllerState ioState, out Boolean outFinFlag)
         {
-            string retState = null;
-
             if ((ioState.TimestampMs - _BootTimeMSec) >= _WaitTimeMSec)
             {
                 outFinFlag = true;
-                retState = _NextState;
             }
             else
             {
                 outFinFlag = false;
             }
 
-            return retState;
+            return _NextState;
         }
 
         public void Finally(ControllerState inState)

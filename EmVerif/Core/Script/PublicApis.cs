@@ -168,7 +168,7 @@ namespace EmVerif.Core.Script
             List<Byte> Data,
             CanDataMask DataMask = null,
             List<CanDataMask> DataMaskList = null,
-            UInt32 ResponseCanId = CanSendCommand.NoResponseValue,
+            UInt32 ResponseCanId = CanSendCommand.NoValue,
             string Next = null
         )
         {
@@ -191,7 +191,7 @@ namespace EmVerif.Core.Script
             double RepTime,
             CanDataMask DataMask = null,
             List<CanDataMask> DataMaskList = null,
-            UInt32 ResponseCanId = CanSendCommand.NoResponseValue,
+            UInt32 ResponseCanId = CanSendCommand.NoValue,
             string Stop = null
         )
         {
@@ -203,6 +203,28 @@ namespace EmVerif.Core.Script
                 inResponseCanId: ResponseCanId,
                 inRepeatTime: RepTime,
                 inStopState: Stop
+            );
+
+            PublicController.Instance.Register(Trig, cmd);
+        }
+
+        public void CanDiagSend(
+            string Trig,
+            UInt32 SendCanId,
+            List<Byte> SendData,
+            UInt32 SendNta = CanDiagSendCommand.NoValue,
+            UInt32 ResponseCanId = CanDiagSendCommand.NoValue,
+            UInt32 ResponseNta = CanDiagSendCommand.NoValue,
+            string Next = null
+        )
+        {
+            CanDiagSendCommand cmd = new CanDiagSendCommand(
+                inSendCanId: SendCanId,
+                inSendNta: SendNta,
+                inSendData: SendData,
+                inResponseCanId: ResponseCanId,
+                inResponseNta: ResponseNta,
+                inNext: Next
             );
 
             PublicController.Instance.Register(Trig, cmd);

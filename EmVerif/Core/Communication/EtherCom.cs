@@ -7,7 +7,7 @@ using System.Net.NetworkInformation;
 
 namespace EmVerif.Core.Communication
 {
-    delegate void Dg_RecvEvent(byte[] inRecvData);
+    delegate void Dg_RecvEvent(in byte[] inRecvData);
 
     class EtherCom
     {
@@ -46,7 +46,7 @@ namespace EmVerif.Core.Communication
             return ipAddrList;
         }
 
-        public void Connect(IPAddress inIpAddr)
+        public void Connect(in IPAddress inIpAddr)
         {
             IPEndPoint localEP = new IPEndPoint(inIpAddr, _MyPort);
 
@@ -79,7 +79,7 @@ namespace EmVerif.Core.Communication
             return ret;
         }
 
-        public void Send(Byte[] inSendData)
+        public void Send(in Byte[] inSendData)
         {
             //IPEndPoint serverEP = new IPEndPoint(IPAddress.Parse(_ServerIpAddr), _ServerPort);
 

@@ -24,7 +24,7 @@ namespace EmVerif.Core.Communication
             _MinAddr = 0xFFFFFFFF;
         }
 
-        public void Read(string inFileName)
+        public void Read(in string inFileName)
         {
             StreamReader sr = new StreamReader(inFileName);
 
@@ -33,7 +33,7 @@ namespace EmVerif.Core.Communication
             sr.Close();
         }
 
-        public void Read(List<string> inContentList)
+        public void Read(in IReadOnlyList<string> inContentList)
         {
             Clear();
             foreach (string oneLine in inContentList)
@@ -89,7 +89,7 @@ namespace EmVerif.Core.Communication
             return GetData(_MinAddr, GetSize());
         }
 
-        public List<Byte> GetData(UInt32 inFromAddr, UInt32 inSize)
+        public List<Byte> GetData(in UInt32 inFromAddr, in UInt32 inSize)
         {
             List<Byte> dataList = new List<byte>();
             UInt32 curAddr = inFromAddr;

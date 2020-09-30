@@ -39,12 +39,10 @@ namespace EmVerif.Core.Script.Command
         public string ExecPer10Ms(ControllerState ioState, out bool outFinFlag)
         {
             double pastTimeMs = ioState.TimestampMs - _StartTimeMs;
-            string ret = null;
 
             if (pastTimeMs >= _TimeMs)
             {
                 ioState.VariableDict[_VarName] = _Target;
-                ret = _Next;
                 outFinFlag = true;
             }
             else
@@ -53,7 +51,7 @@ namespace EmVerif.Core.Script.Command
                 outFinFlag = false;
             }
 
-            return ret;
+            return _Next;
         }
 
         public void Finally(ControllerState inState)

@@ -10,7 +10,7 @@ namespace EmVerif.Core.Script.Command
 {
     class CanSendCommand : IEmVerifCommand
     {
-        public const UInt32 NoResponseValue = 0xFFFFFFFF;
+        public const UInt32 NoValue = 0xFFFFFFFF;
 
         private enum Mode
         {
@@ -168,7 +168,7 @@ namespace EmVerif.Core.Script.Command
                 );
             }
             // inDataMaskList チェックは、DataMask 内で実行。
-            if ((_ResponseCanId > 0x20000000) && (_ResponseCanId != NoResponseValue))
+            if ((_ResponseCanId > 0x20000000) && (_ResponseCanId != NoValue))
             {
                 throw new Exception(
                     "CanSend/CanRepSend コマンド内 ResponseCanId 設定エラー⇒" + _ResponseCanId + "\n" +
@@ -181,7 +181,7 @@ namespace EmVerif.Core.Script.Command
         {
             if (CheckSend(ioState))
             {
-                if (_ResponseCanId == NoResponseValue)
+                if (_ResponseCanId == NoValue)
                 {
                     if (_Mode == Mode.OneShot)
                     {
