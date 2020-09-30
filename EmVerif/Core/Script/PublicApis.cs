@@ -215,6 +215,7 @@ namespace EmVerif.Core.Script
             UInt32 SendNta = CanDiagSendCommand.NoValue,
             UInt32 ResponseCanId = CanDiagSendCommand.NoValue,
             UInt32 ResponseNta = CanDiagSendCommand.NoValue,
+            string ResponseDataArrayName = null,
             string Next = null
         )
         {
@@ -224,6 +225,7 @@ namespace EmVerif.Core.Script
                 inSendData: SendData,
                 inResponseCanId: ResponseCanId,
                 inResponseNta: ResponseNta,
+                inResponseDataArrayName: ResponseDataArrayName,
                 inNext: Next
             );
 

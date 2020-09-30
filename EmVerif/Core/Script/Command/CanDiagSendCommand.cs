@@ -24,6 +24,7 @@ namespace EmVerif.Core.Script.Command
         private UInt32 _SendNta;
         private UInt32 _ResponseCanId;
         private UInt32 _ResponseNta;
+        private string _ResponseDataArrayName;
         private List<Byte> _ResponseDataList;
         private Boolean _TimeoutFlag;
 
@@ -33,7 +34,8 @@ namespace EmVerif.Core.Script.Command
             UInt32 inSendCanId,
             UInt32 inSendNta,
             UInt32 inResponseCanId,
-            UInt32 inResponseNta
+            UInt32 inResponseNta,
+            string inResponseDataArrayName
         )
         {
             _Next = inNext;
@@ -43,6 +45,7 @@ namespace EmVerif.Core.Script.Command
             _SendNta = inSendNta;
             _ResponseCanId = inResponseCanId;
             _ResponseNta = inResponseNta;
+            _ResponseDataArrayName = inResponseDataArrayName;
         }
 
         public void Boot(ControllerState ioState)
@@ -86,9 +89,21 @@ namespace EmVerif.Core.Script.Command
             return _Next;
         }
 
-        public void Finally(ControllerState inState)
+        public void Finally(ControllerState ioState)
         {
-            throw new NotImplementedException();
+            if (!_TimeoutFlag && (_ResponseDataArrayName != null))
+            {
+                int idx = 0;
+
+                foreach (var data in _ResponseDataList)
+                {
+                    string arrayName = _ResponseDataArrayName + @"[" + idx.ToString() + @"]";
+
+                    ioState.VariableFormulaDict.Remove(arrayName);
+                    ioState.VariableDict.Add(arrayName, data);
+                    idx++;
+                }
+            }
         }
     }
 }
