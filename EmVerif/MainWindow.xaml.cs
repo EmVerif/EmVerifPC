@@ -58,33 +58,23 @@ namespace EmVerif
             }
         }
 
-        private void TreeView_KeyUp(object sender, KeyEventArgs e)
+        private void roslynCodeEditor_TextChanged(object sender, EventArgs e)
         {
-            SetSelectedElement((TreeView)sender);
+            _ViewModel.SelectedElement.Script = roslynCodeEditor.Text;
         }
 
-        private void TreeView_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private async void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            SetSelectedElement((TreeView)sender);
-        }
-
-        private async void SetSelectedElement(TreeView sender)
-        {
-            if ((_SelectedChangedLock) || (sender.SelectedItem == null))
+            if ((_SelectedChangedLock) || (((TreeView)sender).SelectedItem == null))
             {
                 return;
             }
             _SelectedChangedLock = true;
             await Task.Delay(500);
             _ViewModel.SelectedElement.Script = roslynCodeEditor.Text;
-            _ViewModel.SelectedElement = (OneElement)sender.SelectedItem;
+            _ViewModel.SelectedElement = (OneElement)((TreeView)sender).SelectedItem;
             roslynCodeEditor.Text = _ViewModel.SelectedElement.Script;
             _SelectedChangedLock = false;
-        }
-
-        private void roslynCodeEditor_TextChanged(object sender, EventArgs e)
-        {
-            _ViewModel.SelectedElement.Script = roslynCodeEditor.Text;
         }
     }
 }

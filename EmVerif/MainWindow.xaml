@@ -50,8 +50,7 @@
             </Grid.ColumnDefinitions>
             <TreeView x:Name="TreeView"
                       Grid.Column="0"
-                      ItemsSource="{Binding TreeViewList}"
-                      KeyUp="TreeView_KeyUp" MouseLeftButtonUp="TreeView_MouseLeftButtonUp">
+                      ItemsSource="{Binding TreeViewList}" SelectedItemChanged="TreeView_SelectedItemChanged">
                 <TreeView.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="追加" Command="{Binding AddElementContextMenu}"/>
