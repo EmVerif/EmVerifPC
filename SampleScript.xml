@@ -293,7 +293,8 @@ GetWave(Trig: "Boot", Stop: "End", FileName: "All.wav", SpioutId: "0, 11", PwmId
 </Explanation>
                   <ScriptContent>
 CanSend( Trig: "Boot", SendCanId: 0x100, Data: new List&lt;byte&gt;() { 0x00, 0xAA, 0xFF }, Next: "②");
-CanSend( Trig: "②", SendCanId: 0x200, Data: new List&lt;byte&gt;() { 0xAA, 0xFF, 0x00 }, Next: "End");
+CanSend( Trig: "②", SendCanId: 0x200, Data: new List&lt;byte&gt;() { 0xAA, 0xFF, 0x00 });
+Wait(Trig: "②", Next: "End", Time: 5);
 </ScriptContent>
                 </XmlIO>
               </OneElement>
@@ -347,6 +348,8 @@ Wait(Trig: "Boot", Next: "End", Time: 5);
                   <Explanation>
 </Explanation>
                   <ScriptContent>
+CanDiagSend(Trig: "Boot", SendCanId: 0x600, SendData: new List&lt;byte&gt;() {0x10, 0x00}, ResponseCanId: 0x660, ResponseDataArrayName: "Resp0", Next: "②");
+CanDiagSend(Trig: "②", SendCanId: 0x600, SendData: new List&lt;byte&gt;() {0x10, 0x00}, ResponseCanId: 0x660, ResponseDataArrayName: "Resp1", Next: "End");
 </ScriptContent>
                 </XmlIO>
               </OneElement>

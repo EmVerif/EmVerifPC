@@ -27,6 +27,7 @@ namespace EmVerif.Core.Script.Command
         private string _ResponseDataArrayName;
         private List<Byte> _ResponseDataList;
         private Boolean _TimeoutFlag;
+        private Boolean _ErrorSeqFlag;
 
         public CanDiagSendCommand(
             string inNext,
@@ -40,6 +41,10 @@ namespace EmVerif.Core.Script.Command
         {
             _Next = inNext;
 
+            if (inSendData.Count > 4095)
+            {
+                throw new Exception("CanDiagSendの送信最大サイズは4095[B]。");
+            }
             _SendDataList = inSendData;
             _SendCanId = inSendCanId;
             _SendNta = inSendNta;
@@ -74,7 +79,8 @@ namespace EmVerif.Core.Script.Command
                 case State.WaitEnd:
                     bool isFinish = CanDiagProtocol.Instance.GetResult(
                         out _ResponseDataList,
-                        out _TimeoutFlag
+                        out _TimeoutFlag,
+                        out _ErrorSeqFlag
                     );
                     if (isFinish)
                     {
@@ -91,7 +97,7 @@ namespace EmVerif.Core.Script.Command
 
         public void Finally(ControllerState ioState)
         {
-            if (!_TimeoutFlag && (_ResponseDataArrayName != null))
+            if (!_TimeoutFlag && !_ErrorSeqFlag && (_ResponseDataArrayName != null))
             {
                 int idx = 0;
 

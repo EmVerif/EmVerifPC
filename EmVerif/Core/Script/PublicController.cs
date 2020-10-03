@@ -406,7 +406,11 @@ namespace EmVerif.Core.Script
 
         private void PostProcess()
         {
-            CanDiagProtocol.Instance.Process(ref _State.UserDataToEcuStructure0);
+            CanDiagProtocol.Instance.Process(
+                _State.UserDataFromEcuStructureList,
+                ref _State.UserDataToEcuStructure0,
+                _State.TimestampMs
+            );
             SendUserDataToEcuStructure0();
             SendUserDataToEcuStructure1();
             if (
@@ -458,6 +462,7 @@ namespace EmVerif.Core.Script
             Marshal.FreeHGlobal(ptr);
 
             PublicCmd.Instance.SetUserData(bytes.ToList());
+            _State.UserDataToEcuStructure0 = new UserDataToEcuStructure0();
         }
 
         private void SendUserDataToEcuStructure1()
