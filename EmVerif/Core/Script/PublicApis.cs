@@ -324,6 +324,31 @@ namespace EmVerif.Core.Script
             PublicController.Instance.Register(Trig, cmd);
         }
 
+        public void CalcDft(
+            string Trig, string Stop,
+            List<double> InspectFreqList,
+            string AmpResultArrayName = null,
+            string PhaseResultArrayName = null,
+            UInt32 AdId = CalcFftCommand.NoSelectValue,
+            UInt32 SpioutId = CalcFftCommand.NoSelectValue,
+            UInt32 PwmId = CalcFftCommand.NoSelectValue,
+            string Message = null
+        )
+        {
+            CalcDftCommand cmd = new CalcDftCommand(
+                inStop: Stop,
+                inInspectFreqList: InspectFreqList,
+                inAmpResultArrayName: AmpResultArrayName,
+                inPhaseResultArrayName: PhaseResultArrayName,
+                inAdId: AdId,
+                inSpioutId: SpioutId,
+                inPwmId: PwmId,
+                inMessage: Message
+            );
+
+            PublicController.Instance.Register(Trig, cmd);
+        }
+
         public void ValueCheck(
             string CheckValue,
             Decimal ExpValueMax,

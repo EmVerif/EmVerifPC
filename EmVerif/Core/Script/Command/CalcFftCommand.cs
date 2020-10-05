@@ -172,20 +172,28 @@ namespace EmVerif.Core.Script.Command
             List<double> averageAmpList;
             List<double> averagePhaseList;
 
+            if (_DataList.Count == 0)
+            {
+                return;
+            }
             if (_Message != null)
             {
                 LogManager.Instance.Set(_Message);
             }
             if (_DataList.Count < _FftNum)
             {
-                LogManager.Instance.Set("\t" + @"データサンプル数が足りません。");
+                LogManager.Instance.Set("\t" + @"データサンプル数が足りません。NG");
                 return;
             }
             CalcFftAverage(out ampEachRangeListList, out averageAmpList, out averagePhaseList);
             SearchInfo(ampEachRangeListList, averageAmpList, averagePhaseList, ioState);
         }
 
-        private void CalcFftAverage(out List<List<double>> outAmpEachRangeListList, out List<double> outAverageAmpList, out List<double> outAveragePhaseList)
+        private void CalcFftAverage(
+            out List<List<double>> outAmpEachRangeListList,
+            out List<double> outAverageAmpList,
+            out List<double> outAveragePhaseList
+        )
         {
             int calcNum = 0;
             double[] averageReal = Enumerable.Repeat<double>(0, _FftNum / 2).ToArray();
@@ -198,7 +206,7 @@ namespace EmVerif.Core.Script.Command
             while (_DataList.Count >= _FftNum)
             {
                 Complex[] src = new Complex[_FftNum];
-                Complex[] dst = new Complex[_FftNum];
+                Complex[] dst;
                 List<double> ampList = new List<double>();
 
                 for (int idx = 0; idx < _FftNum; idx++)
@@ -228,7 +236,12 @@ namespace EmVerif.Core.Script.Command
             }
         }
 
-        private void SearchInfo(List<List<double>> ioAmpEachRangeListList, List<double> inAverageAmpList, List<double> inAveragePhaseList, ControllerState ioState)
+        private void SearchInfo(
+            IReadOnlyList<List<double>> ioAmpEachRangeListList,
+            IReadOnlyList<double> inAverageAmpList,
+            IReadOnlyList<double> inAveragePhaseList,
+            ControllerState ioState
+        )
         {
             for (int idx = 0; idx < _InspectFreqList.Count; idx++)
             {
@@ -237,7 +250,7 @@ namespace EmVerif.Core.Script.Command
                 double freqRangeMax = _InspectFreqList[idx] + freqDeltaHalf;
                 Int32 freqRangeMinIdx = (Int32)Math.Ceiling(freqRangeMin / _FreqDeltaUnit);
                 Int32 freqRangeMaxIdx = (Int32)Math.Floor(freqRangeMax / _FreqDeltaUnit);
-                Int32 maxFreqIdx = 0;
+                double maxFreq = 0;
                 double maxAmp = double.MinValue;
                 double phase = 0;
 
@@ -247,7 +260,7 @@ namespace EmVerif.Core.Script.Command
                     {
                         maxAmp = inAverageAmpList[freqIdx];
                         phase = inAveragePhaseList[freqIdx];
-                        maxFreqIdx = freqIdx;
+                        maxFreq = freqIdx * _FreqDeltaUnit;
                     }
                     foreach (var ampList in ioAmpEachRangeListList)
                     {
@@ -256,11 +269,12 @@ namespace EmVerif.Core.Script.Command
                 }
                 LogManager.Instance.Set(
                     "\t" +
-                    (maxFreqIdx * _FreqDeltaUnit).ToString() +
+                    maxFreq.ToString() +
                     @"[Hz]の振幅は" +
                     maxAmp.ToString() +
                     @"、位相は" +
-                    phase.ToString()
+                    phase.ToString() +
+                    @"[deg]"
                 );
                 if (_AmpResultArrayName != null)
                 {
@@ -280,7 +294,7 @@ namespace EmVerif.Core.Script.Command
             double otherAmpMax;
             Int32 otherFreqIdx;
 
-            GetMaxAndIndex(ioAmpEachRangeListList, out otherAmpMax, out otherFreqIdx);
+            GetAmpMaxAndIndex(ioAmpEachRangeListList, out otherAmpMax, out otherFreqIdx);
             LogManager.Instance.Set(
                 "\t" + @"指定周波数以外の最大振幅は" +
                 otherAmpMax.ToString() +
@@ -297,7 +311,7 @@ namespace EmVerif.Core.Script.Command
             }
         }
 
-        private void GetMaxAndIndex(List<List<double>> inAmpEachRangeListList, out double outMaxValue, out Int32 outIndex)
+        private void GetAmpMaxAndIndex(IReadOnlyList<IReadOnlyList<double>> inAmpEachRangeListList, out double outMaxValue, out Int32 outIndex)
         {
             outMaxValue = double.MinValue;
             outIndex = 0;

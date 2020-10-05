@@ -394,6 +394,7 @@ Wait(Trig: "②", Time: 5, Next: "End");
 　１秒待機後、②に遷移
 
 ②Spiout Ch0はFFT実行後、100±2[Hz]の最大振幅を取得
+　Spiout Ch0はDFT実行後、100[Hz]の振幅を取得
 　Spiout Ch1はFFT実行後、200±2[Hz]、300[Hz]±2[Hz]の最大振幅を取得
 　Pwm Ch0はFFT実行後、100±2[Hz]の最大振幅を取得
 　Pwm Ch1はFFT実行後、250[Hz]の最大振幅を取得
@@ -418,6 +419,13 @@ CalcFft(
     InspectFreqDeltaList: new List&lt;double&gt;(){4},
     AmpResultArrayName: "SpioutCh0Amp", PhaseResultArrayName: "SpioutCh0Phase", OtherAmpResultVarName: "SpioutCh0OtherAmp",
     Message: "Spiout Ch0 FFT 計算"
+);
+CalcDft(
+    Trig: "②", Stop: "③",
+    SpioutId: 0,
+    InspectFreqList: new List&lt;double&gt;() {100},
+    AmpResultArrayName: "SpioutCh0AmpDft", PhaseResultArrayName: "SpioutCh0PhaseDft",
+    Message: "Spiout Ch0 DFT 計算"
 );
 CalcFft(
     Trig: "②", Stop: "③",
@@ -446,10 +454,11 @@ Wait(Trig: "②", Time: 5, Next: "③");
 
 Wait(Trig: "③", Time: 1, Next: "End");
 
-ValueCheck(CheckValue: "SpioutCh0Amp[0]", ExpValueMax: (Decimal)1, ExpValueMin: (Decimal)0.90, Message: @"Spiout Ch0 100[Hz] 振幅確認");
+ValueCheck(CheckValue: "SpioutCh0Amp[0]", ExpValueMax: (Decimal)1.1, ExpValueMin: (Decimal)0.90, Message: @"Spiout Ch0 100[Hz] 振幅確認");
+ValueCheck(CheckValue: "SpioutCh0AmpDft[0]", ExpValueMax: (Decimal)1.1, ExpValueMin: (Decimal)0.90, Message: @"Spiout Ch0 100[Hz] 振幅確認 DFT バージョン");
 ValueCheck(CheckValue: "SpioutCh0OtherAmp", ExpValueMax: (Decimal)0.01, ExpValueMin: 0, Message: @"Spiout Ch0 100[Hz] 以外の振幅確認");
-ValueCheck(CheckValue: "SpioutCh1Amp[0]", ExpValueMax: (Decimal)0.5, ExpValueMin: (Decimal)0.45, Message: @"Spiout Ch1 200[Hz] 振幅確認");
-ValueCheck(CheckValue: "SpioutCh1Amp[1]", ExpValueMax: (Decimal)0.5, ExpValueMin: (Decimal)0.45, Message: @"Spiout Ch1 300[Hz] 振幅確認");
+ValueCheck(CheckValue: "SpioutCh1Amp[0]", ExpValueMax: (Decimal)0.55, ExpValueMin: (Decimal)0.45, Message: @"Spiout Ch1 200[Hz] 振幅確認");
+ValueCheck(CheckValue: "SpioutCh1Amp[1]", ExpValueMax: (Decimal)0.55, ExpValueMin: (Decimal)0.45, Message: @"Spiout Ch1 300[Hz] 振幅確認");
 ValueCheck(CheckValue: "SpioutCh1OtherAmp", ExpValueMax: (Decimal)0.01, ExpValueMin: 0, Message: @"Spiout Ch1 200, 300[Hz] 以外の振幅確認");
 ValueCheck(CheckValue: "SpioutCh0Amp[0] / PwmCh0Amp[0]", ExpValueMax: (Decimal)1.05, ExpValueMin: (Decimal)0.95, Message: @"Spiout Ch0 と Pwm Ch0 の 100[Hz] 振幅比確認");
 </ScriptContent>

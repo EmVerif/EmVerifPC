@@ -92,6 +92,18 @@ namespace EmVerif.Core.Utility
             }
         }
 
+        public void Dft(Complex[] inSrc, double inWaveNumPerSmp, out Complex outDst)
+        {
+            Int32 smp = 0;
+
+            outDst = new Complex(0, 0);
+            foreach (var data in inSrc)
+            {
+                outDst += data * Complex.FromPolarCoordinates(1.0, 2 * Math.PI * inWaveNumPerSmp * smp);
+                smp++;
+            }
+        }
+
         public void Hamming(Complex[] data, Boolean normalize = false)
         {
             int dataCount = data.Length;
