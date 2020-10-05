@@ -205,7 +205,6 @@ namespace EmVerif.Core.Script
             }
         }
 
-
         public void Initialize()
         {
             _State = State.Idle;
@@ -365,7 +364,10 @@ namespace EmVerif.Core.Script
 
                         if (
                             (canRecvData.CanId == _ResponseCanId) &&
-                            (!_IsExistResponse || (canRecvData.Data[0] == _ResponseNta))
+                            (
+                                !_IsExistResponseNta ||
+                                ((canRecvData.Data[0] == _ResponseNta) && (canRecvData.DataLen >= 1))
+                            )
                         )
                         {
                             hitCnt++;
@@ -461,7 +463,10 @@ namespace EmVerif.Core.Script
 
                         if (
                             (canRecvData.CanId == _ResponseCanId) &&
-                            (!_IsExistResponse || (canRecvData.Data[0] == _ResponseNta))
+                            (
+                                !_IsExistResponseNta ||
+                                ((canRecvData.Data[0] == _ResponseNta) && (canRecvData.DataLen >= 1))
+                            )
                         )
                         {
                             hitCnt++;
@@ -565,7 +570,10 @@ namespace EmVerif.Core.Script
 
                         if (
                             (canRecvData.CanId == _ResponseCanId) &&
-                            (!_IsExistResponse || (canRecvData.Data[0] == _ResponseNta))
+                            (
+                                !_IsExistResponseNta ||
+                                ((canRecvData.Data[0] == _ResponseNta) && (canRecvData.DataLen >= 1))
+                            )
                         )
                         {
                             if (
