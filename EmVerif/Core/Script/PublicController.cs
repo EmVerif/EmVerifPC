@@ -424,29 +424,13 @@ namespace EmVerif.Core.Script
             SendUserDataToEcuStructure1();
             if (
                 (_State.CurrentState == ControllerState.EndStr) ||
-                (_GuiTop.FormClosingRequest)
-            )
-            {
-                _GuiTop.Invoke((Action)(() =>
-                {
-                    EndEvent?.Invoke(this, new EventArgs());
-                }));
-            }
-            else if (
+                (_GuiTop.FormClosingRequest) ||
                 (PublicCmd.Instance.PcRecvErrorCounter != 0) ||
                 (PublicCmd.Instance.EcuRecvErrorCounter != 0)
             )
             {
                 _GuiTop.Invoke((Action)(() =>
                 {
-                    EndEvent?.Invoke(this, new EventArgs());
-                }));
-            }
-            else if (!PublicCmd.Instance.EcuActive)
-            {
-                _GuiTop.Invoke((Action)(() =>
-                {
-                    MessageBox.Show("Ecu 反応無し");
                     EndEvent?.Invoke(this, new EventArgs());
                 }));
             }

@@ -23,13 +23,6 @@ namespace EmVerif.Core.Communication
         public static InternalCmd Instance = new InternalCmd();
         public UInt32 PcRecvErrorCounter { get; private set; }
         public UInt32 EcuRecvErrorCounter { get; private set; }
-        public Boolean EcuActive
-        {
-            get
-            {
-                return EtherCom.Instance.GetRecvTaskBusy();
-            }
-        }
 
         private const UInt32 _IfVersion = 0x00000003;
 

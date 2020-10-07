@@ -33,13 +33,6 @@ namespace EmVerif.Core.Communication
                 return InternalCmd.Instance.EcuRecvErrorCounter;
             }
         }
-        public Boolean EcuActive
-        {
-            get
-            {
-                return InternalCmd.Instance.EcuActive;
-            }
-        }
 
         private Boolean[] _AckRecvFlag = new Boolean[Byte.MaxValue];
         private IReadOnlyList<byte>[] _RecvDataList = new List<byte>[Byte.MaxValue];
