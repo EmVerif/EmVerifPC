@@ -31,7 +31,7 @@ namespace EmVerif.Core.Communication
             }
         }
 
-        private const UInt32 _IfVersion = 0x00000002;
+        private const UInt32 _IfVersion = 0x00000003;
 
         private const Byte _StartCmdId = 0x01;
         private const Byte _EndCmdId = 0x02;
@@ -52,6 +52,7 @@ namespace EmVerif.Core.Communication
         private object _SendCmdQueueLock = new object();
 
         private Boolean _StartCmdAckRecv;
+        private Boolean _IfVersionMismatch;
         private Boolean _EndCmdAckRecv;
 
         private UInt16 _PcEcuCmdCounter;
@@ -73,6 +74,7 @@ namespace EmVerif.Core.Communication
             _SendCmdQueue = new List<List<byte>>();
 
             _StartCmdAckRecv = false;
+            _IfVersionMismatch = false;
             _EndCmdAckRecv = false;
 
             _PcEcuCmdCounter = 0;
@@ -234,7 +236,8 @@ namespace EmVerif.Core.Communication
                 _DeadEcuTimeCounterMSec++;
                 if (_DeadEcuTimeCounterMSec > 2000)
                 {
-                    End();
+                    PcRecvErrorCounter++;
+                    _DeadEcuTimeCounterMSec = 0;
                 }
             }
         }
@@ -246,6 +249,7 @@ namespace EmVerif.Core.Communication
             List<byte> cmd = new List<byte>();
 
             _StartCmdAckRecv = false;
+            _IfVersionMismatch = false;
             _RecvEvent[_StartCmdId] = RecvStartCmdAck;
             cmd.Add(_StartCmdId);
             lock (_SendCmdQueueLock)
@@ -266,6 +270,10 @@ namespace EmVerif.Core.Communication
                 }
                 timeoutCounter--;
                 System.Threading.Thread.Sleep(10);
+            }
+            if (_IfVersionMismatch)
+            {
+                throw new Exception("Interface version is mismatch.");
             }
         }
 
@@ -289,8 +297,13 @@ namespace EmVerif.Core.Communication
                 );
                 if (ifVersion == _IfVersion)
                 {
-                    _StartCmdAckRecv = true;
+                    _IfVersionMismatch = false;
                 }
+                else
+                {
+                    _IfVersionMismatch = true;
+                }
+                _StartCmdAckRecv = true;
             }
         }
         #endregion
@@ -317,6 +330,7 @@ namespace EmVerif.Core.Communication
             {
                 if (timeoutCounter <= 0)
                 {
+                    PcRecvErrorCounter++;
                     break;
                 }
                 timeoutCounter--;
@@ -326,7 +340,16 @@ namespace EmVerif.Core.Communication
 
         private void RecvEndCmdAck(in IReadOnlyList<byte> inRecvDataList)
         {
-            _EndCmdAckRecv = true;
+            if (inRecvDataList.Count >= 4)
+            {
+                EcuRecvErrorCounter = (
+                    ((UInt32)inRecvDataList[0] << 24) +
+                    ((UInt32)inRecvDataList[1] << 16) +
+                    ((UInt32)inRecvDataList[2] << 8) +
+                    ((UInt32)inRecvDataList[3])
+                );
+                _EndCmdAckRecv = true;
+            }
         }
 
         private void WaitUdpEnd()

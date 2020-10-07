@@ -100,6 +100,15 @@ namespace EmVerif.Core.Script
         {
             PublicCmd.Instance.OnTimer -= BootExecScript1MsTask;
             PublicCmd.Instance.End();
+            if (
+                (PublicCmd.Instance.PcRecvErrorCounter != 0) ||
+                (PublicCmd.Instance.EcuRecvErrorCounter != 0)
+            )
+            {
+                LogManager.Instance.Set("通信障害発生⇒NG");
+                LogManager.Instance.Set("受信エラー数：" + PublicCmd.Instance.PcRecvErrorCounter);
+                LogManager.Instance.Set("送信エラー数：" + PublicCmd.Instance.EcuRecvErrorCounter);
+            }
             Finally();
             LogManager.Instance.Stop();
             if (_GuiTop != null)
@@ -430,11 +439,6 @@ namespace EmVerif.Core.Script
             {
                 _GuiTop.Invoke((Action)(() =>
                 {
-                    MessageBox.Show(
-                        "通信障害発生\n" +
-                        "受信エラー数：" + PublicCmd.Instance.PcRecvErrorCounter + "\n" +
-                        "送信エラー数：" + PublicCmd.Instance.EcuRecvErrorCounter
-                    );
                     EndEvent?.Invoke(this, new EventArgs());
                 }));
             }
