@@ -525,6 +525,7 @@ namespace EmVerif.Core.Script
                                 )
                                 {
                                     // NRC 0x78 受信
+                                    hitCnt = 0;
                                     _BaseTimestampMs = inCurTimestampMs;
                                     _State = State.WaitRecvSfFf;
                                 }
