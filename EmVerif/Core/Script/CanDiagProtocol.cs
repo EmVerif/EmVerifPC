@@ -26,8 +26,10 @@ namespace EmVerif.Core.Script
         private List<Byte> _RestSendDataList;
         private UInt32 _SendCanId;
         private UInt32 _SendNta;
+        private Byte _Sid;
         private List<Byte> _ResponseDataList;
-        private Boolean _TimeoutFlag;
+        private Boolean _SendTimeoutFlag;
+        private Boolean _RecvTimeoutFlag;
         private Boolean _ErrorSeqFlag;
         private UInt32 _ResponseCanId;
         private UInt32 _ResponseNta;
@@ -215,7 +217,8 @@ namespace EmVerif.Core.Script
             in UInt32 inSendCanId,
             in UInt32 inResponseCanId,
             in UInt32 inSendNta,
-            in UInt32 inResponseNta
+            in UInt32 inResponseNta,
+            in UInt32 inCurTimestampMs
         )
         {
             Boolean ret = false;
@@ -223,13 +226,16 @@ namespace EmVerif.Core.Script
             if (_State == State.Idle)
             {
                 _RestSendDataList = new List<byte>(inDataList);
+                _Sid = inDataList[0];
                 _SendCanId = inSendCanId;
                 _SendNta = inSendNta;
                 _ResponseDataList = new List<byte>();
-                _TimeoutFlag = false;
+                _SendTimeoutFlag = false;
+                _RecvTimeoutFlag = false;
                 _ErrorSeqFlag = false;
                 _ResponseCanId = inResponseCanId;
                 _ResponseNta = inResponseNta;
+                _BaseTimestampMs = inCurTimestampMs;
 
                 _SendFrameNum = 0;
                 _ResponseFrameNum = 0;
@@ -244,14 +250,18 @@ namespace EmVerif.Core.Script
         {
             bool ret;
 
-            outTimeoutFlag = _TimeoutFlag;
+            outTimeoutFlag = _RecvTimeoutFlag || _SendTimeoutFlag;
             outErrorSeqFlag = _ErrorSeqFlag;
             outDataList = _ResponseDataList;
             if (_State == State.End)
             {
-                if (_TimeoutFlag)
+                if (_SendTimeoutFlag)
                 {
-                    LogManager.Instance.Set("タイムアウト発生⇒NG");
+                    LogManager.Instance.Set("送信タイムアウト発生⇒NG");
+                }
+                if (_RecvTimeoutFlag)
+                {
+                    LogManager.Instance.Set("受信タイムアウト発生⇒NG");
                 }
                 if (_ErrorSeqFlag)
                 {
@@ -311,6 +321,14 @@ namespace EmVerif.Core.Script
             UInt32 inCurTimestampMs
         )
         {
+            if ((inCurTimestampMs - _BaseTimestampMs) >= _TimeoutMs)
+            {
+                _SendTimeoutFlag = true;
+                _State = State.End;
+
+                return;
+            }
+
             if (ioUserDataToEcuStructure0.CanSendNum < inUserDataFromEcuStructureList.Last().CanSendPossibleNum)
             {
                 UInt32 id = ioUserDataToEcuStructure0.CanSendNum;
@@ -349,54 +367,53 @@ namespace EmVerif.Core.Script
         {
             if ((inCurTimestampMs - _BaseTimestampMs) >= _TimeoutMs)
             {
-                _TimeoutFlag = true;
+                _RecvTimeoutFlag = true;
                 _State = State.End;
+
+                return;
             }
-            else
+            int hitCnt = 0;
+
+            foreach (var userDataFromEcu in inUserDataFromEcuStructureList)
             {
-                int hitCnt = 0;
-
-                foreach (var userDataFromEcu in inUserDataFromEcuStructureList)
+                for (int idx = 0; idx < userDataFromEcu.CanRecvNum; idx++)
                 {
-                    for (int idx = 0; idx < userDataFromEcu.CanRecvNum; idx++)
-                    {
-                        var canRecvData = userDataFromEcu.CanRecvData[idx];
+                    var canRecvData = userDataFromEcu.CanRecvData[idx];
 
-                        if (
-                            (canRecvData.CanId == _ResponseCanId) &&
-                            (
-                                !_IsExistResponseNta ||
-                                ((canRecvData.Data[0] == _ResponseNta) && (canRecvData.DataLen >= 1))
-                            )
+                    if (
+                        (canRecvData.CanId == _ResponseCanId) &&
+                        (
+                            !_IsExistResponseNta ||
+                            ((canRecvData.Data[0] == _ResponseNta) && (canRecvData.DataLen >= 1))
+                        )
+                    )
+                    {
+                        hitCnt++;
+                        if (hitCnt > 1)
+                        {
+                            _ErrorSeqFlag = true;
+                            _State = State.End;
+
+                            return;
+                        }
+                        else if (
+                            (canRecvData.DataLen >= _FcResponseSize) &&
+                            ((canRecvData.Data[_ResponseNpciStartPos] & 0xF0) == 0x30)
                         )
                         {
-                            hitCnt++;
-                            if (hitCnt > 1)
-                            {
-                                _ErrorSeqFlag = true;
-                                _State = State.End;
-
-                                return;
-                            }
-                            else if (
-                                (canRecvData.DataLen >= _FcResponseSize) &&
-                                ((canRecvData.Data[_ResponseNpciStartPos] & 0xF0) == 0x30)
-                            )
-                            {
-                                _BlockSize = canRecvData.Data[_ResponseNpciStartPos + 1];
-                                _StMin = canRecvData.Data[_ResponseNpciStartPos + 2];
-                                _BaseTimestampMs = inCurTimestampMs;
-                                _State = State.WaitSendCf;
-                            }
-                            else
-                            {
-                                _ErrorSeqFlag = true;
-                                _State = State.End;
-
-                                return;
-                            }
-                            _SendFrameNumInBlock = 0;
+                            _BlockSize = canRecvData.Data[_ResponseNpciStartPos + 1];
+                            _StMin = canRecvData.Data[_ResponseNpciStartPos + 2];
+                            _BaseTimestampMs = inCurTimestampMs;
+                            _State = State.WaitSendCf;
                         }
+                        else
+                        {
+                            _ErrorSeqFlag = true;
+                            _State = State.End;
+
+                            return;
+                        }
+                        _SendFrameNumInBlock = 0;
                     }
                 }
             }
@@ -408,6 +425,14 @@ namespace EmVerif.Core.Script
             UInt32 inCurTimestampMs
         )
         {
+            if ((inCurTimestampMs - _BaseTimestampMs) >= _TimeoutMs)
+            {
+                _SendTimeoutFlag = true;
+                _State = State.End;
+
+                return;
+            }
+
             if (
                 ((inCurTimestampMs - _BaseTimestampMs) >= _StMin) &&
                 (ioUserDataToEcuStructure0.CanSendNum < inUserDataFromEcuStructureList.Last().CanSendPossibleNum)
@@ -448,47 +473,60 @@ namespace EmVerif.Core.Script
         {
             if ((inCurTimestampMs - _BaseTimestampMs) >= _TimeoutMs)
             {
-                _TimeoutFlag = true;
+                _RecvTimeoutFlag = true;
                 _State = State.End;
+
+                return;
             }
-            else
+            int hitCnt = 0;
+
+            foreach (var userDataFromEcu in inUserDataFromEcuStructureList)
             {
-                int hitCnt = 0;
-
-                foreach (var userDataFromEcu in inUserDataFromEcuStructureList)
+                for (int canRecvDataIdx = 0; canRecvDataIdx < userDataFromEcu.CanRecvNum; canRecvDataIdx++)
                 {
-                    for (int canRecvDataIdx = 0; canRecvDataIdx < userDataFromEcu.CanRecvNum; canRecvDataIdx++)
-                    {
-                        var canRecvData = userDataFromEcu.CanRecvData[canRecvDataIdx];
+                    var canRecvData = userDataFromEcu.CanRecvData[canRecvDataIdx];
 
-                        if (
-                            (canRecvData.CanId == _ResponseCanId) &&
-                            (
-                                !_IsExistResponseNta ||
-                                ((canRecvData.Data[0] == _ResponseNta) && (canRecvData.DataLen >= 1))
-                            )
+                    if (
+                        (canRecvData.CanId == _ResponseCanId) &&
+                        (
+                            !_IsExistResponseNta ||
+                            ((canRecvData.Data[0] == _ResponseNta) && (canRecvData.DataLen >= 1))
+                        )
+                    )
+                    {
+                        hitCnt++;
+                        if (hitCnt > 1)
+                        {
+                            _ErrorSeqFlag = true;
+                            _State = State.End;
+
+                            return;
+                        }
+                        else if (
+                            (canRecvData.DataLen >= _SfCfResponseMinSize) &&
+                            ((canRecvData.Data[_ResponseNpciStartPos] & 0xF0) == 0x00)
                         )
                         {
-                            hitCnt++;
-                            if (hitCnt > 1)
+                            // SF 受信
+                            int dataSize = canRecvData.Data[_ResponseNpciStartPos] & 0x0F;
+
+                            if ((dataSize + _ResponseNpciStartPos + 1) < canRecvData.DataLen)
                             {
                                 _ErrorSeqFlag = true;
                                 _State = State.End;
-
-                                return;
                             }
-                            else if (
-                                (canRecvData.DataLen >= _SfCfResponseMinSize) &&
-                                ((canRecvData.Data[_ResponseNpciStartPos] & 0xF0) == 0x00)
-                            )
+                            else
                             {
-                                // SF 受信
-                                // TODO: 0x78
-                                int dataSize = canRecvData.Data[_ResponseNpciStartPos] & 0x0F;
-
-                                if ((dataSize + _ResponseNpciStartPos + 1) < canRecvData.DataLen)
+                                if (
+                                    (dataSize == 3) &&
+                                    (canRecvData.Data[_ResponseNpciStartPos + 1] == 0x7E) &&
+                                    (canRecvData.Data[_ResponseNpciStartPos + 2] == _Sid) &&
+                                    (canRecvData.Data[_ResponseNpciStartPos + 3] == 0x78)
+                                )
                                 {
-                                    _ErrorSeqFlag = true;
+                                    // NRC 0x78 受信
+                                    _BaseTimestampMs = inCurTimestampMs;
+                                    _State = State.WaitRecvSfFf;
                                 }
                                 else
                                 {
@@ -496,40 +534,40 @@ namespace EmVerif.Core.Script
                                     {
                                         _ResponseDataList.Add(canRecvData.Data[idx + _ResponseNpciStartPos + 1]);
                                     }
-                                }
-                                _State = State.End;
-                            }
-                            else if (
-                                (canRecvData.DataLen >= 8) &&
-                                ((canRecvData.Data[_ResponseNpciStartPos] & 0xF0) == 0x10)
-                            )
-                            {
-                                // CF 受信
-                                _RestResponseDataSize = (canRecvData.Data[_ResponseNpciStartPos] & 0x0F) * 256 + canRecvData.Data[_ResponseNpciStartPos + 1];
-                                if (_RestResponseDataSize <= _FfResponseDataSize)
-                                {
-                                    _ErrorSeqFlag = true;
                                     _State = State.End;
                                 }
-                                else
-                                {
-                                    for (int idx = 0; idx < _FfResponseDataSize; idx++)
-                                    {
-                                        _ResponseDataList.Add(canRecvData.Data[idx + _ResponseNpciStartPos + 2]);
-                                        _RestResponseDataSize--;
-                                    }
-                                    _ResponseFrameNum++;
-                                    _BaseTimestampMs = inCurTimestampMs;
-                                    _State = State.WaitSendFc;
-                                }
                             }
-                            else
+                        }
+                        else if (
+                            (canRecvData.DataLen >= 8) &&
+                            ((canRecvData.Data[_ResponseNpciStartPos] & 0xF0) == 0x10)
+                        )
+                        {
+                            // CF 受信
+                            _RestResponseDataSize = (canRecvData.Data[_ResponseNpciStartPos] & 0x0F) * 256 + canRecvData.Data[_ResponseNpciStartPos + 1];
+                            if (_RestResponseDataSize <= _FfResponseDataSize)
                             {
                                 _ErrorSeqFlag = true;
                                 _State = State.End;
-
-                                return;
                             }
+                            else
+                            {
+                                for (int idx = 0; idx < _FfResponseDataSize; idx++)
+                                {
+                                    _ResponseDataList.Add(canRecvData.Data[idx + _ResponseNpciStartPos + 2]);
+                                    _RestResponseDataSize--;
+                                }
+                                _ResponseFrameNum++;
+                                _BaseTimestampMs = inCurTimestampMs;
+                                _State = State.WaitSendFc;
+                            }
+                        }
+                        else
+                        {
+                            _ErrorSeqFlag = true;
+                            _State = State.End;
+
+                            return;
                         }
                     }
                 }
@@ -538,6 +576,14 @@ namespace EmVerif.Core.Script
 
         private void WaitSendFc(IReadOnlyList<UserDataFromEcuStructure> inUserDataFromEcuStructureList, ref UserDataToEcuStructure0 ioUserDataToEcuStructure0, uint inCurTimestampMs)
         {
+            if ((inCurTimestampMs - _BaseTimestampMs) >= _TimeoutMs)
+            {
+                _SendTimeoutFlag = true;
+                _State = State.End;
+
+                return;
+            }
+
             if (ioUserDataToEcuStructure0.CanSendNum < inUserDataFromEcuStructureList.Last().CanSendPossibleNum)
             {
                 UInt32 id = ioUserDataToEcuStructure0.CanSendNum;
@@ -557,62 +603,63 @@ namespace EmVerif.Core.Script
         {
             if ((inCurTimestampMs - _BaseTimestampMs) >= _TimeoutMs)
             {
-                _TimeoutFlag = true;
+                _RecvTimeoutFlag = true;
                 _State = State.End;
-            }
-            else
-            {
-                foreach (var userDataFromEcu in inUserDataFromEcuStructureList)
-                {
-                    for (int canRecvDataIdx = 0; canRecvDataIdx < userDataFromEcu.CanRecvNum; canRecvDataIdx++)
-                    {
-                        var canRecvData = userDataFromEcu.CanRecvData[canRecvDataIdx];
 
+                return;
+            }
+
+            foreach (var userDataFromEcu in inUserDataFromEcuStructureList)
+            {
+                for (int canRecvDataIdx = 0; canRecvDataIdx < userDataFromEcu.CanRecvNum; canRecvDataIdx++)
+                {
+                    var canRecvData = userDataFromEcu.CanRecvData[canRecvDataIdx];
+
+                    if (
+                        (canRecvData.CanId == _ResponseCanId) &&
+                        (
+                            !_IsExistResponseNta ||
+                            ((canRecvData.Data[0] == _ResponseNta) && (canRecvData.DataLen >= 1))
+                        )
+                    )
+                    {
                         if (
-                            (canRecvData.CanId == _ResponseCanId) &&
-                            (
-                                !_IsExistResponseNta ||
-                                ((canRecvData.Data[0] == _ResponseNta) && (canRecvData.DataLen >= 1))
-                            )
+                            (canRecvData.DataLen >= _SfCfResponseMinSize) &&
+                            ((canRecvData.Data[_ResponseNpciStartPos] & 0xF0) == 0x20) &&
+                            ((canRecvData.Data[_ResponseNpciStartPos] & 0x0F) == (_ResponseFrameNum & 0x0F)) &&
+                            (_RestResponseDataSize > 0)
                         )
                         {
-                            if (
-                                (canRecvData.DataLen >= _SfCfResponseMinSize) &&
-                                ((canRecvData.Data[_ResponseNpciStartPos] & 0xF0) == 0x20) &&
-                                ((canRecvData.Data[_ResponseNpciStartPos] & 0x0F) == (_ResponseFrameNum & 0x0F)) &&
-                                (_RestResponseDataSize > 0)
-                            )
-                            {
-                                int dataSize = canRecvData.DataLen - _ResponseNpciStartPos - 1;
+                            int dataSize = canRecvData.DataLen - _ResponseNpciStartPos - 1;
 
-                                if (dataSize < _RestResponseDataSize)
+                            if (dataSize < _RestResponseDataSize)
+                            {
+                                for (int idx = 0; idx < dataSize; idx++)
                                 {
-                                    for (int idx = 0; idx < dataSize; idx++)
-                                    {
-                                        _ResponseDataList.Add(canRecvData.Data[idx + _ResponseNpciStartPos + 1]);
-                                    }
-                                    _RestResponseDataSize -= dataSize;
-                                    _BaseTimestampMs = inCurTimestampMs;
-                                    _ResponseFrameNum++;
+                                    _ResponseDataList.Add(canRecvData.Data[idx + _ResponseNpciStartPos + 1]);
                                 }
-                                else
-                                {
-                                    for (int idx = 0; idx < _RestResponseDataSize; idx++)
-                                    {
-                                        _ResponseDataList.Add(canRecvData.Data[idx + _ResponseNpciStartPos + 1]);
-                                    }
-                                    _RestResponseDataSize = 0;
-                                    _State = State.End;
-                                    return;
-                                }
+                                _RestResponseDataSize -= dataSize;
+                                _BaseTimestampMs = inCurTimestampMs;
+                                _ResponseFrameNum++;
+                                _State = State.WaitRecvCf;
                             }
                             else
                             {
-                                _ErrorSeqFlag = true;
+                                for (int idx = 0; idx < _RestResponseDataSize; idx++)
+                                {
+                                    _ResponseDataList.Add(canRecvData.Data[idx + _ResponseNpciStartPos + 1]);
+                                }
+                                _RestResponseDataSize = 0;
                                 _State = State.End;
-
                                 return;
                             }
+                        }
+                        else
+                        {
+                            _ErrorSeqFlag = true;
+                            _State = State.End;
+
+                            return;
                         }
                     }
                 }

@@ -69,7 +69,8 @@ namespace EmVerif.Core.Script.Command
                         _SendCanId,
                         _ResponseCanId,
                         _SendNta,
-                        _ResponseNta
+                        _ResponseNta,
+                        ioState.TimestampMs
                     );
                     if (isRegistered)
                     {
