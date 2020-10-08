@@ -510,7 +510,7 @@ namespace EmVerif.Core.Script
                             // SF 受信
                             int dataSize = canRecvData.Data[_ResponseNpciStartPos] & 0x0F;
 
-                            if ((dataSize + _ResponseNpciStartPos + 1) < canRecvData.DataLen)
+                            if ((dataSize + _ResponseNpciStartPos + 1) > canRecvData.DataLen)
                             {
                                 _ErrorSeqFlag = true;
                                 _State = State.End;
@@ -519,7 +519,7 @@ namespace EmVerif.Core.Script
                             {
                                 if (
                                     (dataSize == 3) &&
-                                    (canRecvData.Data[_ResponseNpciStartPos + 1] == 0x7E) &&
+                                    (canRecvData.Data[_ResponseNpciStartPos + 1] == 0x7F) &&
                                     (canRecvData.Data[_ResponseNpciStartPos + 2] == _Sid) &&
                                     (canRecvData.Data[_ResponseNpciStartPos + 3] == 0x78)
                                 )
