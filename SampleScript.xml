@@ -348,8 +348,18 @@ Wait(Trig: "Boot", Next: "End", Time: 5);
                   <Explanation>
 </Explanation>
                   <ScriptContent>
-CanDiagSend(Trig: "Boot", SendCanId: 0x600, SendData: new List&lt;byte&gt;() {0x10, 0x00}, ResponseCanId: 0x660, ResponseDataArrayName: "Resp0", Next: "②");
-CanDiagSend(Trig: "②", SendCanId: 0x600, SendData: new List&lt;byte&gt;() {0x10, 0x00}, ResponseCanId: 0x660, ResponseDataArrayName: "Resp1", Next: "End");
+CanDiagSend(
+    Trig: "Boot",
+    SendCanId: 0x600, SendData: new List&lt;byte&gt;() {0x10, 0x00},
+    ResponseCanId: 0x660, ResponseDataArrayName: "Resp0",
+    Next: "②"
+);
+CanDiagSend(
+    Trig: "②",
+    SendCanId: 0x600, SendData: new List&lt;byte&gt;() {0x10, 0x00},
+    ResponseCanId: 0x660, ResponseDataArrayName: "Resp1",
+    Next: "End"
+);
 </ScriptContent>
                 </XmlIO>
               </OneElement>
@@ -454,13 +464,13 @@ Wait(Trig: "②", Time: 5, Next: "③");
 
 Wait(Trig: "③", Time: 1, Next: "End");
 
-ValueCheck(CheckValue: "SpioutCh0Amp[0]", ExpValueMax: (Decimal)1.1, ExpValueMin: (Decimal)0.90, Message: @"Spiout Ch0 100[Hz] 振幅確認");
-ValueCheck(CheckValue: "SpioutCh0AmpDft[0]", ExpValueMax: (Decimal)1.1, ExpValueMin: (Decimal)0.90, Message: @"Spiout Ch0 100[Hz] 振幅確認 DFT バージョン");
-ValueCheck(CheckValue: "SpioutCh0OtherAmp", ExpValueMax: (Decimal)0.01, ExpValueMin: 0, Message: @"Spiout Ch0 100[Hz] 以外の振幅確認");
-ValueCheck(CheckValue: "SpioutCh1Amp[0]", ExpValueMax: (Decimal)0.55, ExpValueMin: (Decimal)0.45, Message: @"Spiout Ch1 200[Hz] 振幅確認");
-ValueCheck(CheckValue: "SpioutCh1Amp[1]", ExpValueMax: (Decimal)0.55, ExpValueMin: (Decimal)0.45, Message: @"Spiout Ch1 300[Hz] 振幅確認");
-ValueCheck(CheckValue: "SpioutCh1OtherAmp", ExpValueMax: (Decimal)0.01, ExpValueMin: 0, Message: @"Spiout Ch1 200, 300[Hz] 以外の振幅確認");
-ValueCheck(CheckValue: "SpioutCh0Amp[0] / PwmCh0Amp[0]", ExpValueMax: (Decimal)1.05, ExpValueMin: (Decimal)0.95, Message: @"Spiout Ch0 と Pwm Ch0 の 100[Hz] 振幅比確認");
+ValueCheck(Formula: "SpioutCh0Amp[0]", ExpValueMax: (Decimal)1.1, ExpValueMin: (Decimal)0.90, Message: @"Spiout Ch0 100[Hz] 振幅確認");
+ValueCheck(Formula: "SpioutCh0AmpDft[0]", ExpValueMax: (Decimal)1.1, ExpValueMin: (Decimal)0.90, Message: @"Spiout Ch0 100[Hz] 振幅確認 DFT バージョン");
+ValueCheck(Formula: "SpioutCh0OtherAmp", ExpValueMax: (Decimal)0.01, ExpValueMin: 0, Message: @"Spiout Ch0 100[Hz] 以外の振幅確認");
+ValueCheck(Formula: "SpioutCh1Amp[0]", ExpValueMax: (Decimal)0.55, ExpValueMin: (Decimal)0.45, Message: @"Spiout Ch1 200[Hz] 振幅確認");
+ValueCheck(Formula: "SpioutCh1Amp[1]", ExpValueMax: (Decimal)0.55, ExpValueMin: (Decimal)0.45, Message: @"Spiout Ch1 300[Hz] 振幅確認");
+ValueCheck(Formula: "SpioutCh1OtherAmp", ExpValueMax: (Decimal)0.01, ExpValueMin: 0, Message: @"Spiout Ch1 200, 300[Hz] 以外の振幅確認");
+ValueCheck(Formula: "SpioutCh0Amp[0] / PwmCh0Amp[0]", ExpValueMax: (Decimal)1.05, ExpValueMin: (Decimal)0.95, Message: @"Spiout Ch0 と Pwm Ch0 の 100[Hz] 振幅比確認");
 </ScriptContent>
                 </XmlIO>
               </OneElement>
@@ -510,8 +520,8 @@ CalcFft(
 );
 GetWave(Trig: "②", Stop: "⑤", FileName: "SpioutCh0.wav", SpioutId: "0");
 
-ValueCheck(CheckValue: "SpioutCh0Amp[0]", ExpValueMax: (Decimal)1, ExpValueMin: (Decimal)0.90, Message: @"Spiout Ch0 100[Hz] 振幅確認");
-ValueCheck(CheckValue: "SpioutCh0OtherAmp", ExpValueMax: (Decimal)0.01, ExpValueMin: 0, Message: @"Spiout Ch0 100[Hz] 以外の振幅確認");
+ValueCheck(Formula: "SpioutCh0Amp[0]", ExpValueMax: (Decimal)1, ExpValueMin: (Decimal)0.90, Message: @"Spiout Ch0 100[Hz] 振幅確認");
+ValueCheck(Formula: "SpioutCh0OtherAmp", ExpValueMax: (Decimal)0.01, ExpValueMin: 0, Message: @"Spiout Ch0 100[Hz] 以外の振幅確認");
 </ScriptContent>
                 </XmlIO>
               </OneElement>

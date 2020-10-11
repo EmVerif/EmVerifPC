@@ -276,6 +276,7 @@
       <DependentUpon>PublicVariableView.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\Script\CanDiagProtocol.cs" />
+    <Compile Include="Core\Script\Command\ByteArrayCheckCommand.cs" />
     <Compile Include="Core\Script\Command\CalcDftCommand.cs" />
     <Compile Include="Core\Script\Command\CalcFftCommand.cs" />
     <Compile Include="Core\Script\Command\CanDiagSendCommand.cs" />

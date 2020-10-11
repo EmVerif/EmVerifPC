@@ -350,16 +350,33 @@ namespace EmVerif.Core.Script
         }
 
         public void ValueCheck(
-            string CheckValue,
+            string Formula,
             Decimal ExpValueMax,
             Decimal ExpValueMin,
             string Message = null
         )
         {
             ValueCheckCommand cmd = new ValueCheckCommand(
-                inCheckValue: CheckValue,
+                inFormula: Formula,
                 inExpValueMax: ExpValueMax,
                 inExpValueMin: ExpValueMin,
+                inMessage: Message
+            );
+
+            PublicController.Instance.Register("End", cmd);
+        }
+
+        public void ByteArrayCheck(
+            string ArrayName,
+            List<Byte> ExpValue,
+            List<Byte> Mask = null,
+            string Message = null
+        )
+        {
+            ByteArrayCheckCommand cmd = new ByteArrayCheckCommand(
+                inArrayName: ArrayName,
+                inExpValue: ExpValue,
+                inMask: Mask,
                 inMessage: Message
             );
 

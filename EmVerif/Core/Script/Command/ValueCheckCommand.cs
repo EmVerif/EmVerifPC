@@ -10,20 +10,20 @@ namespace EmVerif.Core.Script.Command
 {
     class ValueCheckCommand : IEmVerifCommand
     {
-        private string _CheckValueStr;
+        private string _FormulaStr;
         private Decimal _ExpValueMax;
         private Decimal _ExpValueMin;
         private string _Message;
         private Regex _VarNameRegex = new Regex(@"(?<VarName>[a-zA-Z_][\w\[\]]*)");
 
         public ValueCheckCommand(
-            string inCheckValue,
+            string inFormula,
             Decimal inExpValueMax,
             Decimal inExpValueMin,
             string inMessage
         )
         {
-            _CheckValueStr = inCheckValue;
+            _FormulaStr = inFormula;
             _ExpValueMax = inExpValueMax;
             _ExpValueMin = inExpValueMin;
             _Message = inMessage;
@@ -42,7 +42,7 @@ namespace EmVerif.Core.Script.Command
 
         public void Finally(ControllerState inState)
         {
-            Decimal checkValue = ConvertFormula(inState, _CheckValueStr);
+            Decimal checkValue = ConvertFormula(inState, _FormulaStr);
             string result;
 
             if (
@@ -60,7 +60,7 @@ namespace EmVerif.Core.Script.Command
             {
                 LogManager.Instance.Set(_Message);
             }
-            LogManager.Instance.Set("\t" + _ExpValueMin.ToString() + @" <= " + _CheckValueStr + @" <= " + _ExpValueMax.ToString() + @"⇒" + result);
+            LogManager.Instance.Set("\t" + _ExpValueMin.ToString() + @" <= " + _FormulaStr + @" <= " + _ExpValueMax.ToString() + @"⇒" + result);
         }
 
         private Decimal ConvertFormula(ControllerState inState, string inOrgFormula)
