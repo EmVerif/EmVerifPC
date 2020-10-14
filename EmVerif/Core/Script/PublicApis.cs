@@ -116,7 +116,7 @@ namespace EmVerif.Core.Script
             double Time
         )
         {
-            WaitCommand cmd = new WaitCommand(inWaitTimeSec: Time, inNextState: Next);
+            WaitCommand cmd = new WaitCommand(inWaitTimeSec: Time, inNext: Next);
 
             PublicController.Instance.Register(Trig, cmd);
         }
@@ -137,7 +137,7 @@ namespace EmVerif.Core.Script
                 inSquareWave: SquareWave,
                 inSetVar: SetVar,
                 inPortOut: PortOut,
-                inNextState: Next
+                inNext: Next
             );
 
             PublicController.Instance.Register(Trig, cmd);
@@ -178,7 +178,7 @@ namespace EmVerif.Core.Script
                 inDataMask: DataMask,
                 inDataMaskList: DataMaskList,
                 inResponseCanId: ResponseCanId,
-                inNextState: Next
+                inNext: Next
             );
 
             PublicController.Instance.Register(Trig, cmd);
@@ -202,7 +202,7 @@ namespace EmVerif.Core.Script
                 inDataMaskList: DataMaskList,
                 inResponseCanId: ResponseCanId,
                 inRepeatTime: RepTime,
-                inStopState: Stop
+                inStop: Stop
             );
 
             PublicController.Instance.Register(Trig, cmd);
@@ -222,11 +222,35 @@ namespace EmVerif.Core.Script
             CanDiagSendCommand cmd = new CanDiagSendCommand(
                 inSendCanId: SendCanId,
                 inSendNta: SendNta,
-                inSendData: SendData,
+                inSendDataList: SendData,
                 inResponseCanId: ResponseCanId,
                 inResponseNta: ResponseNta,
                 inResponseDataArrayName: ResponseDataArrayName,
                 inNext: Next
+            );
+
+            PublicController.Instance.Register(Trig, cmd);
+        }
+
+        public void CanDiagRepSend(
+            string Trig,
+            UInt32 SendCanId,
+            List<Byte> SendData,
+            double RepTime,
+            UInt32 SendNta = CanDiagSendCommand.NoValue,
+            UInt32 ResponseCanId = CanDiagSendCommand.NoValue,
+            UInt32 ResponseNta = CanDiagSendCommand.NoValue,
+            string Stop = null
+        )
+        {
+            CanDiagSendCommand cmd = new CanDiagSendCommand(
+                inSendCanId: SendCanId,
+                inSendNta: SendNta,
+                inSendDataList: SendData,
+                inResponseCanId: ResponseCanId,
+                inResponseNta: ResponseNta,
+                inRepeatTime: RepTime,
+                inStop: Stop
             );
 
             PublicController.Instance.Register(Trig, cmd);

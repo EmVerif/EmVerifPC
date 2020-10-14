@@ -12,12 +12,6 @@ namespace EmVerif.Core.Script.Command
     {
         public const UInt32 NoValue = 0xFFFFFFFF;
 
-        private enum Mode
-        {
-            OneShot,
-            Repeat
-        }
-
         private enum State
         {
             WaitResponse,
@@ -40,6 +34,7 @@ namespace EmVerif.Core.Script.Command
 
         private string _NextState;
         private string _StopState;
+
         private UInt32 _SendCanId;
         private UInt64 _SendData;
         private Int32 _SendDataLen;
@@ -49,7 +44,6 @@ namespace EmVerif.Core.Script.Command
 
         private Regex _VarNameRegex = new Regex(@"(?<VarName>[a-zA-Z_][\w\[\]]*)");
         private State _State;
-        private Mode _Mode;
         private UInt32 _PrevTimestampMs;
         private UInt32 _TimingMs;
 
@@ -59,10 +53,10 @@ namespace EmVerif.Core.Script.Command
             PublicApis.CanDataMask inDataMask,
             List<PublicApis.CanDataMask> inDataMaskList,
             UInt32 inResponseCanId,
-            string inNextState
+            string inNext
         )
         {
-            _NextState = inNextState;
+            _NextState = inNext;
             _StopState = null;
             _SendCanId = inSendCanId;
             _SendData = ConvertToUInt64(inSendDataList);
@@ -81,7 +75,6 @@ namespace EmVerif.Core.Script.Command
             }
             _ResponseCanId = inResponseCanId;
             _RepeatTimeMs = 0;
-            _Mode = Mode.OneShot;
             CheckParam();
         }
 
@@ -92,11 +85,11 @@ namespace EmVerif.Core.Script.Command
             List<PublicApis.CanDataMask> inDataMaskList,
             UInt32 inResponseCanId,
             double inRepeatTime,
-            string inStopState
+            string inStop
         )
         {
             _NextState = null;
-            _StopState = inStopState;
+            _StopState = inStop;
             _SendCanId = inSendCanId;
             _SendData = ConvertToUInt64(inSendDataList);
             _SendDataLen = inSendDataList.Count;
@@ -114,15 +107,18 @@ namespace EmVerif.Core.Script.Command
             }
             _ResponseCanId = inResponseCanId;
             _RepeatTimeMs = (UInt32)(inRepeatTime * 1000);
-            _Mode = Mode.Repeat;
+            if (_RepeatTimeMs < (2 * PublicConfig.SamplingTimeMSec))
+            {
+                throw new Exception("時間は" + (2 * PublicConfig.SamplingTimeMSec) + "[ms]以上に設定すること。");
+            }
             CheckParam();
         }
 
-        public void Boot(ControllerState inState)
+        public void Boot(ControllerState ioState)
         {
             _State = State.WaitSend;
             _TimingMs = _RepeatTimeMs;
-            _PrevTimestampMs = inState.TimestampMs;
+            _PrevTimestampMs = ioState.TimestampMs;
         }
 
         public string ExecPer10Ms(ControllerState ioState, out Boolean outFinFlag)
@@ -183,7 +179,7 @@ namespace EmVerif.Core.Script.Command
             {
                 if (_ResponseCanId == NoValue)
                 {
-                    if (_Mode == Mode.OneShot)
+                    if (_RepeatTimeMs == 0)
                     {
                         ioFinFlag = true;
                     }
@@ -199,7 +195,7 @@ namespace EmVerif.Core.Script.Command
         {
             if (CheckResponse(ioState))
             {
-                if (_Mode == Mode.OneShot)
+                if (_RepeatTimeMs == 0)
                 {
                     ioFinFlag = true;
                 }
@@ -212,9 +208,12 @@ namespace EmVerif.Core.Script.Command
 
         private void CheckStop(ControllerState ioState, ref bool ioFinFlag)
         {
-            if ((_Mode == Mode.Repeat) && (_StopState == ioState.CurrentState))
+            if (_StopState != null)
             {
-                ioFinFlag = true;
+                if (_StopState == ioState.CurrentState)
+                {
+                    ioFinFlag = true;
+                }
             }
         }
 

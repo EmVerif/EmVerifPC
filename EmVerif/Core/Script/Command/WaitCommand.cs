@@ -12,14 +12,14 @@ namespace EmVerif.Core.Script.Command
         private UInt32 _WaitTimeMSec;
         private UInt32 _BootTimeMSec;
 
-        public WaitCommand(double inWaitTimeSec, string inNextState)
+        public WaitCommand(double inWaitTimeSec, string inNext)
         {
             double waitTimeMSec = inWaitTimeSec * 1000;
             if (waitTimeMSec < PublicConfig.SamplingTimeMSec)
             {
                 waitTimeMSec = PublicConfig.SamplingTimeMSec;
             }
-            _NextState = inNextState;
+            _NextState = inNext;
             _WaitTimeMSec = (UInt32)waitTimeMSec - PublicConfig.SamplingTimeMSec;
             _BootTimeMSec = 0;
         }

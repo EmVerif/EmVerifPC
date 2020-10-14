@@ -211,10 +211,10 @@ namespace EmVerif.Core.Script.Command
             PublicApis.SquareWave inSquareWave,
             PublicApis.SetVar inSetVar,
             string inPortOut,
-            string inNextState
+            string inNext
         )
         {
-            _NextState = inNextState;
+            _NextState = inNext;
             _Signal = inSignal;
             if (inVirtualPath != null)
             {
