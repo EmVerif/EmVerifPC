@@ -249,25 +249,22 @@ namespace EmVerif.Core.Script
 
                 for (int idx = 0; idx < userDataFromEcuStructure.CanRecvNum; idx++)
                 {
-                    string recvLog = header + "CAN Recv: ";
+                    string log = header;
 
-                    recvLog += "0x" + userDataFromEcuStructure.CanRecvData[idx].CanId.ToString("X3");
+                    if (userDataFromEcuStructure.CanSendFinFlag[idx] == 0x00)
+                    {
+                        log += "CAN Recv: ";
+                    }
+                    else
+                    {
+                        log += "CAN Send: ";
+                    }
+                    log += "0x" + userDataFromEcuStructure.CanRecvData[idx].CanId.ToString("X3");
                     for (int byteNo = 0; byteNo < userDataFromEcuStructure.CanRecvData[idx].DataLen; byteNo++)
                     {
-                        recvLog += " " + userDataFromEcuStructure.CanRecvData[idx].Data[byteNo].ToString("X2");
+                        log += " " + userDataFromEcuStructure.CanRecvData[idx].Data[byteNo].ToString("X2");
                     }
-                    LogManager.Instance.Set(recvLog);
-                }
-                for (int idx = 0; idx < userDataFromEcuStructure.CanSendFinNum; idx++)
-                {
-                    string sendLog = header + "CAN Send: ";
-
-                    sendLog += "0x" + userDataFromEcuStructure.CanSendFinData[idx].CanId.ToString("X3");
-                    for (int byteNo = 0; byteNo < userDataFromEcuStructure.CanSendFinData[idx].DataLen; byteNo++)
-                    {
-                        sendLog += " " + userDataFromEcuStructure.CanSendFinData[idx].Data[byteNo].ToString("X2");
-                    }
-                    LogManager.Instance.Set(sendLog);
+                    LogManager.Instance.Set(log);
                 }
             }
         }
@@ -511,9 +508,8 @@ namespace EmVerif.Core.Script
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = EmVerif.Core.Communication.PublicConfig.MaxCanFifoNum)]
         public CanFormat[] CanRecvData;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = EmVerif.Core.Communication.PublicConfig.MaxCanFifoNum)]
-        public CanFormat[] CanSendFinData;
+        public Byte[] CanSendFinFlag;
         public UInt32 CanRecvNum;
-        public UInt32 CanSendFinNum;
         public UInt32 CanSendPossibleNum;
         public UInt32 CError;
         public UInt32 CStatus;
@@ -530,14 +526,10 @@ namespace EmVerif.Core.Script
         public UserDataFromEcuStructure()
         {
             CanRecvData = new CanFormat[EmVerif.Core.Communication.PublicConfig.MaxCanFifoNum];
-            CanSendFinData = new CanFormat[EmVerif.Core.Communication.PublicConfig.MaxCanFifoNum];
+            CanSendFinFlag = new Byte[EmVerif.Core.Communication.PublicConfig.MaxCanFifoNum];
             for (int i = 0; i < CanRecvData.Length; i++)
             {
                 CanRecvData[i].Data = new Byte[8];
-            }
-            for (int i = 0; i < CanSendFinData.Length; i++)
-            {
-                CanSendFinData[i].Data = new Byte[8];
             }
 
             AdVal = new UInt16[EmVerif.Core.Communication.PublicConfig.SamplingKhz * PublicConfig.AdChNum];
