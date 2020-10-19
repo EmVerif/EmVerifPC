@@ -321,7 +321,7 @@ namespace EmVerif.Core.Script
                 }
                 if (_State.SpioutSinePhase[idx] != null)
                 {
-                    _State.UserDataToEcuStructure0.SpioutSinePhase[idx] = (float)ConvertFormula(_State.SpioutSinePhase[idx]);
+                    _State.UserDataToEcuStructure0.SpioutSinePhase[idx] = (float)(ConvertFormula(_State.SpioutSinePhase[idx]) / 180 * Math.PI);
                 }
             }
             for (int idx = 0; idx < PublicConfig.SpioutChNum; idx++)

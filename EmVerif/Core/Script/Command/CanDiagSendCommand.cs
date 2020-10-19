@@ -37,8 +37,10 @@ namespace EmVerif.Core.Script.Command
 
         public CanDiagSendCommand(
             string inNext,
-            IReadOnlyList<Byte> inSendDataList,
             UInt32 inSendCanId,
+            IReadOnlyList<Byte> inSendDataList,
+            PublicApis.CanDataMask inDataMask,
+            IReadOnlyList<PublicApis.CanDataMask> inDataMaskList,
             UInt32 inSendNta,
             UInt32 inResponseCanId,
             UInt32 inResponseNta,
@@ -62,8 +64,10 @@ namespace EmVerif.Core.Script.Command
         }
 
         public CanDiagSendCommand(
-            IReadOnlyList<Byte> inSendDataList,
             UInt32 inSendCanId,
+            IReadOnlyList<Byte> inSendDataList,
+            PublicApis.CanDataMask inDataMask,
+            IReadOnlyList<PublicApis.CanDataMask> inDataMaskList,
             UInt32 inSendNta,
             UInt32 inResponseCanId,
             UInt32 inResponseNta,

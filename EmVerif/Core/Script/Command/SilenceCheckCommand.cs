@@ -18,11 +18,21 @@ namespace EmVerif.Core.Script.Command
         {
             _StopState = inStop;
             _AdDataList = new List<double>();
-            if (inAdId != null)
+            try
             {
                 _AdIdList = inAdId.Split(',').ToList().Select(id => Convert.ToInt32(id)).ToList();
             }
-            _AdIdList = new List<Int32>();
+            catch
+            {
+                throw new Exception("AdId 設定に間違い有⇒" + inAdId);
+            }
+            foreach (var id in _AdIdList)
+            {
+                if ((id >= PublicConfig.AdChNum) || (id < 0))
+                {
+                    throw new Exception("AdId 設定は0以上" + PublicConfig.AdChNum + "未満");
+                }
+            }
             _Thresh = inThresh;
             _Message = inMessage;
         }

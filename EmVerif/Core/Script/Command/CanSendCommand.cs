@@ -51,7 +51,7 @@ namespace EmVerif.Core.Script.Command
             UInt32 inSendCanId,
             IReadOnlyList<Byte> inSendDataList,
             PublicApis.CanDataMask inDataMask,
-            List<PublicApis.CanDataMask> inDataMaskList,
+            IReadOnlyList<PublicApis.CanDataMask> inDataMaskList,
             UInt32 inResponseCanId,
             string inNext
         )

@@ -183,6 +183,7 @@ namespace EmVerif.Core.Script.Command
                     ioState.VariableFormulaDict.Remove(arrayName);
                     ioState.VariableDict[arrayName] = Convert.ToDecimal(phase);
                 }
+                idx++;
             }
         }
     }
