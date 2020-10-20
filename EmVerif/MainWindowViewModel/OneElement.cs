@@ -58,7 +58,7 @@ namespace EmVerif.MainWindowViewModel
             set
             {
                 _Script = value;
-                OnPropertyChanged("ScriptContent");
+                OnPropertyChanged("Script");
             }
         }
         public bool IsReadOnly

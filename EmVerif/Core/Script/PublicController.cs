@@ -402,7 +402,7 @@ namespace EmVerif.Core.Script
                     }
                     catch
                     {
-                        throw new Exception("不明な文字列⇒" + varName);
+                        throw new Exception("変数" + varName + "が見つかりません。⇒NG");
                     }
                 }
             }
@@ -484,8 +484,9 @@ namespace EmVerif.Core.Script
                 {
                     cmd.Finally(_State);
                 }
-                catch
+                catch(Exception e)
                 {
+                    LogManager.Instance.Set(e.Message);
                 }
             }
         }

@@ -75,7 +75,14 @@ namespace EmVerif.Core.Script.Command
                 {
                     string varName = (string)varNameMatch.Groups["VarName"].Value;
 
-                    resultStr = resultStr.Replace(varName, inState.VariableDict[varName].ToString());
+                    try
+                    {
+                        resultStr = resultStr.Replace(varName, inState.VariableDict[varName].ToString());
+                    }
+                    catch
+                    {
+                        throw new Exception("変数" + varName + "が見つかりません。⇒NG");
+                    }
                 }
             }
 

@@ -348,9 +348,11 @@ Wait(Trig: "Boot", Next: "End", Time: 5);
                   <Explanation>
 </Explanation>
                   <ScriptContent>
+Set(Trig: "Boot", SetVar: new SetVar() {VarName = "RPM", Value = "1000"});
 CanDiagSend(
     Trig: "Boot",
-    SendCanId: 0x600, SendData: new List&lt;byte&gt;() {0x10, 0x00},
+    SendCanId: 0x600, SendData: new List&lt;byte&gt;() {0x55, 0xAA, 0xFF},
+    DataMask: new CanDataMask() { BitLen = 16, BitPos = 0, BytePos = 1, RefVar = "RPM"},
     ResponseCanId: 0x660, ResponseDataArrayName: "Resp0",
     Next: "②"
 );

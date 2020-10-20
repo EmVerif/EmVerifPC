@@ -29,6 +29,10 @@ namespace EmVerif.Core.Script.Command
                 LShift = (Int32)(8 * (7 - dataMask.BytePos) + dataMask.BitPos);
                 RefVar = dataMask.RefVar;
                 Mask = (((UInt64)1 << (Int32)dataMask.BitLen) - 1) << LShift;
+                if (((dataMask.BitLen + LShift) > 64) || (dataMask.BitPos >= 8))
+                {
+                    throw new Exception("DataMask設定エラー。");
+                }
             }
         }
 
@@ -73,6 +77,13 @@ namespace EmVerif.Core.Script.Command
                     _DataMaskList.Add(new DataMask(dataMask));
                 }
             }
+            foreach (var msk in _DataMaskList)
+            {
+                if ((msk.LShift + (_SendDataLen * 8)) < 64)
+                {
+                    throw new Exception("DataMask設定エラー。");
+                }
+            }
             _ResponseCanId = inResponseCanId;
             _RepeatTimeMs = 0;
             CheckParam();
@@ -103,6 +114,13 @@ namespace EmVerif.Core.Script.Command
                 foreach (var dataMask in inDataMaskList)
                 {
                     _DataMaskList.Add(new DataMask(dataMask));
+                }
+            }
+            foreach (var msk in _DataMaskList)
+            {
+                if ((msk.LShift + (_SendDataLen * 8)) < 64)
+                {
+                    throw new Exception("DataMask設定エラー。");
                 }
             }
             _ResponseCanId = inResponseCanId;
@@ -307,7 +325,14 @@ namespace EmVerif.Core.Script.Command
                 {
                     string varName = (string)varNameMatch.Groups["VarName"].Value;
 
-                    resultStr = resultStr.Replace(varName, inState.VariableDict[varName].ToString());
+                    try
+                    {
+                        resultStr = resultStr.Replace(varName, inState.VariableDict[varName].ToString());
+                    }
+                    catch
+                    {
+                        throw new Exception("変数" + varName + "が見つかりません。⇒NG");
+                    }
                 }
             }
 

@@ -32,7 +32,14 @@ namespace EmVerif.Core.Script.Command
         public void Boot(ControllerState ioState)
         {
             _StartTimeMs = ioState.TimestampMs;
-            _StartValue = ioState.VariableDict[_VarName];
+            try
+            {
+                _StartValue = ioState.VariableDict[_VarName];
+            }
+            catch
+            {
+                throw new Exception("変数" + _VarName + "が見つかりません。⇒NG");
+            }
             ioState.VariableFormulaDict.Remove(_VarName);
         }
 

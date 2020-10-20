@@ -105,7 +105,7 @@ namespace EmVerif.Core.Script.Command
                     (value > Byte.MaxValue)
                 )
                 {
-                    throw new Exception("\tバイトフォーマットではない。⇒NG");
+                    throw new Exception("\t" + _ArrayName + "は、バイトフォーマットではありません。⇒NG");
                 }
                 ret.Add((Byte)value);
                 idx++;
