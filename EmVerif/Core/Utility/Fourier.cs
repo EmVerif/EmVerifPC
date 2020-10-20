@@ -99,7 +99,7 @@ namespace EmVerif.Core.Utility
             outDst = new Complex(0, 0);
             foreach (var data in inSrc)
             {
-                outDst += data * Complex.FromPolarCoordinates(1.0, 2 * Math.PI * inWaveNumPerSmp * smp);
+                outDst += data * Complex.FromPolarCoordinates(1.0, -2 * Math.PI * inWaveNumPerSmp * smp);
                 smp++;
             }
         }
