@@ -75,6 +75,7 @@ namespace EmVerif.Core.Script.Command
         private State _State;
         private UInt32 _PrevTimestampMs;
         private UInt32 _TimingMs;
+        private DataTable _Dt = new DataTable();
 
         public CanDiagSendCommand(
             string inNext,
@@ -306,7 +307,6 @@ namespace EmVerif.Core.Script.Command
 
         private UInt64 ConvertFormula(ControllerState inState, string inOrgFormula)
         {
-            DataTable dt = new DataTable();
             var varNameMatches = _VarNameRegex.Matches(inOrgFormula);
             string resultStr = inOrgFormula;
 
@@ -327,7 +327,7 @@ namespace EmVerif.Core.Script.Command
                 }
             }
 
-            return Convert.ToUInt64(dt.Compute(resultStr, ""));
+            return Convert.ToUInt64(_Dt.Compute(resultStr, ""));
         }
     }
 }

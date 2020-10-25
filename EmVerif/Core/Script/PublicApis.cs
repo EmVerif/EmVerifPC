@@ -398,6 +398,23 @@ namespace EmVerif.Core.Script
             PublicController.Instance.Register("End", cmd);
         }
 
+        public void DegreeCheck(
+            string Formula,
+            Decimal ExpValueMax,
+            Decimal ExpValueMin,
+            string Message = null
+        )
+        {
+            DegreeCheckCommand cmd = new DegreeCheckCommand(
+                inFormula: Formula,
+                inExpValueMax: ExpValueMax,
+                inExpValueMin: ExpValueMin,
+                inMessage: Message
+            );
+
+            PublicController.Instance.Register("End", cmd);
+        }
+
         public void ByteArrayCheck(
             string ArrayName,
             List<Byte> ExpValue,

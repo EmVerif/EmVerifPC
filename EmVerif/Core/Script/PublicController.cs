@@ -33,6 +33,7 @@ namespace EmVerif.Core.Script
         private double _CurLoad;
 
         private Regex _VarNameRegex = new Regex(@"(?<VarName>[a-zA-Z_][\w\[\]]*)");
+        private DataTable _Dt = new DataTable();
 
         public IEnumerable<IPAddress> GetIpV4List()
         {
@@ -105,7 +106,7 @@ namespace EmVerif.Core.Script
                 (PublicCmd.Instance.EcuRecvErrorCounter != 0)
             )
             {
-                LogManager.Instance.Set("通信障害発生⇒NG");
+                LogManager.Instance.Set("通信障害発生");
                 LogManager.Instance.Set("受信エラー数：" + PublicCmd.Instance.PcRecvErrorCounter);
                 LogManager.Instance.Set("送信エラー数：" + PublicCmd.Instance.EcuRecvErrorCounter);
             }
@@ -386,7 +387,6 @@ namespace EmVerif.Core.Script
 
         private double ConvertFormula(in string inOrgFormula)
         {
-            DataTable dt = new DataTable();
             var varNameMatches = _VarNameRegex.Matches(inOrgFormula);
             string resultStr = inOrgFormula;
 
@@ -407,7 +407,7 @@ namespace EmVerif.Core.Script
                 }
             }
 
-            return Convert.ToDouble(dt.Compute(resultStr, ""));
+            return Convert.ToDouble(_Dt.Compute(resultStr, ""));
         }
 
         private void PostProcess()

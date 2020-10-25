@@ -21,6 +21,7 @@ namespace EmVerif.Core.Gui.Graph
         private List<double> _SetDataList = new List<double>();
         private Boolean _SetDataListUpdate = false;
         private IReadOnlyList<double> _DataForSyncList = new List<double>();
+        private DataTable _Dt = new DataTable();
 
         public OneGraph()
         {
@@ -82,16 +83,15 @@ namespace EmVerif.Core.Gui.Graph
 
         private void GenerateData()
         {
-            DataTable dt = new DataTable();
             DataRow dtRow;
 
             _DataSet = new DataSet();
-            dt.Columns.Add("時間[ms]", Type.GetType("System.Double"));
+            _Dt.Columns.Add("時間[ms]", Type.GetType("System.Double"));
             for (Int32 idx = 0; idx < _ChNum; idx++)
             {
-                dt.Columns.Add("Ch" + idx.ToString(), Type.GetType("System.Double"));
+                _Dt.Columns.Add("Ch" + idx.ToString(), Type.GetType("System.Double"));
             }
-            _DataSet.Tables.Add(dt);
+            _DataSet.Tables.Add(_Dt);
 
             // データの追加
             for (Int32 idx = 0; idx < ChartSmpNum; idx++)

@@ -406,9 +406,10 @@ Wait(Trig: "②", Time: 5, Next: "End");
 　１秒待機後、②に遷移
 
 ②Spiout Ch0はFFT実行後、100±2[Hz]の最大振幅を取得
-　Spiout Ch0はDFT実行後、100[Hz]の振幅を取得
+　Spiout Ch0はDFT実行後、100[Hz]の振幅、位相を取得
 　Spiout Ch1はFFT実行後、200±2[Hz]、300[Hz]±2[Hz]の最大振幅を取得
 　Pwm Ch0はFFT実行後、100±2[Hz]の最大振幅を取得
+　Pwm Ch0はDFT実行後、100[Hz]の振幅、位相を取得
 　Pwm Ch1はFFT実行後、250[Hz]の最大振幅を取得
 　５秒待機後、③に遷移
 
@@ -418,7 +419,7 @@ Wait(Trig: "②", Time: 5, Next: "End");
 Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 0, Gain = "1.0", Freq = "100"});
 Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 1, Id = 0, Gain = "0.5", Freq = "200"});
 Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 1, Id = 1, Gain = "0.5", Freq = "300"});
-Set(Trig: "Boot", Signal: new PwmSineWave() {Ch = 0, Gain = "1.0", Freq = "100", Phase = "180"});
+Set(Trig: "Boot", Signal: new PwmSineWave() {Ch = 0, Gain = "1.0", Freq = "100", Phase = "111"});
 Set(Trig: "Boot", Signal: new PwmSineWave() {Ch = 1, Id = 0, Gain = "0.5", Freq = "250"});
 Set(Trig: "Boot", Signal: new PwmSineWave() {Ch = 1, Id = 1, Gain = "0.5", Freq = "350"});
 Wait(Trig: "Boot", Time: 1, Next: "②");
@@ -429,7 +430,7 @@ CalcFft(
     SpioutId: 0,
     InspectFreqList: new List&lt;double&gt;() {100},
     InspectFreqDeltaList: new List&lt;double&gt;(){4},
-    AmpResultArrayName: "SpioutCh0Amp", PhaseResultArrayName: "SpioutCh0Phase", OtherAmpResultVarName: "SpioutCh0OtherAmp",
+    AmpResultArrayName: "SpioutCh0Amp", OtherAmpResultVarName: "SpioutCh0OtherAmp",
     Message: "Spiout Ch0 FFT 計算"
 );
 CalcDft(
@@ -453,8 +454,15 @@ CalcFft(
     PwmId: 0,
     InspectFreqList: new List&lt;double&gt;() {100},
     InspectFreqDeltaList: new List&lt;double&gt;(){4},
-    AmpResultArrayName: "PwmCh0Amp", PhaseResultArrayName: "PwmCh0Phase", OtherAmpResultVarName: "PwmCh0OtherAmp",
+    AmpResultArrayName: "PwmCh0Amp",
     Message: "Pwm Ch0 FFT 計算"
+);
+CalcDft(
+    Trig: "②", Stop: "③",
+    PwmId: 0,
+    InspectFreqList: new List&lt;double&gt;() {100},
+    AmpResultArrayName: "PwmCh0AmpDft", PhaseResultArrayName: "PwmCh0PhaseDft",
+    Message: "Pwm Ch0 DFT 計算"
 );
 CalcFft(
     Trig: "②", Stop: "③",
@@ -473,6 +481,10 @@ ValueCheck(Formula: "SpioutCh1Amp[0]", ExpValueMax: (Decimal)0.55, ExpValueMin: 
 ValueCheck(Formula: "SpioutCh1Amp[1]", ExpValueMax: (Decimal)0.55, ExpValueMin: (Decimal)0.45, Message: @"Spiout Ch1 300[Hz] 振幅確認");
 ValueCheck(Formula: "SpioutCh1OtherAmp", ExpValueMax: (Decimal)0.01, ExpValueMin: 0, Message: @"Spiout Ch1 200, 300[Hz] 以外の振幅確認");
 ValueCheck(Formula: "SpioutCh0Amp[0] / PwmCh0Amp[0]", ExpValueMax: (Decimal)1.05, ExpValueMin: (Decimal)0.95, Message: @"Spiout Ch0 と Pwm Ch0 の 100[Hz] 振幅比確認");
+DegreeCheck(Formula: "PwmCh0PhaseDft[0] - SpioutCh0PhaseDft[0]", ExpValueMin: 110, ExpValueMax: 112, Message: @"Spiout Ch0 と Pwm Ch0 の 100[Hz] 位相確認 DFT バージョン１");
+DegreeCheck(Formula: "PwmCh0PhaseDft[0] - SpioutCh0PhaseDft[0]", ExpValueMin: -250, ExpValueMax: 112, Message: @"Spiout Ch0 と Pwm Ch0 の 100[Hz] 位相確認 DFT バージョン２");
+DegreeCheck(Formula: "PwmCh0PhaseDft[0] - SpioutCh0PhaseDft[0]", ExpValueMin: 110, ExpValueMax: -248, Message: @"Spiout Ch0 と Pwm Ch0 の 100[Hz] 位相確認 DFT バージョン３");
+DegreeCheck(Formula: "PwmCh0PhaseDft[0] - SpioutCh0PhaseDft[0]", ExpValueMin: -250, ExpValueMax: -248, Message: @"Spiout Ch0 と Pwm Ch0 の 100[Hz] 位相確認 DFT バージョン４");
 </ScriptContent>
                 </XmlIO>
               </OneElement>

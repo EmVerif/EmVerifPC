@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace EmVerif.Core.Script.Command
 {
-    class ValueCheckCommand : IEmVerifCommand
+    class DegreeCheckCommand : IEmVerifCommand
     {
         private string _FormulaStr;
         private Decimal _ExpValueMax;
@@ -17,7 +17,7 @@ namespace EmVerif.Core.Script.Command
         private Regex _VarNameRegex = new Regex(@"(?<VarName>[a-zA-Z_][\w\[\]]*)");
         private DataTable _Dt = new DataTable();
 
-        public ValueCheckCommand(
+        public DegreeCheckCommand(
             string inFormula,
             Decimal inExpValueMax,
             Decimal inExpValueMin,
@@ -25,8 +25,20 @@ namespace EmVerif.Core.Script.Command
         )
         {
             _FormulaStr = inFormula;
-            _ExpValueMax = inExpValueMax;
-            _ExpValueMin = inExpValueMin;
+            _ExpValueMax = inExpValueMax % 360;
+            if (_ExpValueMax < 0)
+            {
+                _ExpValueMax += 360;
+            }
+            _ExpValueMin = inExpValueMin % 360;
+            if (_ExpValueMin < 0)
+            {
+                _ExpValueMin += 360;
+            }
+            while (_ExpValueMin > _ExpValueMax)
+            {
+                _ExpValueMin -= 360;
+            }
             _Message = inMessage;
         }
 
@@ -43,12 +55,26 @@ namespace EmVerif.Core.Script.Command
 
         public void Finally(ControllerState inState)
         {
-            Decimal checkValue = ConvertFormula(inState, _FormulaStr);
+            Decimal checkValue = ConvertFormula(inState, _FormulaStr) % 360;
             string result;
 
             if (
                 (_ExpValueMax >= checkValue) &&
                 (_ExpValueMin <= checkValue)
+            )
+            {
+                result = @"OK";
+            }
+            else if (
+                (_ExpValueMax >= (checkValue - 360)) &&
+                (_ExpValueMin <= (checkValue - 360))
+            )
+            {
+                result = @"OK";
+            }
+            else if (
+                (_ExpValueMax >= (checkValue + 360)) &&
+                (_ExpValueMin <= (checkValue + 360))
             )
             {
                 result = @"OK";

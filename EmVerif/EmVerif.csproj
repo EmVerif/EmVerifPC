@@ -282,6 +282,7 @@
     <Compile Include="Core\Script\Command\CanDiagSendCommand.cs" />
     <Compile Include="Core\Script\Command\CanSendCommand.cs" />
     <Compile Include="Core\Script\Command\DcCutCommand.cs" />
+    <Compile Include="Core\Script\Command\DegreeCheckCommand.cs" />
     <Compile Include="Core\Script\Command\ExecBatchCommand.cs" />
     <Compile Include="Core\Script\Command\FadeCommand.cs" />
     <Compile Include="Core\Script\Command\GetWaveCommand.cs" />

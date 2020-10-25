@@ -18,6 +18,7 @@ namespace EmVerif.Core.Gui.Graph
         private List<double> _DataList = null;
         private Boolean _DataListUpdate = false;
         private object _DataLock = new object();
+        private DataTable _Dt = new DataTable();
 
         public PublicLoadBar()
         {
@@ -66,13 +67,12 @@ namespace EmVerif.Core.Gui.Graph
 
         private void GenerateData()
         {
-            DataTable dt = new DataTable();
             DataRow dtRow;
 
             _DataSet = new DataSet();
-            dt.Columns.Add("種別", Type.GetType("System.String"));
-            dt.Columns.Add("負荷[%]", Type.GetType("System.Double"));
-            _DataSet.Tables.Add(dt);
+            _Dt.Columns.Add("種別", Type.GetType("System.String"));
+            _Dt.Columns.Add("負荷[%]", Type.GetType("System.Double"));
+            _DataSet.Tables.Add(_Dt);
 
             // データの追加
             dtRow = _DataSet.Tables[0].NewRow();
