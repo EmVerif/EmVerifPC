@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using EmVerif.Core.Script.Command;
 
 namespace EmVerif.Core.Script
@@ -310,7 +307,7 @@ namespace EmVerif.Core.Script
         public void Fade(
             string Trig,
             string VarName,
-            Decimal Target,
+            double Target,
             double Time,
             string Next = null
         )
@@ -383,8 +380,8 @@ namespace EmVerif.Core.Script
 
         public void ValueCheck(
             string Formula,
-            Decimal ExpValueMax,
-            Decimal ExpValueMin,
+            double ExpValueMax,
+            double ExpValueMin,
             string Message = null
         )
         {
@@ -400,8 +397,8 @@ namespace EmVerif.Core.Script
 
         public void DegreeCheck(
             string Formula,
-            Decimal ExpValueMax,
-            Decimal ExpValueMin,
+            double ExpValueMax,
+            double ExpValueMin,
             string Message = null
         )
         {
@@ -426,6 +423,42 @@ namespace EmVerif.Core.Script
                 inArrayName: ArrayName,
                 inExpValue: ExpValue,
                 inMask: Mask,
+                inMessage: Message
+            );
+
+            PublicController.Instance.Register("End", cmd);
+        }
+
+        public void ByteArrayCheckContains(
+            string ArrayName,
+            List<Byte> ExpValue,
+            List<Byte> Mask = null,
+            string Message = null
+        )
+        {
+            ByteArrayCheckContainsCommand cmd = new ByteArrayCheckContainsCommand(
+                inArrayName: ArrayName,
+                inExpValue: ExpValue,
+                inMask: Mask,
+                inMatchCheckFlag: true,
+                inMessage: Message
+            );
+
+            PublicController.Instance.Register("End", cmd);
+        }
+
+        public void ByteArrayCheckNotContains(
+            string ArrayName,
+            List<Byte> ExpValue,
+            List<Byte> Mask = null,
+            string Message = null
+        )
+        {
+            ByteArrayCheckContainsCommand cmd = new ByteArrayCheckContainsCommand(
+                inArrayName: ArrayName,
+                inExpValue: ExpValue,
+                inMask: Mask,
+                inMatchCheckFlag: false,
                 inMessage: Message
             );
 

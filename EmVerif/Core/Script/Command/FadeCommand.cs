@@ -9,16 +9,16 @@ namespace EmVerif.Core.Script.Command
     class FadeCommand : IEmVerifCommand
     {
         private string _VarName;
-        private Decimal _Target;
+        private double _Target;
         private double _TimeMs;
         private string _Next;
 
         private double _StartTimeMs;
-        private Decimal _StartValue;
+        private double _StartValue;
 
         public FadeCommand(
             string inVarName,
-            Decimal inTarget,
+            double inTarget,
             double inTime,
             string inNext = null
         )
@@ -34,7 +34,7 @@ namespace EmVerif.Core.Script.Command
             _StartTimeMs = ioState.TimestampMs;
             try
             {
-                _StartValue = ioState.VariableDict[_VarName];
+                _StartValue = (double)ioState.VariableDict[_VarName];
             }
             catch
             {
@@ -49,12 +49,12 @@ namespace EmVerif.Core.Script.Command
 
             if (pastTimeMs >= _TimeMs)
             {
-                ioState.VariableDict[_VarName] = _Target;
+                ioState.VariableDict[_VarName] = (Decimal)_Target;
                 outFinFlag = true;
             }
             else
             {
-                ioState.VariableDict[_VarName] = _StartValue + (_Target - _StartValue) * (Decimal)(pastTimeMs / _TimeMs);
+                ioState.VariableDict[_VarName] = (Decimal)(_StartValue + (_Target - _StartValue) * (pastTimeMs / _TimeMs));
                 outFinFlag = false;
             }
 

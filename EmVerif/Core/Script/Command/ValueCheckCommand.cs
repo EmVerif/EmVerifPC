@@ -11,16 +11,16 @@ namespace EmVerif.Core.Script.Command
     class ValueCheckCommand : IEmVerifCommand
     {
         private string _FormulaStr;
-        private Decimal _ExpValueMax;
-        private Decimal _ExpValueMin;
+        private double _ExpValueMax;
+        private double _ExpValueMin;
         private string _Message;
         private Regex _VarNameRegex = new Regex(@"(?<VarName>[a-zA-Z_][\w\[\]]*)");
         private DataTable _Dt = new DataTable();
 
         public ValueCheckCommand(
             string inFormula,
-            Decimal inExpValueMax,
-            Decimal inExpValueMin,
+            double inExpValueMax,
+            double inExpValueMin,
             string inMessage
         )
         {
@@ -43,7 +43,7 @@ namespace EmVerif.Core.Script.Command
 
         public void Finally(ControllerState inState)
         {
-            Decimal checkValue = ConvertFormula(inState, _FormulaStr);
+            double checkValue = ConvertFormula(inState, _FormulaStr);
             string result;
 
             if (
@@ -64,7 +64,7 @@ namespace EmVerif.Core.Script.Command
             LogManager.Instance.Set("\t" + _ExpValueMin.ToString() + @" <= " + _FormulaStr + @" <= " + _ExpValueMax.ToString() + @"⇒" + result);
         }
 
-        private Decimal ConvertFormula(ControllerState inState, string inOrgFormula)
+        private double ConvertFormula(ControllerState inState, string inOrgFormula)
         {
             var varNameMatches = _VarNameRegex.Matches(inOrgFormula);
             string resultStr = inOrgFormula;
@@ -86,7 +86,7 @@ namespace EmVerif.Core.Script.Command
                 }
             }
 
-            return Convert.ToDecimal(_Dt.Compute(resultStr, ""));
+            return Convert.ToDouble(_Dt.Compute(resultStr, ""));
         }
     }
 }

@@ -474,13 +474,13 @@ Wait(Trig: "②", Time: 5, Next: "③");
 
 Wait(Trig: "③", Time: 1, Next: "End");
 
-ValueCheck(Formula: "SpioutCh0Amp[0]", ExpValueMax: (Decimal)1.1, ExpValueMin: (Decimal)0.90, Message: @"Spiout Ch0 100[Hz] 振幅確認");
-ValueCheck(Formula: "SpioutCh0AmpDft[0]", ExpValueMax: (Decimal)1.1, ExpValueMin: (Decimal)0.90, Message: @"Spiout Ch0 100[Hz] 振幅確認 DFT バージョン");
-ValueCheck(Formula: "SpioutCh0OtherAmp", ExpValueMax: (Decimal)0.01, ExpValueMin: 0, Message: @"Spiout Ch0 100[Hz] 以外の振幅確認");
-ValueCheck(Formula: "SpioutCh1Amp[0]", ExpValueMax: (Decimal)0.55, ExpValueMin: (Decimal)0.45, Message: @"Spiout Ch1 200[Hz] 振幅確認");
-ValueCheck(Formula: "SpioutCh1Amp[1]", ExpValueMax: (Decimal)0.55, ExpValueMin: (Decimal)0.45, Message: @"Spiout Ch1 300[Hz] 振幅確認");
-ValueCheck(Formula: "SpioutCh1OtherAmp", ExpValueMax: (Decimal)0.01, ExpValueMin: 0, Message: @"Spiout Ch1 200, 300[Hz] 以外の振幅確認");
-ValueCheck(Formula: "SpioutCh0Amp[0] / PwmCh0Amp[0]", ExpValueMax: (Decimal)1.05, ExpValueMin: (Decimal)0.95, Message: @"Spiout Ch0 と Pwm Ch0 の 100[Hz] 振幅比確認");
+ValueCheck(Formula: "SpioutCh0Amp[0]", ExpValueMax: 1.1, ExpValueMin: 0.90, Message: @"Spiout Ch0 100[Hz] 振幅確認");
+ValueCheck(Formula: "SpioutCh0AmpDft[0]", ExpValueMax: 1.1, ExpValueMin: 0.90, Message: @"Spiout Ch0 100[Hz] 振幅確認 DFT バージョン");
+ValueCheck(Formula: "SpioutCh0OtherAmp", ExpValueMax: 0.01, ExpValueMin: 0, Message: @"Spiout Ch0 100[Hz] 以外の振幅確認");
+ValueCheck(Formula: "SpioutCh1Amp[0]", ExpValueMax: 0.55, ExpValueMin: 0.45, Message: @"Spiout Ch1 200[Hz] 振幅確認");
+ValueCheck(Formula: "SpioutCh1Amp[1]", ExpValueMax: 0.55, ExpValueMin: 0.45, Message: @"Spiout Ch1 300[Hz] 振幅確認");
+ValueCheck(Formula: "SpioutCh1OtherAmp", ExpValueMax: 0.01, ExpValueMin: 0, Message: @"Spiout Ch1 200, 300[Hz] 以外の振幅確認");
+ValueCheck(Formula: "SpioutCh0Amp[0] / PwmCh0Amp[0]", ExpValueMax: 1.05, ExpValueMin: 0.95, Message: @"Spiout Ch0 と Pwm Ch0 の 100[Hz] 振幅比確認");
 DegreeCheck(Formula: "PwmCh0PhaseDft[0] - SpioutCh0PhaseDft[0]", ExpValueMin: 110, ExpValueMax: 112, Message: @"Spiout Ch0 と Pwm Ch0 の 100[Hz] 位相確認 DFT バージョン１");
 DegreeCheck(Formula: "PwmCh0PhaseDft[0] - SpioutCh0PhaseDft[0]", ExpValueMin: -250, ExpValueMax: 112, Message: @"Spiout Ch0 と Pwm Ch0 の 100[Hz] 位相確認 DFT バージョン２");
 DegreeCheck(Formula: "PwmCh0PhaseDft[0] - SpioutCh0PhaseDft[0]", ExpValueMin: 110, ExpValueMax: -248, Message: @"Spiout Ch0 と Pwm Ch0 の 100[Hz] 位相確認 DFT バージョン３");
@@ -534,8 +534,8 @@ CalcFft(
 );
 GetWave(Trig: "②", Stop: "⑤", FileName: "SpioutCh0.wav", SpioutId: "0");
 
-ValueCheck(Formula: "SpioutCh0Amp[0]", ExpValueMax: (Decimal)1, ExpValueMin: (Decimal)0.90, Message: @"Spiout Ch0 100[Hz] 振幅確認");
-ValueCheck(Formula: "SpioutCh0OtherAmp", ExpValueMax: (Decimal)0.01, ExpValueMin: 0, Message: @"Spiout Ch0 100[Hz] 以外の振幅確認");
+ValueCheck(Formula: "SpioutCh0Amp[0]", ExpValueMax: 1.1, ExpValueMin: 0.90, Message: @"Spiout Ch0 100[Hz] 振幅確認");
+ValueCheck(Formula: "SpioutCh0OtherAmp", ExpValueMax: 0.01, ExpValueMin: 0, Message: @"Spiout Ch0 100[Hz] 以外の振幅確認");
 </ScriptContent>
                 </XmlIO>
               </OneElement>
