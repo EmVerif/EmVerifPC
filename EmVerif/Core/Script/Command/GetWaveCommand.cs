@@ -36,6 +36,16 @@ namespace EmVerif.Core.Script.Command
             {
                 _SpioutIdList = inSpioutId.Split(',').ToList().Select(id => Convert.ToUInt32(id)).ToList();
             }
+            if (
+                (inAdId == null) &&
+                (inPwmId == null) &&
+                (inSpioutId == null)
+            )
+            {
+                _AdIdList = Enumerable.Range(0, PublicConfig.AdChNum).Select(x => (UInt32)x).ToList();
+                _PwmIdList = Enumerable.Range(0, PublicConfig.PwmChNum).Select(x => (UInt32)x).ToList();
+                _SpioutIdList = Enumerable.Range(0, PublicConfig.SpioutChNum).Select(x => (UInt32)x).ToList();
+            }
             CheckParam(inAdId, inPwmId, inSpioutId);
             _FileName = inFileName;
             _AdDataList = new List<double>();

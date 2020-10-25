@@ -638,6 +638,7 @@ Wait(Trig: "Boot", Next: "②", Time: 5.0);
 Set(Trig: "②", SetVar: new SetVar() {VarName = "RPM", Value = "2000"});
 Set(Trig: "②", SetVar: new SetVar() {VarName = "Torque", Value = "1000"});
 GetWave(Trig: "②", Stop: "End", FileName: "②.wav", PwmId: "0, 5");
+GetWave(Trig: "②", Stop: "End", FileName: "②_.wav");
 Wait(Trig: "②", Next: "End", Time: 5.0);
 </ScriptContent>
                 </XmlIO>
