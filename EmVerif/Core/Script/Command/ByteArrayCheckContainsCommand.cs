@@ -47,19 +47,19 @@ namespace EmVerif.Core.Script.Command
         public void Finally(ControllerState inState)
         {
             List<Byte> checkValueList;
-            string result = "\tOK";
+            string result;
             Boolean isMatch = false;
 
             try
             {
                 checkValueList = GetValueList(inState);
-                for (int baseIdx = 0; baseIdx < (checkValueList.Count - _ExpValueList.Count); baseIdx++)
+                for (int baseIdx = 0; baseIdx <= (checkValueList.Count - _ExpValueList.Count); baseIdx++)
                 {
                     Boolean isNotMatch = false;
 
                     for (int idx = 0; idx < _ExpValueList.Count; idx++)
                     {
-                        if ((checkValueList[baseIdx] & _MaskList[baseIdx]) != _ExpValueList[baseIdx])
+                        if ((checkValueList[baseIdx + idx] & _MaskList[idx]) != _ExpValueList[idx])
                         {
                             isNotMatch = true;
                             break;
