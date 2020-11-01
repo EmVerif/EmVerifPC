@@ -63,7 +63,11 @@ namespace EmVerif.MainWindowViewModel
                     oneElement = oneElement.Parent;
                 }
                 workFolder = @".\" + oneElement.Title + workFolder;
-                StartScript(_RefViewModel.SelectedElement.Script, _RefViewModel.SelectedIpAddress, workFolder);
+                StartScript(
+                    _RefViewModel.SelectedElement.IncludedScriptDocument.Text + "\n" + _RefViewModel.SelectedElement.ScriptDocument.Text,
+                    _RefViewModel.SelectedIpAddress,
+                    workFolder
+                );
             }
         }
 
@@ -80,14 +84,14 @@ namespace EmVerif.MainWindowViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
         }
 
-        async private void StartScript(string inRoslynText, IPAddress inIpAddress, string inWorkFolder)
+        private void StartScript(string inRoslynText, IPAddress inIpAddress, string inWorkFolder)
         {
             try
             {
                 ScriptOptions options = ScriptOptions.Default.WithImports("System", "System.Collections.Generic");
                 PublicController.Instance.Reset(inWorkFolder);
                 Script<object> script = CSharpScript.Create(inRoslynText, options, typeof(PublicApis));
-                await script.RunAsync(new PublicApis());
+                script.RunAsync(new PublicApis()).Wait();
                 PublicController.Instance.EndEvent += StopScript;
                 PublicController.Instance.StartScript(inIpAddress);
                 DisplayString = _StopStr;

@@ -6,6 +6,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
+using EmVerif.Core.Utility;
+
 namespace EmVerif.Core.Script.Command
 {
     class CanSendCommand : IEmVerifCommand
@@ -46,11 +48,9 @@ namespace EmVerif.Core.Script.Command
         private UInt32 _ResponseCanId;
         private UInt32 _RepeatTimeMs;
 
-        private Regex _VarNameRegex = new Regex(@"(?<VarName>[a-zA-Z_][\w\[\]]*)");
         private State _State;
         private UInt32 _PrevTimestampMs;
         private UInt32 _TimingMs;
-        private DataTable _Dt = new DataTable();
 
         public CanSendCommand(
             UInt32 inSendCanId,
@@ -316,27 +316,7 @@ namespace EmVerif.Core.Script.Command
 
         private UInt64 ConvertFormula(ControllerState inState, string inOrgFormula, UInt64 inOrgData, UInt64 inMask, Int32 inLShift)
         {
-            var varNameMatches = _VarNameRegex.Matches(inOrgFormula);
-            string resultStr = inOrgFormula;
-
-            if (varNameMatches.Count != 0)
-            {
-                foreach (Match varNameMatch in varNameMatches)
-                {
-                    string varName = (string)varNameMatch.Groups["VarName"].Value;
-
-                    try
-                    {
-                        resultStr = resultStr.Replace(varName, inState.VariableDict[varName].ToString());
-                    }
-                    catch
-                    {
-                        throw new Exception("変数" + varName + "が見つかりません。⇒NG");
-                    }
-                }
-            }
-
-            return ((Convert.ToUInt64(_Dt.Compute(resultStr, "")) << inLShift) & inMask) | (inOrgData & ~inMask);
+            return ((Convert.ToUInt64(Calculator.Instance.ConvertFormula(inOrgFormula, inState.VariableDict)) << inLShift) & inMask) | (inOrgData & ~inMask);
         }
     }
 }

@@ -8,8 +8,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using EmVerif.Core.Script;
 using EmVerif.MainWindowViewModel;
-using RoslynPad.Editor;
-using RoslynPad.Roslyn;
 
 namespace EmVerif
 {
@@ -18,21 +16,9 @@ namespace EmVerif
     /// </summary>
     public partial class MainWindow : Window
     {
-        private CustomRoslynHost _Host;
-        private bool _SelectedChangedLock = false;
-
         public MainWindow()
         {
             InitializeComponent();
-            _Host = new CustomRoslynHost(
-                additionalAssemblies: new[]
-                {
-                    Assembly.Load("RoslynPad.Roslyn.Windows"),
-                    Assembly.Load("RoslynPad.Editor.Windows")
-                },
-                references: RoslynHostReferences.Default.With(typeNamespaceImports: new[] { typeof(PublicApis) })
-            );
-            roslynCodeEditor.Initialize(_Host, new ClassificationHighlightColors(), Directory.GetCurrentDirectory(), String.Empty);
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
@@ -58,23 +44,13 @@ namespace EmVerif
             }
         }
 
-        private void roslynCodeEditor_TextChanged(object sender, EventArgs e)
+        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            _ViewModel.SelectedElement.Script = roslynCodeEditor.Text;
-        }
-
-        private async void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            if ((_SelectedChangedLock) || (((TreeView)sender).SelectedItem == null))
+            if (((TreeView)sender).SelectedItem == null)
             {
                 return;
             }
-            _SelectedChangedLock = true;
-            await Task.Delay(500);
-            _ViewModel.SelectedElement.Script = roslynCodeEditor.Text;
             _ViewModel.SelectedElement = (OneElement)((TreeView)sender).SelectedItem;
-            roslynCodeEditor.Text = _ViewModel.SelectedElement.Script;
-            _SelectedChangedLock = false;
         }
     }
 }

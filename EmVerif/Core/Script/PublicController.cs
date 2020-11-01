@@ -14,6 +14,7 @@ using EmVerif.Core.Communication;
 using EmVerif.Core.Gui;
 using EmVerif.Core.Gui.Variable;
 using EmVerif.Core.Script.Command;
+using EmVerif.Core.Utility;
 
 namespace EmVerif.Core.Script
 {
@@ -31,9 +32,6 @@ namespace EmVerif.Core.Script
         private UInt32 _TaskTickCounterMs;
         private double _MaxLoad;
         private double _CurLoad;
-
-        private Regex _VarNameRegex = new Regex(@"(?<VarName>[a-zA-Z_][\w\[\]]*)");
-        private DataTable _Dt = new DataTable();
 
         public IEnumerable<IPAddress> GetIpV4List()
         {
@@ -387,27 +385,7 @@ namespace EmVerif.Core.Script
 
         private double ConvertFormula(in string inOrgFormula)
         {
-            var varNameMatches = _VarNameRegex.Matches(inOrgFormula);
-            string resultStr = inOrgFormula;
-
-            if (varNameMatches.Count != 0)
-            {
-                foreach (Match varNameMatch in varNameMatches)
-                {
-                    string varName = (string)varNameMatch.Groups["VarName"].Value;
-
-                    try
-                    {
-                        resultStr = resultStr.Replace(varName, _State.VariableDict[varName].ToString());
-                    }
-                    catch
-                    {
-                        throw new Exception("変数" + varName + "が見つかりません。⇒NG");
-                    }
-                }
-            }
-
-            return Convert.ToDouble(_Dt.Compute(resultStr, ""));
+            return Convert.ToDouble(Calculator.Instance.ConvertFormula(inOrgFormula, _State.VariableDict));
         }
 
         private void PostProcess()

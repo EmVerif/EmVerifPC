@@ -6,6 +6,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
+using EmVerif.Core.Utility;
+
 namespace EmVerif.Core.Script.Command
 {
     class ValueCheckCommand : IEmVerifCommand
@@ -14,8 +16,6 @@ namespace EmVerif.Core.Script.Command
         private double _ExpValueMax;
         private double _ExpValueMin;
         private string _Message;
-        private Regex _VarNameRegex = new Regex(@"(?<VarName>[a-zA-Z_][\w\[\]]*)");
-        private DataTable _Dt = new DataTable();
 
         public ValueCheckCommand(
             string inFormula,
@@ -66,27 +66,7 @@ namespace EmVerif.Core.Script.Command
 
         private double ConvertFormula(ControllerState inState, string inOrgFormula)
         {
-            var varNameMatches = _VarNameRegex.Matches(inOrgFormula);
-            string resultStr = inOrgFormula;
-
-            if (varNameMatches.Count != 0)
-            {
-                foreach (Match varNameMatch in varNameMatches)
-                {
-                    string varName = (string)varNameMatch.Groups["VarName"].Value;
-
-                    try
-                    {
-                        resultStr = resultStr.Replace(varName, inState.VariableDict[varName].ToString());
-                    }
-                    catch
-                    {
-                        throw new Exception("変数" + varName + "が見つかりません。⇒NG");
-                    }
-                }
-            }
-
-            return Convert.ToDouble(_Dt.Compute(resultStr, ""));
+            return Convert.ToDouble(Calculator.Instance.ConvertFormula(inOrgFormula, inState.VariableDict));
         }
     }
 }

@@ -6,6 +6,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
+using EmVerif.Core.Utility;
+
 namespace EmVerif.Core.Script.Command
 {
     class CanDiagSendCommand : IEmVerifCommand
@@ -71,11 +73,9 @@ namespace EmVerif.Core.Script.Command
         private Boolean _TimeoutFlag;
         private Boolean _ErrorSeqFlag;
 
-        private Regex _VarNameRegex = new Regex(@"(?<VarName>[a-zA-Z_][\w\[\]]*)");
         private State _State;
         private UInt32 _PrevTimestampMs;
         private UInt32 _TimingMs;
-        private DataTable _Dt = new DataTable();
 
         public CanDiagSendCommand(
             string inNext,
@@ -248,7 +248,7 @@ namespace EmVerif.Core.Script.Command
             foreach (var dataMask in _DataMaskList)
             {
                 int idx = dataMask.StartIdx;
-                UInt64 val = ConvertFormula(inState, dataMask.RefVar);
+                UInt64 val = Convert.ToUInt64(Calculator.Instance.ConvertFormula(dataMask.RefVar, inState.VariableDict));
                 int lShift = dataMask.LShift - (8 * dataMask.MaskList.Count) + 8;
 
                 foreach (var msk in dataMask.MaskList)
@@ -303,31 +303,6 @@ namespace EmVerif.Core.Script.Command
                     }
                 }
             }
-        }
-
-        private UInt64 ConvertFormula(ControllerState inState, string inOrgFormula)
-        {
-            var varNameMatches = _VarNameRegex.Matches(inOrgFormula);
-            string resultStr = inOrgFormula;
-
-            if (varNameMatches.Count != 0)
-            {
-                foreach (Match varNameMatch in varNameMatches)
-                {
-                    string varName = (string)varNameMatch.Groups["VarName"].Value;
-
-                    try
-                    {
-                        resultStr = resultStr.Replace(varName, inState.VariableDict[varName].ToString());
-                    }
-                    catch
-                    {
-                        throw new Exception("変数" + varName + "が見つかりません。⇒NG");
-                    }
-                }
-            }
-
-            return Convert.ToUInt64(_Dt.Compute(resultStr, ""));
         }
     }
 }

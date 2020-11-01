@@ -10,6 +10,7 @@
                 <XmlIO>
                   <Children />
                   <IsExpanded>true</IsExpanded>
+                  <IsParentInclude>true</IsParentInclude>
                   <Title>待機</Title>
                   <Explanation>
 ①５秒待機後、②に遷移
@@ -22,6 +23,7 @@ Wait(Trig: "②", Next: "End", Time: 1.0);
               </OneElement>
             </Children>
             <IsExpanded>true</IsExpanded>
+            <IsParentInclude>true</IsParentInclude>
             <Title>待機</Title>
             <Explanation>
 </Explanation>
@@ -36,6 +38,7 @@ Wait(Trig: "②", Next: "End", Time: 1.0);
                 <XmlIO>
                   <Children />
                   <IsExpanded>true</IsExpanded>
+                  <IsParentInclude>true</IsParentInclude>
                   <Title>変数設定（固定）</Title>
                   <Explanation>
 ①RPM 1000、Torque 200、Accel 100に設定。
@@ -60,6 +63,7 @@ Wait(Trig: "②", Next: "End", Time: 5.0);
                 <XmlIO>
                   <Children />
                   <IsExpanded>true</IsExpanded>
+                  <IsParentInclude>true</IsParentInclude>
                   <Title>変数設定（式）</Title>
                   <Explanation>
 ①RPM 1000、Torque = RPM / 5、Accel 100000 / RPMに設定。
@@ -80,6 +84,7 @@ Wait(Trig: "②", Next: "End", Time: 5.0);
               </OneElement>
             </Children>
             <IsExpanded>true</IsExpanded>
+            <IsParentInclude>true</IsParentInclude>
             <Title>変数設定</Title>
             <Explanation>
 </Explanation>
@@ -94,6 +99,7 @@ Wait(Trig: "②", Next: "End", Time: 5.0);
                 <XmlIO>
                   <Children />
                   <IsExpanded>true</IsExpanded>
+                  <IsParentInclude>true</IsParentInclude>
                   <Title>サイン波出力（固定、Spiout）</Title>
                   <Explanation>
 ①Ch0は、Gain 1、Freq 100に設定
@@ -121,6 +127,7 @@ GetWave(Trig: "Boot", Stop: "End", SpioutId: "0, 1, 2, 3, 4, 11", FileName: "Spi
                 <XmlIO>
                   <Children />
                   <IsExpanded>false</IsExpanded>
+                  <IsParentInclude>true</IsParentInclude>
                   <Title>サイン波出力（式、Spiout）</Title>
                   <Explanation>
 ①RPM 1000、Torque 500、Accel 100に設定。
@@ -150,6 +157,7 @@ GetWave(Trig: "Boot", Stop: "End", SpioutId: "0, 1", FileName: "Spiout.wav");
                 <XmlIO>
                   <Children />
                   <IsExpanded>true</IsExpanded>
+                  <IsParentInclude>true</IsParentInclude>
                   <Title>サイン波出力（固定、Pwm）</Title>
                   <Explanation>
 ①Ch0は、Gain 1、Freq 100に設定
@@ -177,6 +185,7 @@ GetWave(Trig: "Boot", Stop: "End", PwmId: "0, 1, 2, 3, 4, 5", FileName: "Pwm.wav
                 <XmlIO>
                   <Children />
                   <IsExpanded>true</IsExpanded>
+                  <IsParentInclude>true</IsParentInclude>
                   <Title>サイン波出力（式、Pwm）</Title>
                   <Explanation>
 ①RPM 1000、Torque 500、Accel 100に設定。
@@ -204,6 +213,7 @@ GetWave(Trig: "Boot", Stop: "End", PwmId: "0, 1", FileName: "Pwm.wav");
               </OneElement>
             </Children>
             <IsExpanded>true</IsExpanded>
+            <IsParentInclude>true</IsParentInclude>
             <Title>サイン波出力</Title>
             <Explanation>
 </Explanation>
@@ -218,6 +228,7 @@ GetWave(Trig: "Boot", Stop: "End", PwmId: "0, 1", FileName: "Pwm.wav");
                 <XmlIO>
                   <Children />
                   <IsExpanded>false</IsExpanded>
+                  <IsParentInclude>true</IsParentInclude>
                   <Title>SPIOut⇒PWM</Title>
                   <Explanation>
 ①Pwm Ch0 = Spiout Ch0 * 0.5
@@ -252,6 +263,7 @@ GetWave(Trig: "Boot", Stop: "End", FileName: "All.wav", SpioutId: "0, 11", PwmId
                 <XmlIO>
                   <Children />
                   <IsExpanded>false</IsExpanded>
+                  <IsParentInclude>true</IsParentInclude>
                   <Title>AD⇒PWM</Title>
                   <Explanation>
 </Explanation>
@@ -263,6 +275,7 @@ GetWave(Trig: "Boot", Stop: "End", FileName: "All.wav", SpioutId: "0, 11", PwmId
                 <XmlIO>
                   <Children />
                   <IsExpanded>true</IsExpanded>
+                  <IsParentInclude>true</IsParentInclude>
                   <Title>AD⇒SPIOut</Title>
                   <Explanation>
 </Explanation>
@@ -272,6 +285,7 @@ GetWave(Trig: "Boot", Stop: "End", FileName: "All.wav", SpioutId: "0, 11", PwmId
               </OneElement>
             </Children>
             <IsExpanded>true</IsExpanded>
+            <IsParentInclude>true</IsParentInclude>
             <Title>バーチャルパス</Title>
             <Explanation>
 </Explanation>
@@ -286,6 +300,7 @@ GetWave(Trig: "Boot", Stop: "End", FileName: "All.wav", SpioutId: "0, 11", PwmId
                 <XmlIO>
                   <Children />
                   <IsExpanded>true</IsExpanded>
+                  <IsParentInclude>true</IsParentInclude>
                   <Title>単発送信</Title>
                   <Explanation>
 ①CAN ID 0x100 で、0x00, 0xAA, 0xFF ３バイト送信し、②へ遷移。
@@ -302,6 +317,7 @@ Wait(Trig: "②", Next: "End", Time: 5);
                 <XmlIO>
                   <Children />
                   <IsExpanded>true</IsExpanded>
+                  <IsParentInclude>true</IsParentInclude>
                   <Title>周期送信</Title>
                   <Explanation>
 ①CAN ID 0x100 で、0x00, 0xAA, 0xFF ３バイトを200ms周期で送信。
@@ -323,6 +339,7 @@ Wait(Trig: "②", Next: "End", Time: 5);
                 <XmlIO>
                   <Children />
                   <IsExpanded>true</IsExpanded>
+                  <IsParentInclude>true</IsParentInclude>
                   <Title>データに同期した送信</Title>
                   <Explanation>
 ①CAN ID 0x100 で、0xXX, 0xXX, 0xFF ３バイトを200ms周期で送信。
@@ -344,6 +361,7 @@ Wait(Trig: "Boot", Next: "End", Time: 5);
                 <XmlIO>
                   <Children />
                   <IsExpanded>true</IsExpanded>
+                  <IsParentInclude>true</IsParentInclude>
                   <Title>ダイアグ送信</Title>
                   <Explanation>
 </Explanation>
@@ -367,6 +385,7 @@ CanDiagSend(
               </OneElement>
             </Children>
             <IsExpanded>true</IsExpanded>
+            <IsParentInclude>true</IsParentInclude>
             <Title>CAN</Title>
             <Explanation>
 </Explanation>
@@ -381,6 +400,7 @@ CanDiagSend(
                 <XmlIO>
                   <Children />
                   <IsExpanded>true</IsExpanded>
+                  <IsParentInclude>true</IsParentInclude>
                   <Title>無音チェック</Title>
                   <Explanation>
 </Explanation>
@@ -397,6 +417,7 @@ Wait(Trig: "②", Time: 5, Next: "End");
                 <XmlIO>
                   <Children />
                   <IsExpanded>true</IsExpanded>
+                  <IsParentInclude>true</IsParentInclude>
                   <Title>周波数チェックOK</Title>
                   <Explanation>
 ①Spiout Ch0は、Gain 1、Freq 100に設定
@@ -492,6 +513,7 @@ DegreeCheck(Formula: "PwmCh0PhaseDft[0] - SpioutCh0PhaseDft[0]", ExpValueMin: -2
                 <XmlIO>
                   <Children />
                   <IsExpanded>true</IsExpanded>
+                  <IsParentInclude>true</IsParentInclude>
                   <Title>周波数チェックNG</Title>
                   <Explanation>
 ①Spiout Ch0は、Gain 1、Freq 100に設定
@@ -541,6 +563,7 @@ ValueCheck(Formula: "SpioutCh0OtherAmp", ExpValueMax: 0.01, ExpValueMin: 0, Mess
               </OneElement>
             </Children>
             <IsExpanded>true</IsExpanded>
+            <IsParentInclude>true</IsParentInclude>
             <Title>チェック</Title>
             <Explanation>
 </Explanation>
@@ -553,8 +576,81 @@ ValueCheck(Formula: "SpioutCh0OtherAmp", ExpValueMax: 0.01, ExpValueMin: 0, Mess
             <Children>
               <OneElement>
                 <XmlIO>
+                  <Children>
+                    <OneElement>
+                      <XmlIO>
+                        <Children />
+                        <IsExpanded>true</IsExpanded>
+                        <IsParentInclude>true</IsParentInclude>
+                        <Title>する２</Title>
+                        <Explanation>
+①１秒待機後、②に遷移
+　⇒２個上の親に記載
+②１秒待機後、③に遷移
+　⇒１個上の親に記載
+③１秒待機後、終了
+　⇒自分自身に記載</Explanation>
+                        <ScriptContent>
+Wait1s(Trig: "③", Next: "End");</ScriptContent>
+                      </XmlIO>
+                    </OneElement>
+                  </Children>
+                  <IsExpanded>true</IsExpanded>
+                  <IsParentInclude>true</IsParentInclude>
+                  <Title>する１</Title>
+                  <Explanation>
+</Explanation>
+                  <ScriptContent>
+Wait1s(Trig: "②", Next: "③");</ScriptContent>
+                </XmlIO>
+              </OneElement>
+              <OneElement>
+                <XmlIO>
+                  <Children>
+                    <OneElement>
+                      <XmlIO>
+                        <Children />
+                        <IsExpanded>true</IsExpanded>
+                        <IsParentInclude>false</IsParentInclude>
+                        <Title>しない</Title>
+                        <Explanation>
+①１秒待機後、終了</Explanation>
+                        <ScriptContent>
+Wait(Trig: "Boot", Time: 1, Next: "End");</ScriptContent>
+                      </XmlIO>
+                    </OneElement>
+                  </Children>
+                  <IsExpanded>true</IsExpanded>
+                  <IsParentInclude>true</IsParentInclude>
+                  <Title>する２</Title>
+                  <Explanation>
+</Explanation>
+                  <ScriptContent>
+Wait1s(Trig: "②", Next: "③");</ScriptContent>
+                </XmlIO>
+              </OneElement>
+            </Children>
+            <IsExpanded>true</IsExpanded>
+            <IsParentInclude>true</IsParentInclude>
+            <Title>インクルード</Title>
+            <Explanation>
+</Explanation>
+            <ScriptContent>
+void Wait1s(string Trig, string Next)
+{
+	Wait(Trig: Trig, Time: 1, Next: Next);
+}
+Wait1s(Trig: "Boot", Next: "②");</ScriptContent>
+          </XmlIO>
+        </OneElement>
+        <OneElement>
+          <XmlIO>
+            <Children>
+              <OneElement>
+                <XmlIO>
                   <Children />
                   <IsExpanded>true</IsExpanded>
+                  <IsParentInclude>true</IsParentInclude>
                   <Title>矩形波出力</Title>
                   <Explanation>
 ①P04_04から周期 1kHz、Duty 50%の矩形波を出力
@@ -571,6 +667,7 @@ GetWave(Trig: "Boot", Stop: "End", FileName: "①.wav", AdId: "0");
                 <XmlIO>
                   <Children />
                   <IsExpanded>true</IsExpanded>
+                  <IsParentInclude>true</IsParentInclude>
                   <Title>ポート出力</Title>
                   <Explanation>
 ①P03_15をACCとして扱う
@@ -598,6 +695,7 @@ GetWave(Trig: "Boot", Stop: "End", FileName: "①.wav", AdId: "0");
                 <XmlIO>
                   <Children />
                   <IsExpanded>true</IsExpanded>
+                  <IsParentInclude>true</IsParentInclude>
                   <Title>バッチ実行</Title>
                   <Explanation>
 ①バッチ実行後、終了</Explanation>
@@ -610,6 +708,7 @@ ExecBatch(Trig: "Boot", Cmd: @"..\..\..\SampleBatch.bat", Next: "End");
                 <XmlIO>
                   <Children />
                   <IsExpanded>true</IsExpanded>
+                  <IsParentInclude>true</IsParentInclude>
                   <Title>波形取得</Title>
                   <Explanation>
 ①MixOut Ch0 = ThroughOut Ch0 * 0.5
@@ -647,6 +746,7 @@ Wait(Trig: "②", Next: "End", Time: 5.0);
                 <XmlIO>
                   <Children />
                   <IsExpanded>true</IsExpanded>
+                  <IsParentInclude>true</IsParentInclude>
                   <Title>DC Cut</Title>
                   <Explanation>
 ①DC Cutオフ設定
@@ -671,6 +771,7 @@ Wait(Trig: "③", Time: 5.0, Next: "End");
                 <XmlIO>
                   <Children />
                   <IsExpanded>true</IsExpanded>
+                  <IsParentInclude>true</IsParentInclude>
                   <Title>Fade</Title>
                   <Explanation>
 ①RPM変数を、５秒かけて1000から100へ変更
@@ -688,6 +789,7 @@ Wait(Trig: "③", Time: 5.0, Next: "End");
               </OneElement>
             </Children>
             <IsExpanded>true</IsExpanded>
+            <IsParentInclude>true</IsParentInclude>
             <Title>その他</Title>
             <Explanation>
 </Explanation>
@@ -697,6 +799,7 @@ Wait(Trig: "③", Time: 5.0, Next: "End");
         </OneElement>
       </Children>
       <IsExpanded>true</IsExpanded>
+      <IsParentInclude>false</IsParentInclude>
       <Title>トップ</Title>
       <Explanation>
 </Explanation>

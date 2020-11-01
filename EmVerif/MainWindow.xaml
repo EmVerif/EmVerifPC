@@ -3,11 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
         xmlns:local="clr-namespace:EmVerif"
-        xmlns:editor="clr-namespace:RoslynPad.Editor;assembly=RoslynPad.Editor.Windows"
         xmlns:vm="clr-namespace:EmVerif.MainWindowViewModel"
         mc:Ignorable="d"
-        Title="EmVerif" Height="800" Width="1000" Closing="Window_Closing">
+        Title="EmVerif" Height="800" Width="1200" Closing="Window_Closing">
     <Window.DataContext>
         <vm:ViewModel x:Name="_ViewModel"/>
     </Window.DataContext>
@@ -42,11 +42,13 @@
                 Command="{Binding LoadButtonInstance}" RenderTransformOrigin="-1.347,0.318"/>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition MinWidth="100" Width="250*"/>
+                <ColumnDefinition MinWidth="100" Width="300*"/>
                 <ColumnDefinition Width="5"/>
-                <ColumnDefinition MinWidth="100" Width="500*"/>
+                <ColumnDefinition MinWidth="100" Width="300*"/>
                 <ColumnDefinition Width="5"/>
-                <ColumnDefinition MinWidth="100" Width="500*"/>
+                <ColumnDefinition MinWidth="100" Width="400*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition MinWidth="100" Width="600*"/>
             </Grid.ColumnDefinitions>
             <TreeView x:Name="TreeView"
                       Grid.Column="0"
@@ -76,22 +78,44 @@
             <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
             <Grid Grid.Column="2">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="34"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="20"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <TextBox Grid.Row="0"
+                <CheckBox Grid.Row="0"
+                          Content="親をインクルード"
+                          HorizontalAlignment="Left"
+                          VerticalAlignment="Top" Margin="10,0,0,0"
+                          IsChecked="{Binding SelectedElement.IsParentInclude, Mode=TwoWay}"
+                          />
+                <TextBox Grid.Row="1"
                          TextWrapping="Wrap"
                          Text="{Binding SelectedElement.Title, Mode=TwoWay}"
-                         IsReadOnly="{Binding SelectedElement.IsReadOnly}"/>
-                <TextBox Grid.Row="1"
+                         IsReadOnly="{Binding SelectedElement.IsReadOnly}"
+                         />
+                <TextBox Grid.Row="2"
                          TextWrapping="Wrap"
                          Text="{Binding SelectedElement.Explanation, Mode=TwoWay}"
                          AcceptsReturn="True"
-                         IsReadOnly="{Binding SelectedElement.IsReadOnly}"/>
+                         IsReadOnly="{Binding SelectedElement.IsReadOnly}"
+                         />
             </Grid>
-            <GridSplitter Grid.Column="3" HorizontalAlignment="Stretch" />
-            <editor:RoslynCodeEditor Grid.Column="4"
-                                     x:Name="roslynCodeEditor" TextChanged="roslynCodeEditor_TextChanged"/>
+            <GridSplitter Grid.Column="3" HorizontalAlignment="Stretch"/>
+            <avalonEdit:TextEditor Grid.Column="4"
+                                   FontSize="10pt"
+                                   SyntaxHighlighting="C#"
+                                   ShowLineNumbers="True"
+                                   IsReadOnly="True"
+                                   Document="{Binding SelectedElement.IncludedScriptDocument, Mode=TwoWay}"
+                                   />
+            <GridSplitter Grid.Column="5" HorizontalAlignment="Stretch"/>
+            <local:CustomTextEditor Grid.Column="6"
+                                    FontSize="10pt"
+                                    SyntaxHighlighting="C#"
+                                    ShowLineNumbers="True"
+                                    Document="{Binding SelectedElement.ScriptDocument, Mode=TwoWay}"
+                                    AddDocument="{Binding SelectedElement.IncludedScriptDocument, Mode=TwoWay}"
+                                    />
         </Grid>
     </Grid>
 </Window>

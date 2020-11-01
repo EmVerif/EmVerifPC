@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfOneElement xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <OneElement>
+    <XmlIO>
+      <Children />
+      <IsExpanded>true</IsExpanded>
+      <IsParentInclude>false</IsParentInclude>
+      <Title>トップ</Title>
+      <Explanation>
+</Explanation>
+      <ScriptContent>
+</ScriptContent>
+    </XmlIO>
+  </OneElement>
+</ArrayOfOneElement>
