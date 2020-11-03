@@ -278,6 +278,29 @@ namespace EmVerif.Core.Script
             PublicController.Instance.Register(Trig, cmd);
         }
 
+        public void NoiseCheck(
+            string Trig, string Stop,
+            string AdId = null,
+            UInt32 SmpNum = 20,
+            UInt32 Dimension = 2,
+            double ThreshSigma = 3,
+            double Thresh = 0.01,
+            string Message = null
+        )
+        {
+            NoiseCheckCommand cmd = new NoiseCheckCommand(
+                inStop: Stop,
+                inAdId: AdId,
+                inSmpNum: SmpNum,
+                inDimension: Dimension,
+                inThreshSigma: ThreshSigma,
+                inThresh: Thresh,
+                inMessage: Message
+            );
+
+            PublicController.Instance.Register(Trig, cmd);
+        }
+
         public void ExecBatch(
             string Trig,
             string Cmd,

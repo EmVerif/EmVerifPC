@@ -216,6 +216,7 @@
     <Compile Include="Core\Script\Command\FadeCommand.cs" />
     <Compile Include="Core\Script\Command\GetWaveCommand.cs" />
     <Compile Include="Core\Script\Command\IEmVerifCommand.cs" />
+    <Compile Include="Core\Script\Command\NoiseCheckCommand.cs" />
     <Compile Include="Core\Script\Command\SetCommand.cs" />
     <Compile Include="Core\Script\Command\SilenceCheckCommand.cs" />
     <Compile Include="Core\Script\Command\ValueCheckCommand.cs" />
