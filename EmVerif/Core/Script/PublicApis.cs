@@ -282,7 +282,7 @@ namespace EmVerif.Core.Script
             string Trig, string Stop,
             string AdId = null,
             UInt32 SmpNum = 20,
-            UInt32 Dimension = 2,
+            UInt32 Order = 2,
             double ThreshSigma = 3,
             double Thresh = 0.01,
             string Message = null
@@ -292,7 +292,7 @@ namespace EmVerif.Core.Script
                 inStop: Stop,
                 inAdId: AdId,
                 inSmpNum: SmpNum,
-                inDimension: Dimension,
+                inOrder: Order,
                 inThreshSigma: ThreshSigma,
                 inThresh: Thresh,
                 inMessage: Message

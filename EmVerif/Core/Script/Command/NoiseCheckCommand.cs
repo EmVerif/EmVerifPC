@@ -13,14 +13,14 @@ namespace EmVerif.Core.Script.Command
         private string _StopState;
         private List<Int32> _AdIdList;
         private UInt32 _SmpNum;
-        private UInt32 _Dimension;
+        private UInt32 _Order;
         private double _ThreshSigma;
         private double _Thresh;
         private string _Message;
 
         private List<double> _AdDataList;
 
-        public NoiseCheckCommand(string inStop, string inAdId, UInt32 inSmpNum, UInt32 inDimension, double inThreshSigma, double inThresh, string inMessage)
+        public NoiseCheckCommand(string inStop, string inAdId, UInt32 inSmpNum, UInt32 inOrder, double inThreshSigma, double inThresh, string inMessage)
         {
             _StopState = inStop;
             if (inAdId == null)
@@ -54,7 +54,7 @@ namespace EmVerif.Core.Script.Command
                 throw new Exception("閾値は0より大");
             }
             _SmpNum = inSmpNum;
-            _Dimension = inDimension;
+            _Order = inOrder;
             _ThreshSigma = inThreshSigma;
             _Thresh = inThresh;
             _Message = inMessage;
@@ -83,7 +83,7 @@ namespace EmVerif.Core.Script.Command
         public void Finally(ControllerState inState)
         {
             Int32 smpNum = _AdDataList.Count / PublicConfig.AdChNum;
-            UInt32 minSmpNum = _SmpNum + 2 * _Dimension;
+            UInt32 minSmpNum = _SmpNum + 2 * _Order;
             string log;
 
             if (smpNum < minSmpNum)
@@ -111,7 +111,7 @@ namespace EmVerif.Core.Script.Command
             {
                 List<double> checkDataList = new List<double>(dataList);
 
-                for (UInt32 idx = 0; idx < _Dimension; idx++)
+                for (UInt32 idx = 0; idx < _Order; idx++)
                 {
                     checkDataList = CalcDiff(checkDataList);
                 }
@@ -123,13 +123,17 @@ namespace EmVerif.Core.Script.Command
                     if (maxAbs >= _Thresh)
                     {
                         double oneSigma = CalcOneSigma(checkDataDivList);
-                        double average = CalcAverage(checkDataDivList);
-                        double checkData = checkDataDivList.Last();
-                        double sigma = Math.Abs((checkData - average) / oneSigma);
 
-                        if (sigma >= _ThreshSigma)
+                        if (oneSigma != 0)
                         {
-                            ret = ret + "\tAd" + _AdIdList[chIdx] + "の" + (idx + _SmpNum + _Dimension ) + "サンプル位置にノイズが存在⇒NG\n";
+                            double average = CalcAverage(checkDataDivList);
+                            double checkData = checkDataDivList.Last();
+                            double sigma = Math.Abs((checkData - average) / oneSigma);
+
+                            if (sigma >= _ThreshSigma)
+                            {
+                                ret = ret + "\tAd" + _AdIdList[chIdx] + "の" + (idx + _SmpNum + _Order) + "サンプル位置にノイズが存在⇒NG\r\n";
+                            }
                         }
                     }
                 }
