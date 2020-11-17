@@ -8,10 +8,12 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using EmVerif.Core.Script;
+using EmVerif.Model;
+
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 
-namespace EmVerif.MainWindowViewModel
+namespace EmVerif.EditTabViewModel
 {
     class StartStopButton : ICommand, INotifyPropertyChanged
     {
@@ -31,13 +33,11 @@ namespace EmVerif.MainWindowViewModel
         }
         private string _DisplayString;
 
-        private ViewModel _RefViewModel;
         private const string _StartStr = "開始";
         private const string _StopStr = "停止";
 
-        public StartStopButton(ViewModel vm)
+        public StartStopButton()
         {
-            _RefViewModel = vm;
             DisplayString = _StartStr;
         }
 
@@ -55,7 +55,7 @@ namespace EmVerif.MainWindowViewModel
             else
             {
                 string workFolder = "";
-                OneElement oneElement = _RefViewModel.SelectedElement;
+                OneElement oneElement = Database.Instance.SelectedElement;
 
                 while (oneElement.Parent != null)
                 {
@@ -64,8 +64,8 @@ namespace EmVerif.MainWindowViewModel
                 }
                 workFolder = @".\" + oneElement.Title + workFolder;
                 StartScript(
-                    _RefViewModel.SelectedElement.IncludedScriptDocument.Text + "\n" + _RefViewModel.SelectedElement.ScriptDocument.Text,
-                    _RefViewModel.SelectedIpAddress,
+                    Database.Instance.SelectedElement.IncludedScriptDocument.Text + "\n" + Database.Instance.SelectedElement.ScriptDocument.Text,
+                    Database.Instance.SelectedIpAddress,
                     workFolder
                 );
             }

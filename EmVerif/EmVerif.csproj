@@ -147,6 +147,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="EditTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ExecTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -228,20 +236,30 @@
     <Compile Include="Core\Utility\Calculator.cs" />
     <Compile Include="Core\Utility\Fourier.cs" />
     <Compile Include="CustomTextEditor.cs" />
+    <Compile Include="EditTabView.xaml.cs">
+      <DependentUpon>EditTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExecTabView.xaml.cs">
+      <DependentUpon>ExecTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ExecTabViewModel\ViewModel.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MainWindowViewModel\AddElementCommand.cs" />
-    <Compile Include="MainWindowViewModel\DelElementCommand.cs" />
+    <Compile Include="EditTabViewModel\AddElementCommand.cs" />
+    <Compile Include="EditTabViewModel\DelElementCommand.cs" />
     <Compile Include="MainWindowViewModel\LoadButton.cs" />
-    <Compile Include="MainWindowViewModel\MoveElementCommand.cs" />
-    <Compile Include="MainWindowViewModel\OneElement.cs" />
+    <Compile Include="EditTabViewModel\MoveElementCommand.cs" />
+    <Compile Include="EditTabViewModel\SelectedViewModel.cs" />
     <Compile Include="MainWindowViewModel\SaveButton.cs" />
-    <Compile Include="MainWindowViewModel\StartStopButton.cs" />
+    <Compile Include="EditTabViewModel\StartStopButton.cs" />
+    <Compile Include="EditTabViewModel\ViewModel.cs" />
     <Compile Include="MainWindowViewModel\ViewModel.cs" />
+    <Compile Include="Model\Database.cs" />
+    <Compile Include="Model\OneElement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -297,6 +315,7 @@
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.3.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.3.0.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -6,17 +6,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace EmVerif.MainWindowViewModel
+using EmVerif.Model;
+
+namespace EmVerif.EditTabViewModel
 {
     class MoveElementCommand : ICommand
     {
         public event EventHandler CanExecuteChanged;
 
-        private ViewModel _RefViewModel;
-
-        public MoveElementCommand(ViewModel vm)
+        public MoveElementCommand()
         {
-            _RefViewModel = vm;
         }
 
         public bool CanExecute(object parameter)
@@ -26,9 +25,9 @@ namespace EmVerif.MainWindowViewModel
 
         public void Execute(object parameter)
         {
-            OneElement selected = _RefViewModel.SelectedElement;
+            OneElement selected = Database.Instance.SelectedElement;
             ObservableCollection<OneElement> children = selected.Parent.Children;
-            int curIdx = children.IndexOf(_RefViewModel.SelectedElement);
+            int curIdx = children.IndexOf(selected);
 
             switch ((string)parameter)
             {
@@ -37,15 +36,15 @@ namespace EmVerif.MainWindowViewModel
                     {
                         children.Remove(selected);
                         children.Insert(curIdx - 1, selected);
-                        _RefViewModel.SelectedElement = selected;
+                        Database.Instance.SelectedElement = selected;
                     }
                     break;
                 case "Down":
-                    if (curIdx < (_RefViewModel.SelectedElement.Parent.Children.Count - 1))
+                    if (curIdx < (children.Count - 1))
                     {
                         children.Remove(selected);
                         children.Insert(curIdx + 1, selected);
-                        _RefViewModel.SelectedElement = selected;
+                        Database.Instance.SelectedElement = selected;
                     }
                     break;
                 default:

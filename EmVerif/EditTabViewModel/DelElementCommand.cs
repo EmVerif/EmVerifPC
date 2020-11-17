@@ -5,17 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace EmVerif.MainWindowViewModel
+using EmVerif.Model;
+
+namespace EmVerif.EditTabViewModel
 {
     class DelElementCommand : ICommand
     {
         public event EventHandler CanExecuteChanged;
 
-        private ViewModel _RefViewModel;
-
         public DelElementCommand(ViewModel vm)
         {
-            _RefViewModel = vm;
             vm.PropertyChanged += Vm_PropertyChanged;
         }
 
@@ -23,7 +22,7 @@ namespace EmVerif.MainWindowViewModel
         {
             bool ret;
 
-            if (_RefViewModel.SelectedElement.Parent == null)
+            if (Database.Instance.SelectedElement.Parent == null)
             {
                 ret = false;
             }
@@ -37,7 +36,7 @@ namespace EmVerif.MainWindowViewModel
 
         public void Execute(object parameter)
         {
-            _RefViewModel.SelectedElement.Parent.Children.Remove(_RefViewModel.SelectedElement);
+            Database.Instance.SelectedElement.Parent.Children.Remove(Database.Instance.SelectedElement);
         }
 
         private void Vm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)

@@ -7,19 +7,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
-using System.Xml.Serialization;
+
+using EmVerif.Model;
 
 namespace EmVerif.MainWindowViewModel
 {
     class LoadButton : ICommand
     {
         public event EventHandler CanExecuteChanged;
+        public event EventHandler LoadFinished;
 
-        private ViewModel _RefViewModel;
-
-        public LoadButton(ViewModel vm)
+        public LoadButton()
         {
-            _RefViewModel = vm;
         }
 
         public bool CanExecute(object parameter)
@@ -36,30 +35,15 @@ namespace EmVerif.MainWindowViewModel
             {
                 try
                 {
-                    var xmlSerializer = new XmlSerializer(typeof(ObservableCollection<OneElement>));
-
-                    using (FileStream fs = new FileStream(ofd.FileName, FileMode.Open))
-                    {
-                        _RefViewModel.TreeViewList = xmlSerializer.Deserialize(fs) as ObservableCollection<OneElement>;
-                        SetParent();
-                        _RefViewModel.OnPropertyChanged("TreeViewList");
-                    }
+                    Database.Instance.Load(ofd.FileName);
+                    LoadFinished?.Invoke(this, new EventArgs());
                     MessageBox.Show("OK");
                 }
                 catch
                 {
-                    _RefViewModel.TreeViewList = new ObservableCollection<OneElement>();
-                    _RefViewModel.OnPropertyChanged("TreeViewList");
+                    LoadFinished?.Invoke(this, new EventArgs());
                     MessageBox.Show("NG");
                 }
-            }
-        }
-
-        private void SetParent()
-        {
-            foreach (var treeView in _RefViewModel.TreeViewList)
-            {
-                treeView.SetParent(null);
             }
         }
     }

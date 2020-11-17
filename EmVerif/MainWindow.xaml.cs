@@ -7,7 +7,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using EmVerif.Core.Script;
-using EmVerif.MainWindowViewModel;
+using EmVerif.EditTabViewModel;
+using EmVerif.Model;
 
 namespace EmVerif
 {
@@ -19,38 +20,28 @@ namespace EmVerif
         public MainWindow()
         {
             InitializeComponent();
+            ViewModel.LoadButtonInstance.LoadFinished += LoadButtonInstance_LoadFinished;
+        }
+
+        private void LoadButtonInstance_LoadFinished(object sender, EventArgs e)
+        {
+            Update();
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
-            _ViewModel.CloseWindow();
+            _EditTab.ViewModel.CloseWindow();
         }
 
-        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (Keyboard.Modifiers == ModifierKeys.Control)
-            {
-                switch (e.Key)
-                {
-                    case Key.Up:
-                        //_ViewModel.MoveElementContextMenu.Execute("Up");
-                        break;
-                    case Key.Down:
-                        //_ViewModel.MoveElementContextMenu.Execute("Down");
-                        break;
-                    default:
-                        break;
-                }
-            }
+            Update();
         }
 
-        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private void Update()
         {
-            if (((TreeView)sender).SelectedItem == null)
-            {
-                return;
-            }
-            _ViewModel.SelectedElement = (OneElement)((TreeView)sender).SelectedItem;
+            _ExecTab.ViewModel.Update();
+            _EditTab.ViewModel.Update();
         }
     }
 }

@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
+
 using ICSharpCode.AvalonEdit.Document;
 
-namespace EmVerif.MainWindowViewModel
+namespace EmVerif.Model
 {
-    public class OneElement : INotifyPropertyChanged, IXmlSerializable
+    public class OneElement : IXmlSerializable
     {
         public class XmlIO
         {
@@ -20,9 +23,8 @@ namespace EmVerif.MainWindowViewModel
             public string Explanation { get; set; }
             public string ScriptContent { get; set; }
         }
-
-        public ObservableCollection<OneElement> Children { get; private set; } = new ObservableCollection<OneElement>();
         public OneElement Parent { get; private set; } = null;
+        public ObservableCollection<OneElement> Children { get; private set; } = new ObservableCollection<OneElement>();
         public bool IsExpanded { get; set; } = true;
         private bool _IsParentInclude = true;
         public bool IsParentInclude
@@ -41,36 +43,10 @@ namespace EmVerif.MainWindowViewModel
             set
             {
                 _IsParentInclude = value;
-                OnPropertyChanged("IncludedScriptDocument");
-                OnPropertyChanged("IsParentInclude");
             }
         }
-        private string _Title = "";
-        public string Title
-        {
-            get
-            {
-                return _Title;
-            }
-            set
-            {
-                _Title = value;
-                OnPropertyChanged("Title");
-            }
-        }
-        private string _Explanation = "";
-        public string Explanation
-        {
-            get
-            {
-                return _Explanation;
-            }
-            set
-            {
-                _Explanation = value;
-                OnPropertyChanged("Explanation");
-            }
-        }
+        public string Title { get; set; } = "";
+        public string Explanation { get; set; } = "";
         private TextDocument _IncludedScriptDocument = new TextDocument();
         public TextDocument IncludedScriptDocument
         {
@@ -93,45 +69,12 @@ namespace EmVerif.MainWindowViewModel
                 }
                 return _IncludedScriptDocument;
             }
-            set
+            private set
             {
                 _IncludedScriptDocument = value;
-                OnPropertyChanged("IncludedScriptDocument");
             }
         }
-        private TextDocument _ScriptDocument = new TextDocument();
-        public TextDocument ScriptDocument
-        {
-            get
-            {
-                return _ScriptDocument;
-            }
-            set
-            {
-                _ScriptDocument = value;
-                OnPropertyChanged("ScriptDocument");
-            }
-        }
-        public bool IsReadOnly
-        {
-            get
-            {
-                bool ret;
-
-                if (Parent == null)
-                {
-                    ret = true;
-                }
-                else
-                {
-                    ret = false;
-                }
-
-                return ret;
-            }
-        }
-        public event PropertyChangedEventHandler PropertyChanged;
-
+        public TextDocument ScriptDocument { get; private set; } = new TextDocument();
         public OneElement()
         {
             Title = "トップ";
@@ -169,7 +112,7 @@ namespace EmVerif.MainWindowViewModel
                     IsParentInclude = xmlIO.IsParentInclude;
                     Title = xmlIO.Title;
                     Explanation = xmlIO.Explanation.TrimStart();
-                    _ScriptDocument.Text = xmlIO.ScriptContent.TrimStart();
+                    ScriptDocument.Text = xmlIO.ScriptContent.TrimStart();
                 }
             }
             reader.Read();
@@ -185,7 +128,7 @@ namespace EmVerif.MainWindowViewModel
             xmlIO.IsParentInclude = IsParentInclude;
             xmlIO.Title = Title;
             xmlIO.Explanation = "\r\n" + Explanation;
-            xmlIO.ScriptContent = "\r\n" + _ScriptDocument.Text;
+            xmlIO.ScriptContent = "\r\n" + ScriptDocument.Text;
 
             serializer.Serialize(writer, xmlIO);
         }
@@ -198,11 +141,5 @@ namespace EmVerif.MainWindowViewModel
                 child.SetParent(this);
             }
         }
-
-        private void OnPropertyChanged(string info)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
-        }
-
     }
 }

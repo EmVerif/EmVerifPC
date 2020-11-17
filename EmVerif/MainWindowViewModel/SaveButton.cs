@@ -7,7 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
-using System.Xml.Serialization;
+
+using EmVerif.Model;
 
 namespace EmVerif.MainWindowViewModel
 {
@@ -15,11 +16,8 @@ namespace EmVerif.MainWindowViewModel
     {
         public event EventHandler CanExecuteChanged;
 
-        private ViewModel _RefViewModel;
-
-        public SaveButton(ViewModel vm)
+        public SaveButton()
         {
-            _RefViewModel = vm;
         }
 
         public bool CanExecute(object parameter)
@@ -36,13 +34,7 @@ namespace EmVerif.MainWindowViewModel
             {
                 try
                 {
-                    var xmlSerializer = new XmlSerializer(typeof(ObservableCollection<OneElement>));
-
-                    using (var sw = new StreamWriter(sfd.FileName, false, Encoding.UTF8))
-                    {
-                        xmlSerializer.Serialize(sw, _RefViewModel.TreeViewList);
-                        sw.Flush();
-                    }
+                    Database.Instance.Save(sfd.FileName);
                     MessageBox.Show("OK");
                 }
                 catch

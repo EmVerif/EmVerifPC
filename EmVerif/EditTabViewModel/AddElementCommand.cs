@@ -5,17 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace EmVerif.MainWindowViewModel
+using EmVerif.Model;
+
+namespace EmVerif.EditTabViewModel
 {
     class AddElementCommand : ICommand
     {
         public event EventHandler CanExecuteChanged;
 
-        private ViewModel _RefViewModel;
-
-        public AddElementCommand(ViewModel vm)
+        public AddElementCommand()
         {
-            _RefViewModel = vm;
         }
 
         public bool CanExecute(object parameter)
@@ -25,10 +24,10 @@ namespace EmVerif.MainWindowViewModel
 
         public void Execute(object parameter)
         {
-            if (_RefViewModel.SelectedElement != null)
+            if (Database.Instance.SelectedElement != null)
             {
-                OneElement oneElement = new OneElement(_RefViewModel.SelectedElement);
-                _RefViewModel.SelectedElement.Children.Add(oneElement);
+                OneElement oneElement = new OneElement(Database.Instance.SelectedElement);
+                Database.Instance.SelectedElement.Children.Add(oneElement);
             }
         }
     }
