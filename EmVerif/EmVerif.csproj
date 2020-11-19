@@ -163,6 +163,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Common\SerializableDictionary.cs" />
     <Compile Include="Core\Communication\EtherCom.cs" />
     <Compile Include="Core\Communication\InternalCmd.cs" />
     <Compile Include="Core\Communication\MmTimer.cs" />
@@ -235,13 +236,17 @@
     <Compile Include="Core\Script\PublicController.cs" />
     <Compile Include="Core\Utility\Calculator.cs" />
     <Compile Include="Core\Utility\Fourier.cs" />
-    <Compile Include="CustomTextEditor.cs" />
+    <Compile Include="Common\CustomTextEditor.cs" />
     <Compile Include="EditTabView.xaml.cs">
       <DependentUpon>EditTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ExecTabView.xaml.cs">
       <DependentUpon>ExecTabView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ExecTabViewModel\CheckButton.cs" />
+    <Compile Include="ExecTabViewModel\ExecButton.cs" />
+    <Compile Include="ExecTabViewModel\ExecTypeAddButton.cs" />
+    <Compile Include="ExecTabViewModel\ExecTypeDelButton.cs" />
     <Compile Include="ExecTabViewModel\ViewModel.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

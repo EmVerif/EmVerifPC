@@ -6,6 +6,7 @@
              xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
              xmlns:local="clr-namespace:EmVerif"
              xmlns:vm="clr-namespace:EmVerif.EditTabViewModel"
+             xmlns:common="clr-namespace:EmVerif.Common"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.DataContext>
@@ -91,7 +92,7 @@
                                    Document="{Binding SelectedViewModel.IncludedScriptDocument}"
                                    />
             <GridSplitter Grid.Column="5" HorizontalAlignment="Stretch"/>
-            <local:CustomTextEditor Grid.Column="6"
+            <common:CustomTextEditor Grid.Column="6"
                                     FontSize="10pt"
                                     SyntaxHighlighting="C#"
                                     ShowLineNumbers="True"

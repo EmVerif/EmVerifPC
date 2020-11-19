@@ -22,7 +22,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Host.Mef;
 using Microsoft.CodeAnalysis.Text;
 
-namespace EmVerif
+namespace EmVerif.Common
 {
     class CustomTextEditor : TextEditor
     {

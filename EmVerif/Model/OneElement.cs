@@ -8,6 +8,8 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
+using EmVerif.Common;
+
 using ICSharpCode.AvalonEdit.Document;
 
 namespace EmVerif.Model
@@ -22,6 +24,7 @@ namespace EmVerif.Model
             public string Title { get; set; }
             public string Explanation { get; set; }
             public string ScriptContent { get; set; }
+            public SerializableDictionary<string, Boolean> ExecFlagDict { get; set; }
         }
         public OneElement Parent { get; private set; } = null;
         public ObservableCollection<OneElement> Children { get; private set; } = new ObservableCollection<OneElement>();
@@ -75,6 +78,8 @@ namespace EmVerif.Model
             }
         }
         public TextDocument ScriptDocument { get; private set; } = new TextDocument();
+        public SerializableDictionary<string, Boolean> ExecFlagDict { get; private set; } = new SerializableDictionary<string, bool>();
+
         public OneElement()
         {
             Title = "トップ";
@@ -113,6 +118,7 @@ namespace EmVerif.Model
                     Title = xmlIO.Title;
                     Explanation = xmlIO.Explanation.TrimStart();
                     ScriptDocument.Text = xmlIO.ScriptContent.TrimStart();
+                    ExecFlagDict = xmlIO.ExecFlagDict;
                 }
             }
             reader.Read();
@@ -129,6 +135,7 @@ namespace EmVerif.Model
             xmlIO.Title = Title;
             xmlIO.Explanation = "\r\n" + Explanation;
             xmlIO.ScriptContent = "\r\n" + ScriptDocument.Text;
+            xmlIO.ExecFlagDict = ExecFlagDict;
 
             serializer.Serialize(writer, xmlIO);
         }

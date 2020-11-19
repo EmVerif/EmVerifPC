@@ -1,52 +1,85 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ArrayOfOneElement xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <OneElement>
-    <XmlIO>
-      <Children>
-        <OneElement>
-          <XmlIO>
-            <Children>
-              <OneElement>
-                <XmlIO>
-                  <Children />
-                  <IsExpanded>true</IsExpanded>
-                  <IsParentInclude>true</IsParentInclude>
-                  <Title>待機</Title>
-                  <Explanation>
+<XmlIO xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ExecTypeList>
+    <string>All</string>
+    <string>CAN</string>
+  </ExecTypeList>
+  <TreeViewList>
+    <OneElement>
+      <XmlIO>
+        <Children>
+          <OneElement>
+            <XmlIO>
+              <Children>
+                <OneElement>
+                  <XmlIO>
+                    <Children />
+                    <IsExpanded>true</IsExpanded>
+                    <IsParentInclude>true</IsParentInclude>
+                    <Title>待機</Title>
+                    <Explanation>
 ①５秒待機後、②に遷移
 ②１秒待機後、終了</Explanation>
-                  <ScriptContent>
+                    <ScriptContent>
 Wait(Trig: "Boot", Next: "②", Time: 5.0);
 Wait(Trig: "②", Next: "End", Time: 1.0);
 </ScriptContent>
-                </XmlIO>
-              </OneElement>
-            </Children>
-            <IsExpanded>true</IsExpanded>
-            <IsParentInclude>true</IsParentInclude>
-            <Title>待機</Title>
-            <Explanation>
+                    <ExecFlagDict>
+                      <KeyValuePair>
+                        <Key>
+                          <string />
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>All</string>
+                        </Key>
+                        <Value>
+                          <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                    </ExecFlagDict>
+                  </XmlIO>
+                </OneElement>
+              </Children>
+              <IsExpanded>true</IsExpanded>
+              <IsParentInclude>true</IsParentInclude>
+              <Title>待機</Title>
+              <Explanation>
 </Explanation>
-            <ScriptContent>
+              <ScriptContent>
 </ScriptContent>
-          </XmlIO>
-        </OneElement>
-        <OneElement>
-          <XmlIO>
-            <Children>
-              <OneElement>
-                <XmlIO>
-                  <Children />
-                  <IsExpanded>true</IsExpanded>
-                  <IsParentInclude>true</IsParentInclude>
-                  <Title>変数設定（固定）</Title>
-                  <Explanation>
+              <ExecFlagDict>
+                <KeyValuePair>
+                  <Key>
+                    <string />
+                  </Key>
+                  <Value>
+                    <boolean>false</boolean>
+                  </Value>
+                </KeyValuePair>
+              </ExecFlagDict>
+            </XmlIO>
+          </OneElement>
+          <OneElement>
+            <XmlIO>
+              <Children>
+                <OneElement>
+                  <XmlIO>
+                    <Children />
+                    <IsExpanded>true</IsExpanded>
+                    <IsParentInclude>true</IsParentInclude>
+                    <Title>変数設定（固定）</Title>
+                    <Explanation>
 ①RPM 1000、Torque 200、Accel 100に設定。
 　５秒待機後、②に遷移
 ②RPM 2000、Torque 400、Accel 50に設定。
 　５秒待機後、終了
 </Explanation>
-                  <ScriptContent>
+                    <ScriptContent>
 Set(Trig: "Boot", SetVar: new SetVar() {VarName = "RPM", Value = "1000"});
 Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Torque", Value = "200"});
 Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Accel", Value = "100"});
@@ -57,21 +90,39 @@ Set(Trig: "②", SetVar: new SetVar() {VarName = "Torque", Value = "400"});
 Set(Trig: "②", SetVar: new SetVar() {VarName = "Accel", Value = "50"});
 Wait(Trig: "②", Next: "End", Time: 5.0);
 </ScriptContent>
-                </XmlIO>
-              </OneElement>
-              <OneElement>
-                <XmlIO>
-                  <Children />
-                  <IsExpanded>true</IsExpanded>
-                  <IsParentInclude>true</IsParentInclude>
-                  <Title>変数設定（式）</Title>
-                  <Explanation>
+                    <ExecFlagDict>
+                      <KeyValuePair>
+                        <Key>
+                          <string />
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>All</string>
+                        </Key>
+                        <Value>
+                          <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                    </ExecFlagDict>
+                  </XmlIO>
+                </OneElement>
+                <OneElement>
+                  <XmlIO>
+                    <Children />
+                    <IsExpanded>true</IsExpanded>
+                    <IsParentInclude>true</IsParentInclude>
+                    <Title>変数設定（式）</Title>
+                    <Explanation>
 ①RPM 1000、Torque = RPM / 5、Accel 100000 / RPMに設定。
 　５秒待機後、②に遷移
 ②RPM 2000に設定。
 　５秒待機後、終了
 </Explanation>
-                  <ScriptContent>
+                    <ScriptContent>
 Set(Trig: "Boot", SetVar: new SetVar() {VarName = "RPM", Value = "1000"});
 Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Torque", Value = "RPM / 5"});
 Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Accel", Value = "100000 / RPM"});
@@ -80,28 +131,56 @@ Wait(Trig: "Boot", Next: "②", Time: 5.0);
 Set(Trig: "②", SetVar: new SetVar() {VarName = "RPM", Value = "2000"});
 Wait(Trig: "②", Next: "End", Time: 5.0);
 </ScriptContent>
-                </XmlIO>
-              </OneElement>
-            </Children>
-            <IsExpanded>true</IsExpanded>
-            <IsParentInclude>true</IsParentInclude>
-            <Title>変数設定</Title>
-            <Explanation>
+                    <ExecFlagDict>
+                      <KeyValuePair>
+                        <Key>
+                          <string />
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>All</string>
+                        </Key>
+                        <Value>
+                          <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                    </ExecFlagDict>
+                  </XmlIO>
+                </OneElement>
+              </Children>
+              <IsExpanded>true</IsExpanded>
+              <IsParentInclude>true</IsParentInclude>
+              <Title>変数設定</Title>
+              <Explanation>
 </Explanation>
-            <ScriptContent>
+              <ScriptContent>
 </ScriptContent>
-          </XmlIO>
-        </OneElement>
-        <OneElement>
-          <XmlIO>
-            <Children>
-              <OneElement>
-                <XmlIO>
-                  <Children />
-                  <IsExpanded>true</IsExpanded>
-                  <IsParentInclude>true</IsParentInclude>
-                  <Title>サイン波出力（固定、Spiout）</Title>
-                  <Explanation>
+              <ExecFlagDict>
+                <KeyValuePair>
+                  <Key>
+                    <string />
+                  </Key>
+                  <Value>
+                    <boolean>false</boolean>
+                  </Value>
+                </KeyValuePair>
+              </ExecFlagDict>
+            </XmlIO>
+          </OneElement>
+          <OneElement>
+            <XmlIO>
+              <Children>
+                <OneElement>
+                  <XmlIO>
+                    <Children />
+                    <IsExpanded>true</IsExpanded>
+                    <IsParentInclude>true</IsParentInclude>
+                    <Title>サイン波出力（固定、Spiout）</Title>
+                    <Explanation>
 ①Ch0は、Gain 1、Freq 100に設定
 　Ch1は、Gain 0.5、Freq 200+Gain 0.5、Freq 300に設定
 　Ch2は、Gain 0.25、Freq 400に設定
@@ -109,7 +188,7 @@ Wait(Trig: "②", Next: "End", Time: 5.0);
 　Ch4は、Gain 1のランダムノイズ
 　Ch11は、Gain 0.0625、Freq 1600に設定
 　５秒待機後、終了</Explanation>
-                  <ScriptContent>
+                    <ScriptContent>
 Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 0, Gain = "1.0", Freq = "100"});
 Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 1, Id = 0, Gain = "0.5", Freq = "200"});
 Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 1, Id = 1, Gain = "0.5", Freq = "300"});
@@ -121,15 +200,33 @@ Wait(Trig: "Boot", Next: "End", Time: 5.0);
 
 GetWave(Trig: "Boot", Stop: "End", SpioutId: "0, 1, 2, 3, 4, 11", FileName: "Spiout.wav");
 </ScriptContent>
-                </XmlIO>
-              </OneElement>
-              <OneElement>
-                <XmlIO>
-                  <Children />
-                  <IsExpanded>false</IsExpanded>
-                  <IsParentInclude>true</IsParentInclude>
-                  <Title>サイン波出力（式、Spiout）</Title>
-                  <Explanation>
+                    <ExecFlagDict>
+                      <KeyValuePair>
+                        <Key>
+                          <string />
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>All</string>
+                        </Key>
+                        <Value>
+                          <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                    </ExecFlagDict>
+                  </XmlIO>
+                </OneElement>
+                <OneElement>
+                  <XmlIO>
+                    <Children />
+                    <IsExpanded>false</IsExpanded>
+                    <IsParentInclude>true</IsParentInclude>
+                    <Title>サイン波出力（式、Spiout）</Title>
+                    <Explanation>
 ①RPM 1000、Torque 500、Accel 100に設定。
 　Ch0は、Gain Torque / 1000、Freq RPM / 60 * 2に設定
 　Ch1は、Gain Torque / 2000、Freq RPM / 60 * 3に設定
@@ -137,7 +234,7 @@ GetWave(Trig: "Boot", Stop: "End", SpioutId: "0, 1, 2, 3, 4, 11", FileName: "Spi
 ②RPM 2000、Torque 1000に設定。
 　５秒待機後、終了
 </Explanation>
-                  <ScriptContent>
+                    <ScriptContent>
 Set(Trig: "Boot", SetVar: new SetVar() {VarName = "RPM", Value = "1000"});
 Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Torque", Value = "500"});
 Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Accel", Value = "100"});
@@ -151,15 +248,33 @@ Wait(Trig: "②", Next: "End", Time: 5.0);
 
 GetWave(Trig: "Boot", Stop: "End", SpioutId: "0, 1", FileName: "Spiout.wav");
 </ScriptContent>
-                </XmlIO>
-              </OneElement>
-              <OneElement>
-                <XmlIO>
-                  <Children />
-                  <IsExpanded>true</IsExpanded>
-                  <IsParentInclude>true</IsParentInclude>
-                  <Title>サイン波出力（固定、Pwm）</Title>
-                  <Explanation>
+                    <ExecFlagDict>
+                      <KeyValuePair>
+                        <Key>
+                          <string />
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>All</string>
+                        </Key>
+                        <Value>
+                          <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                    </ExecFlagDict>
+                  </XmlIO>
+                </OneElement>
+                <OneElement>
+                  <XmlIO>
+                    <Children />
+                    <IsExpanded>true</IsExpanded>
+                    <IsParentInclude>true</IsParentInclude>
+                    <Title>サイン波出力（固定、Pwm）</Title>
+                    <Explanation>
 ①Ch0は、Gain 1、Freq 100に設定
 　Ch1は、Gain 0.5、Freq 200+Gain 0.5、Freq 300に設定
 　Ch2は、Gain 0.25、Freq 400に設定
@@ -167,7 +282,7 @@ GetWave(Trig: "Boot", Stop: "End", SpioutId: "0, 1", FileName: "Spiout.wav");
 　Ch4は、Gain 1のランダムノイズ
 　Ch5は、Gain 0.0625、Freq 1600に設定
 　５秒待機後、終了</Explanation>
-                  <ScriptContent>
+                    <ScriptContent>
 Set(Trig: "Boot", Signal: new PwmSineWave() {Ch = 0, Gain = "1.0", Freq = "100"});
 Set(Trig: "Boot", Signal: new PwmSineWave() {Ch = 1, Id = 0, Gain = "0.5", Freq = "200"});
 Set(Trig: "Boot", Signal: new PwmSineWave() {Ch = 1, Id = 1, Gain = "0.5", Freq = "300"});
@@ -179,15 +294,33 @@ Wait(Trig: "Boot", Next: "End", Time: 5.0);
 
 GetWave(Trig: "Boot", Stop: "End", PwmId: "0, 1, 2, 3, 4, 5", FileName: "Pwm.wav");
 </ScriptContent>
-                </XmlIO>
-              </OneElement>
-              <OneElement>
-                <XmlIO>
-                  <Children />
-                  <IsExpanded>true</IsExpanded>
-                  <IsParentInclude>true</IsParentInclude>
-                  <Title>サイン波出力（式、Pwm）</Title>
-                  <Explanation>
+                    <ExecFlagDict>
+                      <KeyValuePair>
+                        <Key>
+                          <string />
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>All</string>
+                        </Key>
+                        <Value>
+                          <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                    </ExecFlagDict>
+                  </XmlIO>
+                </OneElement>
+                <OneElement>
+                  <XmlIO>
+                    <Children />
+                    <IsExpanded>true</IsExpanded>
+                    <IsParentInclude>true</IsParentInclude>
+                    <Title>サイン波出力（式、Pwm）</Title>
+                    <Explanation>
 ①RPM 1000、Torque 500、Accel 100に設定。
 　Ch0は、Gain Torque / 1000、Freq RPM / 60 * 2に設定
 　Ch1は、Gain Torque / 2000、Freq RPM / 60 * 3に設定
@@ -195,7 +328,7 @@ GetWave(Trig: "Boot", Stop: "End", PwmId: "0, 1, 2, 3, 4, 5", FileName: "Pwm.wav
 ②RPM 2000、Torque 1000に設定。
 　５秒待機後、終了
 </Explanation>
-                  <ScriptContent>
+                    <ScriptContent>
 Set(Trig: "Boot", SetVar: new SetVar() {VarName = "RPM", Value = "1000"});
 Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Torque", Value = "500"});
 Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Accel", Value = "100"});
@@ -209,28 +342,56 @@ Wait(Trig: "②", Next: "End", Time: 5.0);
 
 GetWave(Trig: "Boot", Stop: "End", PwmId: "0, 1", FileName: "Pwm.wav");
 </ScriptContent>
-                </XmlIO>
-              </OneElement>
-            </Children>
-            <IsExpanded>true</IsExpanded>
-            <IsParentInclude>true</IsParentInclude>
-            <Title>サイン波出力</Title>
-            <Explanation>
+                    <ExecFlagDict>
+                      <KeyValuePair>
+                        <Key>
+                          <string />
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>All</string>
+                        </Key>
+                        <Value>
+                          <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                    </ExecFlagDict>
+                  </XmlIO>
+                </OneElement>
+              </Children>
+              <IsExpanded>true</IsExpanded>
+              <IsParentInclude>true</IsParentInclude>
+              <Title>サイン波出力</Title>
+              <Explanation>
 </Explanation>
-            <ScriptContent>
+              <ScriptContent>
 </ScriptContent>
-          </XmlIO>
-        </OneElement>
-        <OneElement>
-          <XmlIO>
-            <Children>
-              <OneElement>
-                <XmlIO>
-                  <Children />
-                  <IsExpanded>false</IsExpanded>
-                  <IsParentInclude>true</IsParentInclude>
-                  <Title>SPIOut⇒PWM</Title>
-                  <Explanation>
+              <ExecFlagDict>
+                <KeyValuePair>
+                  <Key>
+                    <string />
+                  </Key>
+                  <Value>
+                    <boolean>false</boolean>
+                  </Value>
+                </KeyValuePair>
+              </ExecFlagDict>
+            </XmlIO>
+          </OneElement>
+          <OneElement>
+            <XmlIO>
+              <Children>
+                <OneElement>
+                  <XmlIO>
+                    <Children />
+                    <IsExpanded>false</IsExpanded>
+                    <IsParentInclude>true</IsParentInclude>
+                    <Title>SPIOut⇒PWM</Title>
+                    <Explanation>
 ①Pwm Ch0 = Spiout Ch0 * 0.5
 　Pwm Ch5 = Spiout Ch0 * 0.25 + Spiout Ch11 * 0.5
 　RPM 1000、Torque 500、Accel 100に設定。
@@ -240,7 +401,7 @@ GetWave(Trig: "Boot", Stop: "End", PwmId: "0, 1", FileName: "Pwm.wav");
 ②RPM 2000、Torque 1000に設定。
 　５秒待機後、終了
 </Explanation>
-                  <ScriptContent>
+                    <ScriptContent>
 Set(Trig: "Boot", VirtualPath: new VirtualPath() {Gain = 0.5f, Path = "Spiout0_Pwm0"});
 Set(Trig: "Boot", VirtualPath: new VirtualPath() {Gain = 0.25f, Path = "Spiout0_Pwm5", Delay = 50});
 Set(Trig: "Boot", VirtualPath: new VirtualPath() {Gain = 0.5f, Path = "Spiout11_Pwm5", Delay = 100});
@@ -257,96 +418,212 @@ Wait(Trig: "②", Next: "End", Time: 5.0);
 
 GetWave(Trig: "Boot", Stop: "End", FileName: "All.wav", SpioutId: "0, 11", PwmId: "0, 5");
 </ScriptContent>
-                </XmlIO>
-              </OneElement>
-              <OneElement>
-                <XmlIO>
-                  <Children />
-                  <IsExpanded>false</IsExpanded>
-                  <IsParentInclude>true</IsParentInclude>
-                  <Title>AD⇒PWM</Title>
-                  <Explanation>
+                    <ExecFlagDict>
+                      <KeyValuePair>
+                        <Key>
+                          <string />
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>All</string>
+                        </Key>
+                        <Value>
+                          <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                    </ExecFlagDict>
+                  </XmlIO>
+                </OneElement>
+                <OneElement>
+                  <XmlIO>
+                    <Children />
+                    <IsExpanded>false</IsExpanded>
+                    <IsParentInclude>true</IsParentInclude>
+                    <Title>AD⇒PWM</Title>
+                    <Explanation>
 </Explanation>
-                  <ScriptContent>
+                    <ScriptContent>
 </ScriptContent>
-                </XmlIO>
-              </OneElement>
-              <OneElement>
-                <XmlIO>
-                  <Children />
-                  <IsExpanded>true</IsExpanded>
-                  <IsParentInclude>true</IsParentInclude>
-                  <Title>AD⇒SPIOut</Title>
-                  <Explanation>
+                    <ExecFlagDict>
+                      <KeyValuePair>
+                        <Key>
+                          <string />
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>All</string>
+                        </Key>
+                        <Value>
+                          <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                    </ExecFlagDict>
+                  </XmlIO>
+                </OneElement>
+                <OneElement>
+                  <XmlIO>
+                    <Children />
+                    <IsExpanded>true</IsExpanded>
+                    <IsParentInclude>true</IsParentInclude>
+                    <Title>AD⇒SPIOut</Title>
+                    <Explanation>
 </Explanation>
-                  <ScriptContent>
+                    <ScriptContent>
 </ScriptContent>
-                </XmlIO>
-              </OneElement>
-            </Children>
-            <IsExpanded>true</IsExpanded>
-            <IsParentInclude>true</IsParentInclude>
-            <Title>バーチャルパス</Title>
-            <Explanation>
+                    <ExecFlagDict>
+                      <KeyValuePair>
+                        <Key>
+                          <string />
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>All</string>
+                        </Key>
+                        <Value>
+                          <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                    </ExecFlagDict>
+                  </XmlIO>
+                </OneElement>
+              </Children>
+              <IsExpanded>true</IsExpanded>
+              <IsParentInclude>true</IsParentInclude>
+              <Title>バーチャルパス</Title>
+              <Explanation>
 </Explanation>
-            <ScriptContent>
+              <ScriptContent>
 </ScriptContent>
-          </XmlIO>
-        </OneElement>
-        <OneElement>
-          <XmlIO>
-            <Children>
-              <OneElement>
-                <XmlIO>
-                  <Children />
-                  <IsExpanded>true</IsExpanded>
-                  <IsParentInclude>true</IsParentInclude>
-                  <Title>単発送信</Title>
-                  <Explanation>
+              <ExecFlagDict>
+                <KeyValuePair>
+                  <Key>
+                    <string />
+                  </Key>
+                  <Value>
+                    <boolean>false</boolean>
+                  </Value>
+                </KeyValuePair>
+              </ExecFlagDict>
+            </XmlIO>
+          </OneElement>
+          <OneElement>
+            <XmlIO>
+              <Children>
+                <OneElement>
+                  <XmlIO>
+                    <Children />
+                    <IsExpanded>true</IsExpanded>
+                    <IsParentInclude>true</IsParentInclude>
+                    <Title>単発送信</Title>
+                    <Explanation>
 ①CAN ID 0x100 で、0x00, 0xAA, 0xFF ３バイト送信し、②へ遷移。
 ②CAN ID 0x200 で、0xAA, 0xFF, 0x00 ３バイト送信し、終了。
 </Explanation>
-                  <ScriptContent>
+                    <ScriptContent>
 CanSend( Trig: "Boot", SendCanId: 0x100, Data: new List&lt;byte&gt;() { 0x00, 0xAA, 0xFF }, Next: "②");
 CanSend( Trig: "②", SendCanId: 0x200, Data: new List&lt;byte&gt;() { 0xAA, 0xFF, 0x00 });
 Wait(Trig: "②", Next: "End", Time: 5);
 </ScriptContent>
-                </XmlIO>
-              </OneElement>
-              <OneElement>
-                <XmlIO>
-                  <Children />
-                  <IsExpanded>true</IsExpanded>
-                  <IsParentInclude>true</IsParentInclude>
-                  <Title>周期送信</Title>
-                  <Explanation>
+                    <ExecFlagDict>
+                      <KeyValuePair>
+                        <Key>
+                          <string />
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>All</string>
+                        </Key>
+                        <Value>
+                          <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>CAN</string>
+                        </Key>
+                        <Value>
+                          <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                    </ExecFlagDict>
+                  </XmlIO>
+                </OneElement>
+                <OneElement>
+                  <XmlIO>
+                    <Children />
+                    <IsExpanded>true</IsExpanded>
+                    <IsParentInclude>true</IsParentInclude>
+                    <Title>周期送信</Title>
+                    <Explanation>
 ①CAN ID 0x100 で、0x00, 0xAA, 0xFF ３バイトを200ms周期で送信。
 　５秒後、②に遷移。
 ②CAN ID 0x100 停止。
 　CAN ID 0x200 で、0xAA, 0xFF, 0x00 ３バイトを100ms周期で送信。
 　５秒後、終了。
 </Explanation>
-                  <ScriptContent>
+                    <ScriptContent>
 CanRepSend(Trig: "Boot", Stop: "②", SendCanId: 0x100, RepTime: 0.2, Data: new List&lt;byte&gt;() {0x00, 0xAA, 0xFF});
 Wait(Trig: "Boot", Next: "②", Time: 5);
 
 CanRepSend(Trig: "②", SendCanId: 0x200, RepTime: 0.1, Data: new List&lt;byte&gt;() {0xAA, 0xFF, 0x00});
 Wait(Trig: "②", Next: "End", Time: 5);
 </ScriptContent>
-                </XmlIO>
-              </OneElement>
-              <OneElement>
-                <XmlIO>
-                  <Children />
-                  <IsExpanded>true</IsExpanded>
-                  <IsParentInclude>true</IsParentInclude>
-                  <Title>データに同期した送信</Title>
-                  <Explanation>
+                    <ExecFlagDict>
+                      <KeyValuePair>
+                        <Key>
+                          <string />
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>All</string>
+                        </Key>
+                        <Value>
+                          <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>CAN</string>
+                        </Key>
+                        <Value>
+                          <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                    </ExecFlagDict>
+                  </XmlIO>
+                </OneElement>
+                <OneElement>
+                  <XmlIO>
+                    <Children />
+                    <IsExpanded>true</IsExpanded>
+                    <IsParentInclude>true</IsParentInclude>
+                    <Title>データに同期した送信</Title>
+                    <Explanation>
 ①CAN ID 0x100 で、0xXX, 0xXX, 0xFF ３バイトを200ms周期で送信。
 　先頭から１６ビットには、RPM / 10を設定して送信。
 　５秒後、終了。
 </Explanation>
-                  <ScriptContent>
+                    <ScriptContent>
 Set(Trig: "Boot", SetVar: new SetVar() {VarName = "RPM", Value = "1000"});
 CanRepSend(
     Trig: "Boot", SendCanId: 0x100, RepTime: 0.2,
@@ -355,17 +632,43 @@ CanRepSend(
 );
 Wait(Trig: "Boot", Next: "End", Time: 5);
 </ScriptContent>
-                </XmlIO>
-              </OneElement>
-              <OneElement>
-                <XmlIO>
-                  <Children />
-                  <IsExpanded>true</IsExpanded>
-                  <IsParentInclude>true</IsParentInclude>
-                  <Title>ダイアグ送信</Title>
-                  <Explanation>
+                    <ExecFlagDict>
+                      <KeyValuePair>
+                        <Key>
+                          <string />
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>All</string>
+                        </Key>
+                        <Value>
+                          <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>CAN</string>
+                        </Key>
+                        <Value>
+                          <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                    </ExecFlagDict>
+                  </XmlIO>
+                </OneElement>
+                <OneElement>
+                  <XmlIO>
+                    <Children />
+                    <IsExpanded>true</IsExpanded>
+                    <IsParentInclude>true</IsParentInclude>
+                    <Title>ダイアグ送信</Title>
+                    <Explanation>
 </Explanation>
-                  <ScriptContent>
+                    <ScriptContent>
 Set(Trig: "Boot", SetVar: new SetVar() {VarName = "RPM", Value = "1000"});
 CanDiagSend(
     Trig: "Boot",
@@ -381,45 +684,99 @@ CanDiagSend(
     Next: "End"
 );
 </ScriptContent>
-                </XmlIO>
-              </OneElement>
-            </Children>
-            <IsExpanded>true</IsExpanded>
-            <IsParentInclude>true</IsParentInclude>
-            <Title>CAN</Title>
-            <Explanation>
+                    <ExecFlagDict>
+                      <KeyValuePair>
+                        <Key>
+                          <string />
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>All</string>
+                        </Key>
+                        <Value>
+                          <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>CAN</string>
+                        </Key>
+                        <Value>
+                          <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                    </ExecFlagDict>
+                  </XmlIO>
+                </OneElement>
+              </Children>
+              <IsExpanded>true</IsExpanded>
+              <IsParentInclude>true</IsParentInclude>
+              <Title>CAN</Title>
+              <Explanation>
 </Explanation>
-            <ScriptContent>
+              <ScriptContent>
 </ScriptContent>
-          </XmlIO>
-        </OneElement>
-        <OneElement>
-          <XmlIO>
-            <Children>
-              <OneElement>
-                <XmlIO>
-                  <Children />
-                  <IsExpanded>true</IsExpanded>
-                  <IsParentInclude>true</IsParentInclude>
-                  <Title>無音チェック</Title>
-                  <Explanation>
+              <ExecFlagDict>
+                <KeyValuePair>
+                  <Key>
+                    <string />
+                  </Key>
+                  <Value>
+                    <boolean>false</boolean>
+                  </Value>
+                </KeyValuePair>
+              </ExecFlagDict>
+            </XmlIO>
+          </OneElement>
+          <OneElement>
+            <XmlIO>
+              <Children>
+                <OneElement>
+                  <XmlIO>
+                    <Children />
+                    <IsExpanded>true</IsExpanded>
+                    <IsParentInclude>true</IsParentInclude>
+                    <Title>無音チェック</Title>
+                    <Explanation>
 </Explanation>
-                  <ScriptContent>
+                    <ScriptContent>
 DcCut(Trig: "Boot", OnOff: true);
 Wait(Trig: "Boot", Time: 5.0, Next: "②");
 
 SilenceCheck(Trig: "②", Stop: "End", AdId: "0, 1, 2, 3", Message: "AD Ch0/1/2/3の無音確認");
 Wait(Trig: "②", Time: 5, Next: "End");
 </ScriptContent>
-                </XmlIO>
-              </OneElement>
-              <OneElement>
-                <XmlIO>
-                  <Children />
-                  <IsExpanded>true</IsExpanded>
-                  <IsParentInclude>true</IsParentInclude>
-                  <Title>周波数チェックOK</Title>
-                  <Explanation>
+                    <ExecFlagDict>
+                      <KeyValuePair>
+                        <Key>
+                          <string />
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>All</string>
+                        </Key>
+                        <Value>
+                          <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                    </ExecFlagDict>
+                  </XmlIO>
+                </OneElement>
+                <OneElement>
+                  <XmlIO>
+                    <Children />
+                    <IsExpanded>true</IsExpanded>
+                    <IsParentInclude>true</IsParentInclude>
+                    <Title>周波数チェックOK</Title>
+                    <Explanation>
 ①Spiout Ch0は、Gain 1、Freq 100に設定
 　Spiout Ch1は、Gain 0.5、Freq 200+Gain 0.5、Freq 300に設定
 　Pwm Ch0は、Gain 1、Freq 100、Phase 180に設定
@@ -436,7 +793,7 @@ Wait(Trig: "②", Time: 5, Next: "End");
 
 ③１秒待機後、終了
 </Explanation>
-                  <ScriptContent>
+                    <ScriptContent>
 Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 0, Gain = "1.0", Freq = "100"});
 Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 1, Id = 0, Gain = "0.5", Freq = "200"});
 Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 1, Id = 1, Gain = "0.5", Freq = "300"});
@@ -507,15 +864,33 @@ DegreeCheck(Formula: "PwmCh0PhaseDft[0] - SpioutCh0PhaseDft[0]", ExpValueMin: -2
 DegreeCheck(Formula: "PwmCh0PhaseDft[0] - SpioutCh0PhaseDft[0]", ExpValueMin: 110, ExpValueMax: -248, Message: @"Spiout Ch0 と Pwm Ch0 の 100[Hz] 位相確認 DFT バージョン３");
 DegreeCheck(Formula: "PwmCh0PhaseDft[0] - SpioutCh0PhaseDft[0]", ExpValueMin: -250, ExpValueMax: -248, Message: @"Spiout Ch0 と Pwm Ch0 の 100[Hz] 位相確認 DFT バージョン４");
 </ScriptContent>
-                </XmlIO>
-              </OneElement>
-              <OneElement>
-                <XmlIO>
-                  <Children />
-                  <IsExpanded>true</IsExpanded>
-                  <IsParentInclude>true</IsParentInclude>
-                  <Title>周波数チェックNG</Title>
-                  <Explanation>
+                    <ExecFlagDict>
+                      <KeyValuePair>
+                        <Key>
+                          <string />
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>All</string>
+                        </Key>
+                        <Value>
+                          <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                    </ExecFlagDict>
+                  </XmlIO>
+                </OneElement>
+                <OneElement>
+                  <XmlIO>
+                    <Children />
+                    <IsExpanded>true</IsExpanded>
+                    <IsParentInclude>true</IsParentInclude>
+                    <Title>周波数チェックNG</Title>
+                    <Explanation>
 ①Spiout Ch0は、Gain 1、Freq 100に設定
 　１秒待機後、②に遷移
 
@@ -530,7 +905,7 @@ DegreeCheck(Formula: "PwmCh0PhaseDft[0] - SpioutCh0PhaseDft[0]", ExpValueMin: -2
 ⑤Spiout Ch0は②~⑤間のFFT実行後、100±2[Hz]の最大振幅を取得
 　１秒待機後、終了
 </Explanation>
-                  <ScriptContent>
+                    <ScriptContent>
 Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Gain", Value = "1.0"});
 Set(Trig: "Boot", Signal: new SpioutSineWave() {Ch = 0, Gain = "Gain", Freq = "100"});
 Wait(Trig: "Boot", Time: 1, Next: "②");
@@ -559,117 +934,229 @@ GetWave(Trig: "②", Stop: "⑤", FileName: "SpioutCh0.wav", SpioutId: "0");
 ValueCheck(Formula: "SpioutCh0Amp[0]", ExpValueMax: 1.1, ExpValueMin: 0.90, Message: @"Spiout Ch0 100[Hz] 振幅確認");
 ValueCheck(Formula: "SpioutCh0OtherAmp", ExpValueMax: 0.01, ExpValueMin: 0, Message: @"Spiout Ch0 100[Hz] 以外の振幅確認");
 </ScriptContent>
-                </XmlIO>
-              </OneElement>
-            </Children>
-            <IsExpanded>true</IsExpanded>
-            <IsParentInclude>true</IsParentInclude>
-            <Title>チェック</Title>
-            <Explanation>
+                    <ExecFlagDict>
+                      <KeyValuePair>
+                        <Key>
+                          <string />
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>All</string>
+                        </Key>
+                        <Value>
+                          <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                    </ExecFlagDict>
+                  </XmlIO>
+                </OneElement>
+              </Children>
+              <IsExpanded>true</IsExpanded>
+              <IsParentInclude>true</IsParentInclude>
+              <Title>チェック</Title>
+              <Explanation>
 </Explanation>
-            <ScriptContent>
+              <ScriptContent>
 </ScriptContent>
-          </XmlIO>
-        </OneElement>
-        <OneElement>
-          <XmlIO>
-            <Children>
-              <OneElement>
-                <XmlIO>
-                  <Children>
-                    <OneElement>
-                      <XmlIO>
-                        <Children />
-                        <IsExpanded>true</IsExpanded>
-                        <IsParentInclude>true</IsParentInclude>
-                        <Title>する２</Title>
-                        <Explanation>
+              <ExecFlagDict>
+                <KeyValuePair>
+                  <Key>
+                    <string />
+                  </Key>
+                  <Value>
+                    <boolean>false</boolean>
+                  </Value>
+                </KeyValuePair>
+              </ExecFlagDict>
+            </XmlIO>
+          </OneElement>
+          <OneElement>
+            <XmlIO>
+              <Children>
+                <OneElement>
+                  <XmlIO>
+                    <Children>
+                      <OneElement>
+                        <XmlIO>
+                          <Children />
+                          <IsExpanded>true</IsExpanded>
+                          <IsParentInclude>true</IsParentInclude>
+                          <Title>する２</Title>
+                          <Explanation>
 ①１秒待機後、②に遷移
 　⇒２個上の親に記載
 ②１秒待機後、③に遷移
 　⇒１個上の親に記載
 ③１秒待機後、終了
 　⇒自分自身に記載</Explanation>
-                        <ScriptContent>
+                          <ScriptContent>
 Wait1s(Trig: "③", Next: "End");</ScriptContent>
-                      </XmlIO>
-                    </OneElement>
-                  </Children>
-                  <IsExpanded>true</IsExpanded>
-                  <IsParentInclude>true</IsParentInclude>
-                  <Title>する１</Title>
-                  <Explanation>
+                          <ExecFlagDict>
+                            <KeyValuePair>
+                              <Key>
+                                <string />
+                              </Key>
+                              <Value>
+                                <boolean>false</boolean>
+                              </Value>
+                            </KeyValuePair>
+                            <KeyValuePair>
+                              <Key>
+                                <string>All</string>
+                              </Key>
+                              <Value>
+                                <boolean>true</boolean>
+                              </Value>
+                            </KeyValuePair>
+                          </ExecFlagDict>
+                        </XmlIO>
+                      </OneElement>
+                    </Children>
+                    <IsExpanded>true</IsExpanded>
+                    <IsParentInclude>true</IsParentInclude>
+                    <Title>する１</Title>
+                    <Explanation>
 </Explanation>
-                  <ScriptContent>
+                    <ScriptContent>
 Wait1s(Trig: "②", Next: "③");</ScriptContent>
-                </XmlIO>
-              </OneElement>
-              <OneElement>
-                <XmlIO>
-                  <Children>
-                    <OneElement>
-                      <XmlIO>
-                        <Children />
-                        <IsExpanded>true</IsExpanded>
-                        <IsParentInclude>false</IsParentInclude>
-                        <Title>しない</Title>
-                        <Explanation>
+                    <ExecFlagDict>
+                      <KeyValuePair>
+                        <Key>
+                          <string />
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
+                        </Value>
+                      </KeyValuePair>
+                    </ExecFlagDict>
+                  </XmlIO>
+                </OneElement>
+                <OneElement>
+                  <XmlIO>
+                    <Children>
+                      <OneElement>
+                        <XmlIO>
+                          <Children />
+                          <IsExpanded>true</IsExpanded>
+                          <IsParentInclude>false</IsParentInclude>
+                          <Title>しない</Title>
+                          <Explanation>
 ①１秒待機後、終了</Explanation>
-                        <ScriptContent>
+                          <ScriptContent>
 Wait(Trig: "Boot", Time: 1, Next: "End");</ScriptContent>
-                      </XmlIO>
-                    </OneElement>
-                  </Children>
-                  <IsExpanded>true</IsExpanded>
-                  <IsParentInclude>true</IsParentInclude>
-                  <Title>する２</Title>
-                  <Explanation>
+                          <ExecFlagDict>
+                            <KeyValuePair>
+                              <Key>
+                                <string />
+                              </Key>
+                              <Value>
+                                <boolean>false</boolean>
+                              </Value>
+                            </KeyValuePair>
+                            <KeyValuePair>
+                              <Key>
+                                <string>All</string>
+                              </Key>
+                              <Value>
+                                <boolean>true</boolean>
+                              </Value>
+                            </KeyValuePair>
+                          </ExecFlagDict>
+                        </XmlIO>
+                      </OneElement>
+                    </Children>
+                    <IsExpanded>true</IsExpanded>
+                    <IsParentInclude>true</IsParentInclude>
+                    <Title>する２</Title>
+                    <Explanation>
 </Explanation>
-                  <ScriptContent>
+                    <ScriptContent>
 Wait1s(Trig: "②", Next: "③");</ScriptContent>
-                </XmlIO>
-              </OneElement>
-            </Children>
-            <IsExpanded>true</IsExpanded>
-            <IsParentInclude>true</IsParentInclude>
-            <Title>インクルード</Title>
-            <Explanation>
+                    <ExecFlagDict>
+                      <KeyValuePair>
+                        <Key>
+                          <string />
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
+                        </Value>
+                      </KeyValuePair>
+                    </ExecFlagDict>
+                  </XmlIO>
+                </OneElement>
+              </Children>
+              <IsExpanded>true</IsExpanded>
+              <IsParentInclude>true</IsParentInclude>
+              <Title>インクルード</Title>
+              <Explanation>
 </Explanation>
-            <ScriptContent>
+              <ScriptContent>
 void Wait1s(string Trig, string Next)
 {
 	Wait(Trig: Trig, Time: 1, Next: Next);
 }
 Wait1s(Trig: "Boot", Next: "②");</ScriptContent>
-          </XmlIO>
-        </OneElement>
-        <OneElement>
-          <XmlIO>
-            <Children>
-              <OneElement>
-                <XmlIO>
-                  <Children />
-                  <IsExpanded>true</IsExpanded>
-                  <IsParentInclude>true</IsParentInclude>
-                  <Title>矩形波出力</Title>
-                  <Explanation>
+              <ExecFlagDict>
+                <KeyValuePair>
+                  <Key>
+                    <string />
+                  </Key>
+                  <Value>
+                    <boolean>false</boolean>
+                  </Value>
+                </KeyValuePair>
+              </ExecFlagDict>
+            </XmlIO>
+          </OneElement>
+          <OneElement>
+            <XmlIO>
+              <Children>
+                <OneElement>
+                  <XmlIO>
+                    <Children />
+                    <IsExpanded>true</IsExpanded>
+                    <IsParentInclude>true</IsParentInclude>
+                    <Title>矩形波出力</Title>
+                    <Explanation>
 ①P04_04から周期 1kHz、Duty 50%の矩形波を出力
 　５秒後終了</Explanation>
-                  <ScriptContent>
+                    <ScriptContent>
 Set(Trig: "Boot", SetVar: new SetVar() {VarName = "Freq", Value = "1000"});
 Set(Trig: "Boot", SquareWave: new SquareWave() { DenominatorCycle = "33333333 / 128 / Freq", NumeratorCycle = "33333333 / 128 / Freq / 2"});
 Wait(Trig: "Boot", Time: 5.0, Next: "End");
 GetWave(Trig: "Boot", Stop: "End", FileName: "①.wav", AdId: "0");
 </ScriptContent>
-                </XmlIO>
-              </OneElement>
-              <OneElement>
-                <XmlIO>
-                  <Children />
-                  <IsExpanded>true</IsExpanded>
-                  <IsParentInclude>true</IsParentInclude>
-                  <Title>ポート出力</Title>
-                  <Explanation>
+                    <ExecFlagDict>
+                      <KeyValuePair>
+                        <Key>
+                          <string />
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>All</string>
+                        </Key>
+                        <Value>
+                          <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                    </ExecFlagDict>
+                  </XmlIO>
+                </OneElement>
+                <OneElement>
+                  <XmlIO>
+                    <Children />
+                    <IsExpanded>true</IsExpanded>
+                    <IsParentInclude>true</IsParentInclude>
+                    <Title>ポート出力</Title>
+                    <Explanation>
 ①P03_15をACCとして扱う
 　ACC ON
 　５秒待機後、②に遷移
@@ -677,7 +1164,7 @@ GetWave(Trig: "Boot", Stop: "End", FileName: "①.wav", AdId: "0");
 　５秒待機後、③に遷移
 ①ACC OFF
 　５秒待機後、終了</Explanation>
-                  <ScriptContent>
+                    <ScriptContent>
 Set(Trig: "Boot", SetVar: new SetVar() {VarName = "ACC", Value = "1"});
 Set(Trig: "Boot", PortOut: "ACC * 128");
 Wait(Trig: "Boot", Time: 5.0, Next: "②");
@@ -689,28 +1176,64 @@ Set(Trig: "③", SetVar: new SetVar() {VarName = "ACC", Value = "1"});
 Wait(Trig: "③", Time: 5.0, Next: "End");
 GetWave(Trig: "Boot", Stop: "End", FileName: "①.wav", AdId: "0");
 </ScriptContent>
-                </XmlIO>
-              </OneElement>
-              <OneElement>
-                <XmlIO>
-                  <Children />
-                  <IsExpanded>true</IsExpanded>
-                  <IsParentInclude>true</IsParentInclude>
-                  <Title>バッチ実行</Title>
-                  <Explanation>
+                    <ExecFlagDict>
+                      <KeyValuePair>
+                        <Key>
+                          <string />
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>All</string>
+                        </Key>
+                        <Value>
+                          <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                    </ExecFlagDict>
+                  </XmlIO>
+                </OneElement>
+                <OneElement>
+                  <XmlIO>
+                    <Children />
+                    <IsExpanded>true</IsExpanded>
+                    <IsParentInclude>true</IsParentInclude>
+                    <Title>バッチ実行</Title>
+                    <Explanation>
 ①バッチ実行後、終了</Explanation>
-                  <ScriptContent>
+                    <ScriptContent>
 ExecBatch(Trig: "Boot", Cmd: @"..\..\..\SampleBatch.bat", Next: "End");
 </ScriptContent>
-                </XmlIO>
-              </OneElement>
-              <OneElement>
-                <XmlIO>
-                  <Children />
-                  <IsExpanded>true</IsExpanded>
-                  <IsParentInclude>true</IsParentInclude>
-                  <Title>波形取得</Title>
-                  <Explanation>
+                    <ExecFlagDict>
+                      <KeyValuePair>
+                        <Key>
+                          <string />
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>All</string>
+                        </Key>
+                        <Value>
+                          <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                    </ExecFlagDict>
+                  </XmlIO>
+                </OneElement>
+                <OneElement>
+                  <XmlIO>
+                    <Children />
+                    <IsExpanded>true</IsExpanded>
+                    <IsParentInclude>true</IsParentInclude>
+                    <Title>波形取得</Title>
+                    <Explanation>
 ①MixOut Ch0 = ThroughOut Ch0 * 0.5
 　MixOut Ch5 = ThroughOut Ch0 * 0.25 + ThroughOut Ch11 * 0.5
 　RPM 1000、Torque 500、Accel 100に設定。
@@ -722,7 +1245,7 @@ ExecBatch(Trig: "Boot", Cmd: @"..\..\..\SampleBatch.bat", Next: "End");
 　MixOut Ch0, 5の波形取得
 　５秒待機後、終了
 </Explanation>
-                  <ScriptContent>
+                    <ScriptContent>
 Set(Trig: "Boot", VirtualPath: new VirtualPath() {Gain = 0.5f, Path = "Spiout0_Pwm0"});
 Set(Trig: "Boot", VirtualPath: new VirtualPath() {Gain = 0.25f, Path = "Spiout0_Pwm5"});
 Set(Trig: "Boot", VirtualPath: new VirtualPath() {Gain = 0.5f, Path = "Spiout11_Pwm5"});
@@ -740,22 +1263,40 @@ GetWave(Trig: "②", Stop: "End", FileName: "②.wav", PwmId: "0, 5");
 GetWave(Trig: "②", Stop: "End", FileName: "②_.wav");
 Wait(Trig: "②", Next: "End", Time: 5.0);
 </ScriptContent>
-                </XmlIO>
-              </OneElement>
-              <OneElement>
-                <XmlIO>
-                  <Children />
-                  <IsExpanded>true</IsExpanded>
-                  <IsParentInclude>true</IsParentInclude>
-                  <Title>DC Cut</Title>
-                  <Explanation>
+                    <ExecFlagDict>
+                      <KeyValuePair>
+                        <Key>
+                          <string />
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>All</string>
+                        </Key>
+                        <Value>
+                          <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                    </ExecFlagDict>
+                  </XmlIO>
+                </OneElement>
+                <OneElement>
+                  <XmlIO>
+                    <Children />
+                    <IsExpanded>true</IsExpanded>
+                    <IsParentInclude>true</IsParentInclude>
+                    <Title>DC Cut</Title>
+                    <Explanation>
 ①DC Cutオフ設定
 　５秒後に②へ遷移
 ②DC Cutオン設定
 　５秒後に③へ遷移
 ③DC Cutオフ設定
 　５秒後に終了</Explanation>
-                  <ScriptContent>
+                    <ScriptContent>
 DcCut(Trig: "Boot", OnOff: false);
 Wait(Trig: "Boot", Time: 5.0, Next: "②");
 
@@ -765,19 +1306,37 @@ Wait(Trig: "②", Time: 5.0, Next: "③");
 DcCut(Trig: "③", OnOff: false);
 Wait(Trig: "③", Time: 5.0, Next: "End");
 </ScriptContent>
-                </XmlIO>
-              </OneElement>
-              <OneElement>
-                <XmlIO>
-                  <Children />
-                  <IsExpanded>true</IsExpanded>
-                  <IsParentInclude>true</IsParentInclude>
-                  <Title>Fade</Title>
-                  <Explanation>
+                    <ExecFlagDict>
+                      <KeyValuePair>
+                        <Key>
+                          <string />
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>All</string>
+                        </Key>
+                        <Value>
+                          <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                    </ExecFlagDict>
+                  </XmlIO>
+                </OneElement>
+                <OneElement>
+                  <XmlIO>
+                    <Children />
+                    <IsExpanded>true</IsExpanded>
+                    <IsParentInclude>true</IsParentInclude>
+                    <Title>Fade</Title>
+                    <Explanation>
 ①RPM変数を、５秒かけて1000から100へ変更
 ②RPM変数を、２秒かけて100から1000へ変更
 ③５秒待機後、終了</Explanation>
-                  <ScriptContent>
+                    <ScriptContent>
 Set(Trig: "Boot", SetVar: new SetVar() {VarName = "RPM", Value = "1000"});
 Fade(Trig: "Boot", VarName: "RPM", Target: 100, Time: 5.0, Next: "②");
 
@@ -785,26 +1344,56 @@ Fade(Trig: "②", VarName: "RPM", Target: 1000, Time: 2.0, Next: "③");
 
 Wait(Trig: "③", Time: 5.0, Next: "End");
 </ScriptContent>
-                </XmlIO>
-              </OneElement>
-            </Children>
-            <IsExpanded>true</IsExpanded>
-            <IsParentInclude>true</IsParentInclude>
-            <Title>その他</Title>
-            <Explanation>
+                    <ExecFlagDict>
+                      <KeyValuePair>
+                        <Key>
+                          <string />
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>All</string>
+                        </Key>
+                        <Value>
+                          <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                    </ExecFlagDict>
+                  </XmlIO>
+                </OneElement>
+              </Children>
+              <IsExpanded>true</IsExpanded>
+              <IsParentInclude>true</IsParentInclude>
+              <Title>その他</Title>
+              <Explanation>
 </Explanation>
-            <ScriptContent>
+              <ScriptContent>
 </ScriptContent>
-          </XmlIO>
-        </OneElement>
-      </Children>
-      <IsExpanded>true</IsExpanded>
-      <IsParentInclude>false</IsParentInclude>
-      <Title>トップ</Title>
-      <Explanation>
+              <ExecFlagDict>
+                <KeyValuePair>
+                  <Key>
+                    <string />
+                  </Key>
+                  <Value>
+                    <boolean>false</boolean>
+                  </Value>
+                </KeyValuePair>
+              </ExecFlagDict>
+            </XmlIO>
+          </OneElement>
+        </Children>
+        <IsExpanded>true</IsExpanded>
+        <IsParentInclude>false</IsParentInclude>
+        <Title>トップ</Title>
+        <Explanation>
 </Explanation>
-      <ScriptContent>
+        <ScriptContent>
 </ScriptContent>
-    </XmlIO>
-  </OneElement>
-</ArrayOfOneElement>
+        <ExecFlagDict />
+      </XmlIO>
+    </OneElement>
+  </TreeViewList>
+</XmlIO>

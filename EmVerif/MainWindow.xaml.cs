@@ -25,7 +25,8 @@ namespace EmVerif
 
         private void LoadButtonInstance_LoadFinished(object sender, EventArgs e)
         {
-            Update();
+            _EditTab.ViewModel.Update();
+            _ExecTab.ViewModel.Update();
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
@@ -35,13 +36,21 @@ namespace EmVerif
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Update();
-        }
-
-        private void Update()
-        {
-            _ExecTab.ViewModel.Update();
-            _EditTab.ViewModel.Update();
+            if (e.AddedItems.Count >= 1)
+            {
+                if (e.AddedItems[0].GetType() == typeof(TabItem))
+                {
+                    switch (((TabControl)sender).SelectedIndex)
+                    {
+                        case 0:
+                            _EditTab.ViewModel.Update();
+                            break;
+                        case 1:
+                            _ExecTab.ViewModel.Update();
+                            break;
+                    }
+                }
+            }
         }
     }
 }
