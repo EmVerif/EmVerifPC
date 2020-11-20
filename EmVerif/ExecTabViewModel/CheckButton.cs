@@ -46,7 +46,7 @@ namespace EmVerif.ExecTabViewModel
                 }
                 else
                 {
-                    ConfirmCheck(_RefViewModel.SelectedExecType + "列で、" + _RefViewModel.Keyword + "を含む行を全て" + _CheckValue + "に変更しますか？");
+                    ConfirmCheck(_RefViewModel.SelectedExecType + "列で、「" + _RefViewModel.Keyword + "」文字列をタイトルに含む行を全て" + _CheckValue + "に変更しますか？");
                 }
             }
         }

@@ -31,7 +31,7 @@ namespace EmVerif.ExecTabViewModel
         {
             if ((_RefViewModel.SelectedExecType != "") && (Database.Instance.ExecTypeList.Contains(_RefViewModel.SelectedExecType)))
             {
-                var dr = MessageBox.Show(_RefViewModel.SelectedExecType + "を削除しますか？", "確認", MessageBoxButton.OKCancel);
+                var dr = MessageBox.Show(_RefViewModel.SelectedExecType + "列を削除しますか？", "確認", MessageBoxButton.OKCancel);
 
                 if (dr == MessageBoxResult.OK)
                 {

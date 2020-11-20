@@ -26,7 +26,7 @@ namespace EmVerif.EditTabViewModel
         public void Execute(object parameter)
         {
             OneElement selected = Database.Instance.SelectedElement;
-            ObservableCollection<OneElement> children = selected.Parent.Children;
+            List<OneElement> children = selected.Parent.Children;
             int curIdx = children.IndexOf(selected);
 
             switch ((string)parameter)

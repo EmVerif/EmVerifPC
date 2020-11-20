@@ -16,26 +16,33 @@ namespace EmVerif.EditTabViewModel
 {
     class ViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<OneElement> TreeViewList
+        public ObservableCollection<SelectedViewModel> TreeViewList
         {
             get
             {
-                return Database.Instance.TreeViewList;
+                ObservableCollection<SelectedViewModel> ret = new ObservableCollection<SelectedViewModel>();
+
+                foreach (var treeView in Database.Instance.TreeViewList)
+                {
+                    ret.Add(new SelectedViewModel(treeView));
+                }
+
+                return ret;
             }
         }
-        public SelectedViewModel SelectedViewModel { get; private set; }
-        public OneElement SelectedElement
+
+        private SelectedViewModel _SelectedViewModel;
+        public SelectedViewModel SelectedViewModel
         {
             get
             {
-                return Database.Instance.SelectedElement;
+                return _SelectedViewModel;
             }
             set
             {
-                Database.Instance.SelectedElement = value;
-                SelectedViewModel = new SelectedViewModel(value);
+                Database.Instance.SelectedElement = value.RefModel;
+                _SelectedViewModel = value;
                 OnPropertyChanged("SelectedViewModel");
-                OnPropertyChanged("SelectedElement");
             }
         }
 
@@ -58,7 +65,6 @@ namespace EmVerif.EditTabViewModel
         {
             OnPropertyChanged("TreeViewList");
             OnPropertyChanged("SelectedViewModel");
-            OnPropertyChanged("SelectedElement");
         }
 
         public void CloseWindow()

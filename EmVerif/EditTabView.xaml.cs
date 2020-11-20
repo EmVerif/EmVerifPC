@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using EmVerif.Model;
+using EmVerif.EditTabViewModel;
 
 namespace EmVerif
 {
@@ -33,7 +33,7 @@ namespace EmVerif
             {
                 return;
             }
-            ViewModel.SelectedElement = (OneElement)((TreeView)sender).SelectedItem;
+            ViewModel.SelectedViewModel = (SelectedViewModel)((TreeView)sender).SelectedItem;
         }
     }
 }

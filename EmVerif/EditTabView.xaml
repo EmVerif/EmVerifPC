@@ -51,7 +51,7 @@
                 </TreeView.Resources>
                 <TreeView.ItemTemplate>
                     <HierarchicalDataTemplate DataType="vm:OneElement" ItemsSource="{Binding Children}">
-                        <TextBlock Text="{Binding Title, Mode=TwoWay}"
+                        <TextBlock Text="{Binding Title}"
                                    IsEnabled="False"
                                    />
                     </HierarchicalDataTemplate>

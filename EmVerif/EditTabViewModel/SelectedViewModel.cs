@@ -14,15 +14,29 @@ namespace EmVerif.EditTabViewModel
 {
     public class SelectedViewModel : INotifyPropertyChanged
     {
+        public ObservableCollection<SelectedViewModel> Children
+        {
+            get
+            {
+                ObservableCollection<SelectedViewModel> ret = new ObservableCollection<SelectedViewModel>();
+
+                foreach (var treeView in RefModel.Children)
+                {
+                    ret.Add(new SelectedViewModel(treeView));
+                }
+
+                return ret;
+            }
+        }
         public bool IsExpanded
         {
             get
             {
-                return _RefModel.IsExpanded;
+                return RefModel.IsExpanded;
             }
             set
             {
-                _RefModel.IsExpanded = value;
+                RefModel.IsExpanded = value;
                 OnPropertyChanged("IsExpanded");
             }
         }
@@ -30,11 +44,11 @@ namespace EmVerif.EditTabViewModel
         {
             get
             {
-                return _RefModel.IsParentInclude;
+                return RefModel.IsParentInclude;
             }
             set
             {
-                _RefModel.IsParentInclude = value;
+                RefModel.IsParentInclude = value;
                 OnPropertyChanged("IsParentInclude");
             }
         }
@@ -42,11 +56,11 @@ namespace EmVerif.EditTabViewModel
         {
             get
             {
-                return _RefModel.Title;
+                return RefModel.Title;
             }
             set
             {
-                _RefModel.Title = value;
+                RefModel.Title = value;
                 OnPropertyChanged("Title");
             }
         }
@@ -54,11 +68,11 @@ namespace EmVerif.EditTabViewModel
         {
             get
             {
-                return _RefModel.Explanation;
+                return RefModel.Explanation;
             }
             set
             {
-                _RefModel.Explanation = value;
+                RefModel.Explanation = value;
                 OnPropertyChanged("Explanation");
             }
         }
@@ -66,14 +80,14 @@ namespace EmVerif.EditTabViewModel
         {
             get
             {
-                return _RefModel.IncludedScriptDocument;
+                return RefModel.IncludedScriptDocument;
             }
         }
         public TextDocument ScriptDocument
         {
             get
             {
-                return _RefModel.ScriptDocument;
+                return RefModel.ScriptDocument;
             }
         }
         public bool IsReadOnly
@@ -82,7 +96,7 @@ namespace EmVerif.EditTabViewModel
             {
                 bool ret;
 
-                if (_RefModel.Parent == null)
+                if (RefModel.Parent == null)
                 {
                     ret = true;
                 }
@@ -95,11 +109,11 @@ namespace EmVerif.EditTabViewModel
             }
         }
         public event PropertyChangedEventHandler PropertyChanged;
-        private OneElement _RefModel;
+        public OneElement RefModel { get; private set; }
 
         public SelectedViewModel(OneElement oneElement)
         {
-            _RefModel = oneElement;
+            RefModel = oneElement;
         }
 
         private void OnPropertyChanged(string info)
