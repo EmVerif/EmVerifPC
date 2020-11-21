@@ -14,20 +14,7 @@ namespace EmVerif.EditTabViewModel
 {
     public class SelectedViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<SelectedViewModel> Children
-        {
-            get
-            {
-                ObservableCollection<SelectedViewModel> ret = new ObservableCollection<SelectedViewModel>();
-
-                foreach (var treeView in RefModel.Children)
-                {
-                    ret.Add(new SelectedViewModel(treeView));
-                }
-
-                return ret;
-            }
-        }
+        public ObservableCollection<SelectedViewModel> Children { get; private set; } = new ObservableCollection<SelectedViewModel>();
         public bool IsExpanded
         {
             get
@@ -109,10 +96,13 @@ namespace EmVerif.EditTabViewModel
             }
         }
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public SelectedViewModel Parent;
         public OneElement RefModel { get; private set; }
 
-        public SelectedViewModel(OneElement oneElement)
+        public SelectedViewModel(SelectedViewModel selectedViewModel, OneElement oneElement)
         {
+            Parent = selectedViewModel;
             RefModel = oneElement;
         }
 

@@ -13,37 +13,24 @@ namespace EmVerif.EditTabViewModel
     {
         public event EventHandler CanExecuteChanged;
 
+        private ViewModel _RefViewModel;
+
         public DelElementCommand(ViewModel vm)
         {
-            vm.PropertyChanged += Vm_PropertyChanged;
+            _RefViewModel = vm;
         }
 
         public bool CanExecute(object parameter)
         {
-            bool ret;
-
-            if (Database.Instance.SelectedElement.Parent == null)
-            {
-                ret = false;
-            }
-            else
-            {
-                ret = true;
-            }
-
-            return ret;
+            return true;
         }
 
         public void Execute(object parameter)
         {
-            Database.Instance.SelectedElement.Parent.Children.Remove(Database.Instance.SelectedElement);
-        }
-
-        private void Vm_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "SelectedElement")
+            if (_RefViewModel.SelectedViewModel.Parent != null)
             {
-                CanExecuteChanged?.Invoke(this, new EventArgs());
+                Database.Instance.SelectedElement.Parent.Children.Remove(Database.Instance.SelectedElement);
+                _RefViewModel.SelectedViewModel.Parent.Children.Remove(_RefViewModel.SelectedViewModel);
             }
         }
     }

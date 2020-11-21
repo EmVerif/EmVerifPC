@@ -16,20 +16,7 @@ namespace EmVerif.EditTabViewModel
 {
     class ViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<SelectedViewModel> TreeViewList
-        {
-            get
-            {
-                ObservableCollection<SelectedViewModel> ret = new ObservableCollection<SelectedViewModel>();
-
-                foreach (var treeView in Database.Instance.TreeViewList)
-                {
-                    ret.Add(new SelectedViewModel(treeView));
-                }
-
-                return ret;
-            }
-        }
+        public ObservableCollection<SelectedViewModel> TreeViewList { get; private set; }
 
         private SelectedViewModel _SelectedViewModel;
         public SelectedViewModel SelectedViewModel
@@ -55,14 +42,19 @@ namespace EmVerif.EditTabViewModel
 
         public ViewModel()
         {
+            TreeViewList = new ObservableCollection<SelectedViewModel>();
+            TreeViewList.Add(new SelectedViewModel(null, Database.Instance.SelectedElement));
             StartStopButtonInstance = new StartStopButton();
-            AddElementContextMenu = new AddElementCommand();
+            AddElementContextMenu = new AddElementCommand(this);
             DelElementContextMenu = new DelElementCommand(this);
-            MoveElementContextMenu = new MoveElementCommand();
+            MoveElementContextMenu = new MoveElementCommand(this);
         }
 
         public void Update()
         {
+            TreeViewList = new ObservableCollection<SelectedViewModel>();
+            TreeViewList.Add(new SelectedViewModel(null, Database.Instance.SelectedElement));
+            MakeTableViewFromDatabase(Database.Instance.TreeViewList[0].Children, TreeViewList[0]);
             OnPropertyChanged("TreeViewList");
             OnPropertyChanged("SelectedViewModel");
         }
@@ -75,6 +67,20 @@ namespace EmVerif.EditTabViewModel
         public void OnPropertyChanged(string info)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
+        }
+
+        private void MakeTableViewFromDatabase(IReadOnlyList<OneElement> oneElementList, SelectedViewModel parentSelectedViewModel)
+        {
+            foreach (var oneElement in oneElementList)
+            {
+                SelectedViewModel selectedViewModel = new SelectedViewModel(parentSelectedViewModel, oneElement);
+
+                parentSelectedViewModel.Children.Add(selectedViewModel);
+                if (oneElement.Children.Count != 0)
+                {
+                    MakeTableViewFromDatabase(oneElement.Children, selectedViewModel);
+                }
+            }
         }
     }
 }

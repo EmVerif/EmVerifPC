@@ -41,7 +41,7 @@ namespace EmVerif.ExecTabViewModel
         }
 
         public List<string> ChainTitleList = new List<string>();
-        public List<Dictionary<string, Boolean>> ExecFlagDictList = new List<Dictionary<string, bool>>();
+        public List<OneElement> OneElementDependTitleList = new List<OneElement>();
         private DataTable _DataTable { get; set; } = new DataTable();
 
         public ViewModel()
@@ -66,7 +66,7 @@ namespace EmVerif.ExecTabViewModel
             _DataTable.Clear();
             _DataTable.Columns.Clear();
             ChainTitleList = new List<string>();
-            ExecFlagDictList = new List<Dictionary<string, bool>>();
+            OneElementDependTitleList = new List<OneElement>();
 
             _DataTable.Columns.Add("タイトル", typeof(string));
             _DataTable.Columns[0].ReadOnly = true;
@@ -75,17 +75,17 @@ namespace EmVerif.ExecTabViewModel
                 _DataTable.Columns.Add(execType, typeof(Boolean));
             }
 
-            GetTitleList(Database.Instance.TreeViewList[0].Children, new List<string>(), ChainTitleList, ExecFlagDictList);
-            var results = ChainTitleList.Zip(ExecFlagDictList, (chainTitle, execFlagDict) => new { ChainTitle = chainTitle, ExecFlagDict = execFlagDict });
+            GetTitleList(Database.Instance.TreeViewList[0].Children, new List<string>(), ChainTitleList, OneElementDependTitleList);
+            var results = ChainTitleList.Zip(OneElementDependTitleList, (chainTitle, oneElement) => new { ChainTitle = chainTitle, OneElement = oneElement });
             foreach (var result in results)
             {
                 List<object> row = new List<object>() { result.ChainTitle };
 
                 foreach (var execType in Database.Instance.ExecTypeList)
                 {
-                    if (result.ExecFlagDict.ContainsKey(execType))
+                    if (result.OneElement.ExecFlagDict.ContainsKey(execType))
                     {
-                        row.Add(result.ExecFlagDict[execType]);
+                        row.Add(result.OneElement.ExecFlagDict[execType]);
                     }
                     else
                     {
@@ -106,11 +106,11 @@ namespace EmVerif.ExecTabViewModel
             var execInfoList = cellList.Zip(Database.Instance.ExecTypeList, (execFlag, execType) => new { ExecFlag = execFlag, ExecType = execType });
             foreach (var execInfo in execInfoList)
             {
-                ExecFlagDictList[idx][execInfo.ExecType] = (Boolean)execInfo.ExecFlag;
+                OneElementDependTitleList[idx].ExecFlagDict[execInfo.ExecType] = (Boolean)execInfo.ExecFlag;
             }
         }
 
-        private void GetTitleList(IReadOnlyList<OneElement> oneElementList, IReadOnlyList<string> titleList, List<string> chainTitleList, List<Dictionary<string, bool>> execFlagDictList)
+        private void GetTitleList(IReadOnlyList<OneElement> oneElementList, IReadOnlyList<string> titleList, List<string> chainTitleList, List<OneElement> oneElementDependTitleList)
         {
             foreach (var oneElement in oneElementList)
             {
@@ -119,7 +119,7 @@ namespace EmVerif.ExecTabViewModel
                 list.Add(oneElement.Title);
                 if (oneElement.Children.Count != 0)
                 {
-                    GetTitleList(oneElement.Children, list, chainTitleList, execFlagDictList);
+                    GetTitleList(oneElement.Children, list, chainTitleList, oneElementDependTitleList);
                 }
                 else
                 {
@@ -130,7 +130,7 @@ namespace EmVerif.ExecTabViewModel
                         chainTitle += title + "／";
                     }
                     chainTitleList.Add(chainTitle.Trim('／'));
-                    execFlagDictList.Add(oneElement.ExecFlagDict);
+                    oneElementDependTitleList.Add(oneElement);
                 }
             }
         }

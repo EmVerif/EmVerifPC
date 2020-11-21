@@ -14,8 +14,11 @@ namespace EmVerif.EditTabViewModel
     {
         public event EventHandler CanExecuteChanged;
 
-        public MoveElementCommand()
+        private ViewModel _RefViewModel;
+
+        public MoveElementCommand(ViewModel vm)
         {
+            _RefViewModel = vm;
         }
 
         public bool CanExecute(object parameter)
@@ -25,26 +28,30 @@ namespace EmVerif.EditTabViewModel
 
         public void Execute(object parameter)
         {
-            OneElement selected = Database.Instance.SelectedElement;
-            List<OneElement> children = selected.Parent.Children;
-            int curIdx = children.IndexOf(selected);
+            SelectedViewModel selectedViewModel = _RefViewModel.SelectedViewModel;
+            ObservableCollection<SelectedViewModel> childrenSelectedViewModel = selectedViewModel.Parent.Children;
+            OneElement oneElement = Database.Instance.SelectedElement;
+            List<OneElement> childrenOneElement = oneElement.Parent.Children;
+            int curIdx = childrenSelectedViewModel.IndexOf(selectedViewModel);
 
             switch ((string)parameter)
             {
                 case "Up":
                     if (curIdx > 0)
                     {
-                        children.Remove(selected);
-                        children.Insert(curIdx - 1, selected);
-                        Database.Instance.SelectedElement = selected;
+                        childrenSelectedViewModel.Remove(selectedViewModel);
+                        childrenSelectedViewModel.Insert(curIdx - 1, selectedViewModel);
+                        childrenOneElement.Remove(oneElement);
+                        childrenOneElement.Insert(curIdx - 1, oneElement);
                     }
                     break;
                 case "Down":
-                    if (curIdx < (children.Count - 1))
+                    if (curIdx < (childrenSelectedViewModel.Count - 1))
                     {
-                        children.Remove(selected);
-                        children.Insert(curIdx + 1, selected);
-                        Database.Instance.SelectedElement = selected;
+                        childrenSelectedViewModel.Remove(selectedViewModel);
+                        childrenSelectedViewModel.Insert(curIdx + 1, selectedViewModel);
+                        childrenOneElement.Remove(oneElement);
+                        childrenOneElement.Insert(curIdx + 1, oneElement);
                     }
                     break;
                 default:

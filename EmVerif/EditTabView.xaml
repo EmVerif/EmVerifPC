@@ -35,7 +35,8 @@
             </Grid.ColumnDefinitions>
             <TreeView x:Name="TreeView"
                       Grid.Column="0"
-                      ItemsSource="{Binding TreeViewList}" SelectedItemChanged="TreeView_SelectedItemChanged">
+                      ItemsSource="{Binding TreeViewList}"
+                      SelectedItemChanged="TreeView_SelectedItemChanged">
                 <TreeView.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="追加" Command="{Binding AddElementContextMenu}"/>
@@ -50,7 +51,7 @@
                     </Style>
                 </TreeView.Resources>
                 <TreeView.ItemTemplate>
-                    <HierarchicalDataTemplate DataType="vm:OneElement" ItemsSource="{Binding Children}">
+                    <HierarchicalDataTemplate DataType="vm:SelectedViewModel" ItemsSource="{Binding Children}">
                         <TextBlock Text="{Binding Title}"
                                    IsEnabled="False"
                                    />

@@ -13,8 +13,11 @@ namespace EmVerif.EditTabViewModel
     {
         public event EventHandler CanExecuteChanged;
 
-        public AddElementCommand()
+        private ViewModel _RefViewModel;
+
+        public AddElementCommand(ViewModel vm)
         {
+            _RefViewModel = vm;
         }
 
         public bool CanExecute(object parameter)
@@ -24,10 +27,13 @@ namespace EmVerif.EditTabViewModel
 
         public void Execute(object parameter)
         {
-            if (Database.Instance.SelectedElement != null)
+            if (_RefViewModel.SelectedViewModel != null)
             {
                 OneElement oneElement = new OneElement(Database.Instance.SelectedElement);
+                SelectedViewModel selectedViewModel = new SelectedViewModel(_RefViewModel.SelectedViewModel, oneElement);
+
                 Database.Instance.SelectedElement.Children.Add(oneElement);
+                _RefViewModel.SelectedViewModel.Children.Add(selectedViewModel);
             }
         }
     }

@@ -64,12 +64,12 @@ namespace EmVerif.ExecTabViewModel
 
         private void CheckIfContainsKeyword()
         {
-            var list = _RefViewModel.ChainTitleList.Zip(_RefViewModel.ExecFlagDictList, (chainTitle, execFlagDict) => new { ChainTitle = chainTitle, ExecFlagDict = execFlagDict });
-            foreach (var oneElement in list)
+            var results = _RefViewModel.ChainTitleList.Zip(_RefViewModel.OneElementDependTitleList, (chainTitle, oneElement) => new { ChainTitle = chainTitle, OneElement = oneElement });
+            foreach (var result in results)
             {
-                if (oneElement.ChainTitle.Contains(_RefViewModel.Keyword))
+                if (result.ChainTitle.Contains(_RefViewModel.Keyword))
                 {
-                    oneElement.ExecFlagDict[_RefViewModel.SelectedExecType] = _CheckValue;
+                    result.OneElement.ExecFlagDict[_RefViewModel.SelectedExecType] = _CheckValue;
                 }
             }
         }
