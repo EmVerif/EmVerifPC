@@ -19,7 +19,7 @@
                   ItemsSource="{Binding ExecTypeList}"
                   SelectedValue="{Binding SelectedExecType, Mode=OneWayToSource}"
                   />
-        <Button Content="選択列実行"
+        <Button Content="{Binding ExecButtonInstance.DisplayString}"
                 HorizontalAlignment="Left"
                 Margin="115,10,0,0"
                 VerticalAlignment="Top"

@@ -30,8 +30,8 @@ namespace EmVerif.ExecTabViewModel
             if ((_RefViewModel.AddingExecType != "") && (!Database.Instance.ExecTypeList.Contains(_RefViewModel.AddingExecType)))
             {
                 Database.Instance.ExecTypeList.Add(_RefViewModel.AddingExecType);
-                _RefViewModel.AddingExecType = "";
                 SetDefaultExecFlag(Database.Instance.TreeViewList[0].Children);
+                _RefViewModel.AddingExecType = "";
                 _RefViewModel.Update();
             }
         }

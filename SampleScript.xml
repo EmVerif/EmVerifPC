@@ -27,18 +27,18 @@ Wait(Trig: "②", Next: "End", Time: 1.0);
                     <ExecFlagDict>
                       <KeyValuePair>
                         <Key>
-                          <string />
-                        </Key>
-                        <Value>
-                          <boolean>false</boolean>
-                        </Value>
-                      </KeyValuePair>
-                      <KeyValuePair>
-                        <Key>
                           <string>All</string>
                         </Key>
                         <Value>
                           <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>CAN</string>
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
                         </Value>
                       </KeyValuePair>
                     </ExecFlagDict>
@@ -55,7 +55,15 @@ Wait(Trig: "②", Next: "End", Time: 1.0);
               <ExecFlagDict>
                 <KeyValuePair>
                   <Key>
-                    <string />
+                    <string>All</string>
+                  </Key>
+                  <Value>
+                    <boolean>false</boolean>
+                  </Value>
+                </KeyValuePair>
+                <KeyValuePair>
+                  <Key>
+                    <string>CAN</string>
                   </Key>
                   <Value>
                     <boolean>false</boolean>
@@ -93,18 +101,18 @@ Wait(Trig: "②", Next: "End", Time: 5.0);
                     <ExecFlagDict>
                       <KeyValuePair>
                         <Key>
-                          <string />
-                        </Key>
-                        <Value>
-                          <boolean>false</boolean>
-                        </Value>
-                      </KeyValuePair>
-                      <KeyValuePair>
-                        <Key>
                           <string>All</string>
                         </Key>
                         <Value>
                           <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>CAN</string>
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
                         </Value>
                       </KeyValuePair>
                     </ExecFlagDict>
@@ -134,18 +142,18 @@ Wait(Trig: "②", Next: "End", Time: 5.0);
                     <ExecFlagDict>
                       <KeyValuePair>
                         <Key>
-                          <string />
-                        </Key>
-                        <Value>
-                          <boolean>false</boolean>
-                        </Value>
-                      </KeyValuePair>
-                      <KeyValuePair>
-                        <Key>
                           <string>All</string>
                         </Key>
                         <Value>
                           <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>CAN</string>
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
                         </Value>
                       </KeyValuePair>
                     </ExecFlagDict>
@@ -162,7 +170,15 @@ Wait(Trig: "②", Next: "End", Time: 5.0);
               <ExecFlagDict>
                 <KeyValuePair>
                   <Key>
-                    <string />
+                    <string>All</string>
+                  </Key>
+                  <Value>
+                    <boolean>false</boolean>
+                  </Value>
+                </KeyValuePair>
+                <KeyValuePair>
+                  <Key>
+                    <string>CAN</string>
                   </Key>
                   <Value>
                     <boolean>false</boolean>
@@ -203,18 +219,18 @@ GetWave(Trig: "Boot", Stop: "End", SpioutId: "0, 1, 2, 3, 4, 11", FileName: "Spi
                     <ExecFlagDict>
                       <KeyValuePair>
                         <Key>
-                          <string />
-                        </Key>
-                        <Value>
-                          <boolean>false</boolean>
-                        </Value>
-                      </KeyValuePair>
-                      <KeyValuePair>
-                        <Key>
                           <string>All</string>
                         </Key>
                         <Value>
                           <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>CAN</string>
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
                         </Value>
                       </KeyValuePair>
                     </ExecFlagDict>
@@ -251,18 +267,18 @@ GetWave(Trig: "Boot", Stop: "End", SpioutId: "0, 1", FileName: "Spiout.wav");
                     <ExecFlagDict>
                       <KeyValuePair>
                         <Key>
-                          <string />
-                        </Key>
-                        <Value>
-                          <boolean>false</boolean>
-                        </Value>
-                      </KeyValuePair>
-                      <KeyValuePair>
-                        <Key>
                           <string>All</string>
                         </Key>
                         <Value>
                           <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>CAN</string>
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
                         </Value>
                       </KeyValuePair>
                     </ExecFlagDict>
@@ -297,18 +313,18 @@ GetWave(Trig: "Boot", Stop: "End", PwmId: "0, 1, 2, 3, 4, 5", FileName: "Pwm.wav
                     <ExecFlagDict>
                       <KeyValuePair>
                         <Key>
-                          <string />
-                        </Key>
-                        <Value>
-                          <boolean>false</boolean>
-                        </Value>
-                      </KeyValuePair>
-                      <KeyValuePair>
-                        <Key>
                           <string>All</string>
                         </Key>
                         <Value>
                           <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>CAN</string>
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
                         </Value>
                       </KeyValuePair>
                     </ExecFlagDict>
@@ -345,18 +361,18 @@ GetWave(Trig: "Boot", Stop: "End", PwmId: "0, 1", FileName: "Pwm.wav");
                     <ExecFlagDict>
                       <KeyValuePair>
                         <Key>
-                          <string />
-                        </Key>
-                        <Value>
-                          <boolean>false</boolean>
-                        </Value>
-                      </KeyValuePair>
-                      <KeyValuePair>
-                        <Key>
                           <string>All</string>
                         </Key>
                         <Value>
                           <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>CAN</string>
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
                         </Value>
                       </KeyValuePair>
                     </ExecFlagDict>
@@ -373,7 +389,15 @@ GetWave(Trig: "Boot", Stop: "End", PwmId: "0, 1", FileName: "Pwm.wav");
               <ExecFlagDict>
                 <KeyValuePair>
                   <Key>
-                    <string />
+                    <string>All</string>
+                  </Key>
+                  <Value>
+                    <boolean>false</boolean>
+                  </Value>
+                </KeyValuePair>
+                <KeyValuePair>
+                  <Key>
+                    <string>CAN</string>
                   </Key>
                   <Value>
                     <boolean>false</boolean>
@@ -421,18 +445,18 @@ GetWave(Trig: "Boot", Stop: "End", FileName: "All.wav", SpioutId: "0, 11", PwmId
                     <ExecFlagDict>
                       <KeyValuePair>
                         <Key>
-                          <string />
-                        </Key>
-                        <Value>
-                          <boolean>false</boolean>
-                        </Value>
-                      </KeyValuePair>
-                      <KeyValuePair>
-                        <Key>
                           <string>All</string>
                         </Key>
                         <Value>
                           <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>CAN</string>
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
                         </Value>
                       </KeyValuePair>
                     </ExecFlagDict>
@@ -451,18 +475,18 @@ GetWave(Trig: "Boot", Stop: "End", FileName: "All.wav", SpioutId: "0, 11", PwmId
                     <ExecFlagDict>
                       <KeyValuePair>
                         <Key>
-                          <string />
-                        </Key>
-                        <Value>
-                          <boolean>false</boolean>
-                        </Value>
-                      </KeyValuePair>
-                      <KeyValuePair>
-                        <Key>
                           <string>All</string>
                         </Key>
                         <Value>
                           <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>CAN</string>
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
                         </Value>
                       </KeyValuePair>
                     </ExecFlagDict>
@@ -481,18 +505,18 @@ GetWave(Trig: "Boot", Stop: "End", FileName: "All.wav", SpioutId: "0, 11", PwmId
                     <ExecFlagDict>
                       <KeyValuePair>
                         <Key>
-                          <string />
-                        </Key>
-                        <Value>
-                          <boolean>false</boolean>
-                        </Value>
-                      </KeyValuePair>
-                      <KeyValuePair>
-                        <Key>
                           <string>All</string>
                         </Key>
                         <Value>
                           <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>CAN</string>
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
                         </Value>
                       </KeyValuePair>
                     </ExecFlagDict>
@@ -509,7 +533,15 @@ GetWave(Trig: "Boot", Stop: "End", FileName: "All.wav", SpioutId: "0, 11", PwmId
               <ExecFlagDict>
                 <KeyValuePair>
                   <Key>
-                    <string />
+                    <string>All</string>
+                  </Key>
+                  <Value>
+                    <boolean>false</boolean>
+                  </Value>
+                </KeyValuePair>
+                <KeyValuePair>
+                  <Key>
+                    <string>CAN</string>
                   </Key>
                   <Value>
                     <boolean>false</boolean>
@@ -537,14 +569,6 @@ CanSend( Trig: "②", SendCanId: 0x200, Data: new List&lt;byte&gt;() { 0xAA, 0xF
 Wait(Trig: "②", Next: "End", Time: 5);
 </ScriptContent>
                     <ExecFlagDict>
-                      <KeyValuePair>
-                        <Key>
-                          <string />
-                        </Key>
-                        <Value>
-                          <boolean>false</boolean>
-                        </Value>
-                      </KeyValuePair>
                       <KeyValuePair>
                         <Key>
                           <string>All</string>
@@ -587,14 +611,6 @@ Wait(Trig: "②", Next: "End", Time: 5);
                     <ExecFlagDict>
                       <KeyValuePair>
                         <Key>
-                          <string />
-                        </Key>
-                        <Value>
-                          <boolean>false</boolean>
-                        </Value>
-                      </KeyValuePair>
-                      <KeyValuePair>
-                        <Key>
                           <string>All</string>
                         </Key>
                         <Value>
@@ -633,14 +649,6 @@ CanRepSend(
 Wait(Trig: "Boot", Next: "End", Time: 5);
 </ScriptContent>
                     <ExecFlagDict>
-                      <KeyValuePair>
-                        <Key>
-                          <string />
-                        </Key>
-                        <Value>
-                          <boolean>false</boolean>
-                        </Value>
-                      </KeyValuePair>
                       <KeyValuePair>
                         <Key>
                           <string>All</string>
@@ -687,14 +695,6 @@ CanDiagSend(
                     <ExecFlagDict>
                       <KeyValuePair>
                         <Key>
-                          <string />
-                        </Key>
-                        <Value>
-                          <boolean>false</boolean>
-                        </Value>
-                      </KeyValuePair>
-                      <KeyValuePair>
-                        <Key>
                           <string>All</string>
                         </Key>
                         <Value>
@@ -723,7 +723,15 @@ CanDiagSend(
               <ExecFlagDict>
                 <KeyValuePair>
                   <Key>
-                    <string />
+                    <string>All</string>
+                  </Key>
+                  <Value>
+                    <boolean>false</boolean>
+                  </Value>
+                </KeyValuePair>
+                <KeyValuePair>
+                  <Key>
+                    <string>CAN</string>
                   </Key>
                   <Value>
                     <boolean>false</boolean>
@@ -753,18 +761,18 @@ Wait(Trig: "②", Time: 5, Next: "End");
                     <ExecFlagDict>
                       <KeyValuePair>
                         <Key>
-                          <string />
-                        </Key>
-                        <Value>
-                          <boolean>false</boolean>
-                        </Value>
-                      </KeyValuePair>
-                      <KeyValuePair>
-                        <Key>
                           <string>All</string>
                         </Key>
                         <Value>
                           <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>CAN</string>
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
                         </Value>
                       </KeyValuePair>
                     </ExecFlagDict>
@@ -867,18 +875,18 @@ DegreeCheck(Formula: "PwmCh0PhaseDft[0] - SpioutCh0PhaseDft[0]", ExpValueMin: -2
                     <ExecFlagDict>
                       <KeyValuePair>
                         <Key>
-                          <string />
-                        </Key>
-                        <Value>
-                          <boolean>false</boolean>
-                        </Value>
-                      </KeyValuePair>
-                      <KeyValuePair>
-                        <Key>
                           <string>All</string>
                         </Key>
                         <Value>
                           <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>CAN</string>
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
                         </Value>
                       </KeyValuePair>
                     </ExecFlagDict>
@@ -937,18 +945,18 @@ ValueCheck(Formula: "SpioutCh0OtherAmp", ExpValueMax: 0.01, ExpValueMin: 0, Mess
                     <ExecFlagDict>
                       <KeyValuePair>
                         <Key>
-                          <string />
-                        </Key>
-                        <Value>
-                          <boolean>false</boolean>
-                        </Value>
-                      </KeyValuePair>
-                      <KeyValuePair>
-                        <Key>
                           <string>All</string>
                         </Key>
                         <Value>
                           <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>CAN</string>
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
                         </Value>
                       </KeyValuePair>
                     </ExecFlagDict>
@@ -965,7 +973,15 @@ ValueCheck(Formula: "SpioutCh0OtherAmp", ExpValueMax: 0.01, ExpValueMin: 0, Mess
               <ExecFlagDict>
                 <KeyValuePair>
                   <Key>
-                    <string />
+                    <string>All</string>
+                  </Key>
+                  <Value>
+                    <boolean>false</boolean>
+                  </Value>
+                </KeyValuePair>
+                <KeyValuePair>
+                  <Key>
+                    <string>CAN</string>
                   </Key>
                   <Value>
                     <boolean>false</boolean>
@@ -998,18 +1014,18 @@ Wait1s(Trig: "③", Next: "End");</ScriptContent>
                           <ExecFlagDict>
                             <KeyValuePair>
                               <Key>
-                                <string />
-                              </Key>
-                              <Value>
-                                <boolean>false</boolean>
-                              </Value>
-                            </KeyValuePair>
-                            <KeyValuePair>
-                              <Key>
                                 <string>All</string>
                               </Key>
                               <Value>
                                 <boolean>true</boolean>
+                              </Value>
+                            </KeyValuePair>
+                            <KeyValuePair>
+                              <Key>
+                                <string>CAN</string>
+                              </Key>
+                              <Value>
+                                <boolean>false</boolean>
                               </Value>
                             </KeyValuePair>
                           </ExecFlagDict>
@@ -1026,7 +1042,15 @@ Wait1s(Trig: "②", Next: "③");</ScriptContent>
                     <ExecFlagDict>
                       <KeyValuePair>
                         <Key>
-                          <string />
+                          <string>All</string>
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>CAN</string>
                         </Key>
                         <Value>
                           <boolean>false</boolean>
@@ -1051,18 +1075,18 @@ Wait(Trig: "Boot", Time: 1, Next: "End");</ScriptContent>
                           <ExecFlagDict>
                             <KeyValuePair>
                               <Key>
-                                <string />
-                              </Key>
-                              <Value>
-                                <boolean>false</boolean>
-                              </Value>
-                            </KeyValuePair>
-                            <KeyValuePair>
-                              <Key>
                                 <string>All</string>
                               </Key>
                               <Value>
                                 <boolean>true</boolean>
+                              </Value>
+                            </KeyValuePair>
+                            <KeyValuePair>
+                              <Key>
+                                <string>CAN</string>
+                              </Key>
+                              <Value>
+                                <boolean>false</boolean>
                               </Value>
                             </KeyValuePair>
                           </ExecFlagDict>
@@ -1079,7 +1103,15 @@ Wait1s(Trig: "②", Next: "③");</ScriptContent>
                     <ExecFlagDict>
                       <KeyValuePair>
                         <Key>
-                          <string />
+                          <string>All</string>
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>CAN</string>
                         </Key>
                         <Value>
                           <boolean>false</boolean>
@@ -1103,7 +1135,15 @@ Wait1s(Trig: "Boot", Next: "②");</ScriptContent>
               <ExecFlagDict>
                 <KeyValuePair>
                   <Key>
-                    <string />
+                    <string>All</string>
+                  </Key>
+                  <Value>
+                    <boolean>false</boolean>
+                  </Value>
+                </KeyValuePair>
+                <KeyValuePair>
+                  <Key>
+                    <string>CAN</string>
                   </Key>
                   <Value>
                     <boolean>false</boolean>
@@ -1133,18 +1173,18 @@ GetWave(Trig: "Boot", Stop: "End", FileName: "①.wav", AdId: "0");
                     <ExecFlagDict>
                       <KeyValuePair>
                         <Key>
-                          <string />
-                        </Key>
-                        <Value>
-                          <boolean>false</boolean>
-                        </Value>
-                      </KeyValuePair>
-                      <KeyValuePair>
-                        <Key>
                           <string>All</string>
                         </Key>
                         <Value>
                           <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>CAN</string>
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
                         </Value>
                       </KeyValuePair>
                     </ExecFlagDict>
@@ -1179,18 +1219,18 @@ GetWave(Trig: "Boot", Stop: "End", FileName: "①.wav", AdId: "0");
                     <ExecFlagDict>
                       <KeyValuePair>
                         <Key>
-                          <string />
-                        </Key>
-                        <Value>
-                          <boolean>false</boolean>
-                        </Value>
-                      </KeyValuePair>
-                      <KeyValuePair>
-                        <Key>
                           <string>All</string>
                         </Key>
                         <Value>
                           <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>CAN</string>
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
                         </Value>
                       </KeyValuePair>
                     </ExecFlagDict>
@@ -1210,18 +1250,18 @@ ExecBatch(Trig: "Boot", Cmd: @"..\..\..\SampleBatch.bat", Next: "End");
                     <ExecFlagDict>
                       <KeyValuePair>
                         <Key>
-                          <string />
-                        </Key>
-                        <Value>
-                          <boolean>false</boolean>
-                        </Value>
-                      </KeyValuePair>
-                      <KeyValuePair>
-                        <Key>
                           <string>All</string>
                         </Key>
                         <Value>
                           <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>CAN</string>
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
                         </Value>
                       </KeyValuePair>
                     </ExecFlagDict>
@@ -1266,18 +1306,18 @@ Wait(Trig: "②", Next: "End", Time: 5.0);
                     <ExecFlagDict>
                       <KeyValuePair>
                         <Key>
-                          <string />
-                        </Key>
-                        <Value>
-                          <boolean>false</boolean>
-                        </Value>
-                      </KeyValuePair>
-                      <KeyValuePair>
-                        <Key>
                           <string>All</string>
                         </Key>
                         <Value>
                           <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>CAN</string>
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
                         </Value>
                       </KeyValuePair>
                     </ExecFlagDict>
@@ -1309,18 +1349,18 @@ Wait(Trig: "③", Time: 5.0, Next: "End");
                     <ExecFlagDict>
                       <KeyValuePair>
                         <Key>
-                          <string />
-                        </Key>
-                        <Value>
-                          <boolean>false</boolean>
-                        </Value>
-                      </KeyValuePair>
-                      <KeyValuePair>
-                        <Key>
                           <string>All</string>
                         </Key>
                         <Value>
                           <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>CAN</string>
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
                         </Value>
                       </KeyValuePair>
                     </ExecFlagDict>
@@ -1347,18 +1387,18 @@ Wait(Trig: "③", Time: 5.0, Next: "End");
                     <ExecFlagDict>
                       <KeyValuePair>
                         <Key>
-                          <string />
-                        </Key>
-                        <Value>
-                          <boolean>false</boolean>
-                        </Value>
-                      </KeyValuePair>
-                      <KeyValuePair>
-                        <Key>
                           <string>All</string>
                         </Key>
                         <Value>
                           <boolean>true</boolean>
+                        </Value>
+                      </KeyValuePair>
+                      <KeyValuePair>
+                        <Key>
+                          <string>CAN</string>
+                        </Key>
+                        <Value>
+                          <boolean>false</boolean>
                         </Value>
                       </KeyValuePair>
                     </ExecFlagDict>
@@ -1375,7 +1415,15 @@ Wait(Trig: "③", Time: 5.0, Next: "End");
               <ExecFlagDict>
                 <KeyValuePair>
                   <Key>
-                    <string />
+                    <string>All</string>
+                  </Key>
+                  <Value>
+                    <boolean>false</boolean>
+                  </Value>
+                </KeyValuePair>
+                <KeyValuePair>
+                  <Key>
+                    <string>CAN</string>
                   </Key>
                   <Value>
                     <boolean>false</boolean>
