@@ -32,6 +32,7 @@ namespace EmVerif
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             _EditTab.ViewModel.CloseWindow();
+            _ExecTab.ViewModel.CloseWindow();
         }
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)

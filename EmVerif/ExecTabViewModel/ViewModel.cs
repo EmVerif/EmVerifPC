@@ -60,6 +60,11 @@ namespace EmVerif.ExecTabViewModel
             OnPropertyChanged("DataView");
         }
 
+        public void CloseWindow()
+        {
+            ExecButtonInstance.ForceEnd();
+        }
+
         private void MakeDataTableFromDatabase()
         {
             _DataTable.RowChanged -= _DataTable_RowChanged;

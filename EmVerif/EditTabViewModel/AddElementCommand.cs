@@ -29,7 +29,7 @@ namespace EmVerif.EditTabViewModel
         {
             if (_RefViewModel.SelectedViewModel != null)
             {
-                OneElement oneElement = new OneElement(Database.Instance.SelectedElement);
+                OneElement oneElement = new OneElement(Database.Instance.SelectedElement, Database.Instance.ExecTypeList);
                 SelectedViewModel selectedViewModel = new SelectedViewModel(_RefViewModel.SelectedViewModel, oneElement);
 
                 Database.Instance.SelectedElement.Children.Add(oneElement);

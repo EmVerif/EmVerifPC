@@ -18,12 +18,13 @@ namespace EmVerif.Model
         }
         public static Database Instance = new Database();
         public List<OneElement> TreeViewList { get; private set; } = new List<OneElement>();
-        public OneElement SelectedElement { get; set; } = new OneElement();
+        public OneElement SelectedElement { get; set; }
         public IPAddress SelectedIpAddress { get; set; }
         public List<string> ExecTypeList { get; private set; } = new List<string>();
 
         public Database()
         {
+            SelectedElement = new OneElement(ExecTypeList);
             TreeViewList.Add(SelectedElement);
         }
 
@@ -62,7 +63,7 @@ namespace EmVerif.Model
             {
                 ExecTypeList = new List<string>();
                 TreeViewList = new List<OneElement>();
-                SelectedElement = new OneElement();
+                SelectedElement = new OneElement(Database.Instance.ExecTypeList);
                 TreeViewList.Add(SelectedElement);
                 throw e;
             }

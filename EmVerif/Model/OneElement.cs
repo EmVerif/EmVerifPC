@@ -84,10 +84,23 @@ namespace EmVerif.Model
             Title = "トップ";
         }
 
-        public OneElement(OneElement inParent)
+        public OneElement(IReadOnlyList<string> inExecTypeList)
+        {
+            Title = "トップ";
+            foreach (var execType in inExecTypeList)
+            {
+                ExecFlagDict.Add(execType, false);
+            }
+        }
+
+        public OneElement(OneElement inParent, IReadOnlyList<string> inExecTypeList)
         {
             Parent = inParent;
             Title = "新規";
+            foreach (var execType in inExecTypeList)
+            {
+                ExecFlagDict.Add(execType, false);
+            }
         }
 
         public XmlSchema GetSchema()
