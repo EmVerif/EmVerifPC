@@ -53,7 +53,8 @@ namespace EmVerif.EditTabViewModel
         public void Update()
         {
             TreeViewList = new ObservableCollection<SelectedViewModel>();
-            TreeViewList.Add(new SelectedViewModel(null, Database.Instance.SelectedElement));
+            Database.Instance.SelectedElement = Database.Instance.TreeViewList[0];
+            TreeViewList.Add(new SelectedViewModel(null, Database.Instance.TreeViewList[0]));
             MakeTableViewFromDatabase(Database.Instance.TreeViewList[0].Children, TreeViewList[0]);
             OnPropertyChanged("TreeViewList");
             OnPropertyChanged("SelectedViewModel");

@@ -40,6 +40,7 @@ namespace EmVerif.Core.Script
 
         public void Reset(in string inWorkFolder)
         {
+            EndEvent = null;
             _RegistrationListDict = new Dictionary<string, List<IEmVerifCommand>>();
             _ExecList = new List<IEmVerifCommand>();
             _State = new ControllerState(inWorkFolder);
