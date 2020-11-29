@@ -17,14 +17,15 @@ namespace EmVerif.Core.Communication
             AuthCmdId = 0x08,
             SetCanCmdId = 0x09,
             SetSpiCmdId = 0x0A,
-            SetGpioCmdId = 0x0B
+            SetGpioCmdId = 0x0B,
+            SetI2cCmdId = 0x0C
         }
 
         public static InternalCmd Instance = new InternalCmd();
         public UInt32 PcRecvErrorCounter { get; private set; }
         public UInt32 EcuRecvErrorCounter { get; private set; }
 
-        private const UInt32 _IfVersion = 0x00000003;
+        private const UInt32 _IfVersion = 0x00000004;
 
         private const Byte _StartCmdId = 0x01;
         private const Byte _EndCmdId = 0x02;

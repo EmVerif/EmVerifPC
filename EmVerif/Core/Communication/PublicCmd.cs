@@ -163,6 +163,21 @@ namespace EmVerif.Core.Communication
             WaitSetGpioCmdAck();
         }
 
+        public void SetI2c(in UInt16 inKbps, out UInt16 outKbps)
+        {
+            List<Byte> data = new List<byte>();
+
+            data.Add((Byte)((inKbps >> 8) & 0xFF));
+            data.Add((Byte)(inKbps & 0xFF));
+            _AckRecvFlag[(Byte)InternalCmd.PublicCmdId.SetI2cCmdId] = false;
+            InternalCmd.Instance.ExecCmd(InternalCmd.PublicCmdId.SetI2cCmdId, data, RecvSetI2cCmdAck);
+            WaitSetI2cCmdAck();
+            outKbps = (UInt16)(
+                (UInt16)_RecvDataList[(Byte)InternalCmd.PublicCmdId.SetI2cCmdId][0] * 256 +
+                (UInt16)_RecvDataList[(Byte)InternalCmd.PublicCmdId.SetI2cCmdId][1]
+            );
+        }
+
         public void End()
         {
             InternalCmd.Instance.End();
@@ -301,6 +316,32 @@ namespace EmVerif.Core.Communication
                 if (timeoutCounter <= 0)
                 {
                     throw new Exception("Can't set GPIO.");
+                }
+                timeoutCounter--;
+                System.Threading.Thread.Sleep(10);
+            }
+        }
+        #endregion
+
+        #region I2C 設定処理
+        private void RecvSetI2cCmdAck(in IReadOnlyList<byte> inRecvDataList)
+        {
+            _RecvDataList[(Byte)InternalCmd.PublicCmdId.SetI2cCmdId] = inRecvDataList;
+            if (inRecvDataList.Count >= 2)
+            {
+                _AckRecvFlag[(Byte)InternalCmd.PublicCmdId.SetI2cCmdId] = true;
+            }
+        }
+
+        private void WaitSetI2cCmdAck()
+        {
+            int timeoutCounter = 10;
+
+            while (!_AckRecvFlag[(Byte)InternalCmd.PublicCmdId.SetI2cCmdId])
+            {
+                if (timeoutCounter <= 0)
+                {
+                    throw new Exception("Can't set I2C.");
                 }
                 timeoutCounter--;
                 System.Threading.Thread.Sleep(10);
