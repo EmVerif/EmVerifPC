@@ -53,5 +53,10 @@ namespace EmVerif
                 }
             }
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            _EditTab.CustomTextEditor.SetCompletion();
+        }
     }
 }

@@ -53,7 +53,10 @@ namespace EmVerif.Common
             SearchPanel.Install(TextArea);
             TextArea.TextEntering += TextArea_TextEntering;
             TextArea.TextEntered += TextArea_TextEntered;
+        }
 
+        public void SetCompletion()
+        {
             var workspace = new AdhocWorkspace(MefHostServices.Create(MefHostServices.DefaultAssemblies));
             var compilationOptions = new CSharpCompilationOptions(
                 OutputKind.DynamicallyLinkedLibrary

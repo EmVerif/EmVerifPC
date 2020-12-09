@@ -93,13 +93,14 @@
                                    Document="{Binding SelectedViewModel.IncludedScriptDocument}"
                                    />
             <GridSplitter Grid.Column="5" HorizontalAlignment="Stretch"/>
-            <common:CustomTextEditor Grid.Column="6"
-                                    FontSize="10pt"
-                                    SyntaxHighlighting="C#"
-                                    ShowLineNumbers="True"
-                                    Document="{Binding SelectedViewModel.ScriptDocument}"
-                                    AddDocument="{Binding SelectedViewModel.IncludedScriptDocument}"
-                                    />
+            <common:CustomTextEditor x:Name="CustomTextEditor"
+                                     Grid.Column="6"
+                                     FontSize="10pt"
+                                     SyntaxHighlighting="C#"
+                                     ShowLineNumbers="True"
+                                     Document="{Binding SelectedViewModel.ScriptDocument}"
+                                     AddDocument="{Binding SelectedViewModel.IncludedScriptDocument}"
+                                     />
         </Grid>
     </Grid>
 </UserControl>

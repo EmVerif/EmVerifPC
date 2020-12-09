@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:EmVerif"
         xmlns:vm="clr-namespace:EmVerif.MainWindowViewModel"
         mc:Ignorable="d"
-        Title="EmVerif" Height="800" Width="1200" Closing="Window_Closing">
+        Title="EmVerif" Height="800" Width="1200" Closing="Window_Closing" Loaded="Window_Loaded">
     <Window.DataContext>
         <vm:ViewModel x:Name="ViewModel"/>
     </Window.DataContext>
