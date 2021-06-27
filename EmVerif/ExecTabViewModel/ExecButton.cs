@@ -29,7 +29,7 @@ namespace EmVerif.ExecTabViewModel
             private set
             {
                 _DisplayString = value;
-                OnPropertyChanged("DisplayString");
+                OnPropertyChanged(nameof(DisplayString));
             }
         }
         private string _DisplayString;

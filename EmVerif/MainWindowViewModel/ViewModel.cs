@@ -27,7 +27,7 @@ namespace EmVerif.MainWindowViewModel
             set
             {
                 Database.Instance.SelectedIpAddress = value;
-                OnPropertyChanged("SelectedIpAddress");
+                OnPropertyChanged(nameof(SelectedIpAddress));
             }
         }
 

@@ -55,9 +55,9 @@ namespace EmVerif.ExecTabViewModel
         public void Update()
         {
             MakeDataTableFromDatabase();
-            OnPropertyChanged("ExecTypeList");
-            OnPropertyChanged("AddingExecType");
-            OnPropertyChanged("DataView");
+            OnPropertyChanged(nameof(ExecTypeList));
+            OnPropertyChanged(nameof(AddingExecType));
+            OnPropertyChanged(nameof(DataView));
         }
 
         public void CloseWindow()

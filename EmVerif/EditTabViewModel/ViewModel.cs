@@ -29,7 +29,7 @@ namespace EmVerif.EditTabViewModel
             {
                 Database.Instance.SelectedElement = value.RefModel;
                 _SelectedViewModel = value;
-                OnPropertyChanged("SelectedViewModel");
+                OnPropertyChanged(nameof(SelectedViewModel));
             }
         }
 
@@ -56,8 +56,8 @@ namespace EmVerif.EditTabViewModel
             Database.Instance.SelectedElement = Database.Instance.TreeViewList[0];
             TreeViewList.Add(new SelectedViewModel(null, Database.Instance.TreeViewList[0]));
             MakeTableViewFromDatabase(Database.Instance.TreeViewList[0].Children, TreeViewList[0]);
-            OnPropertyChanged("TreeViewList");
-            OnPropertyChanged("SelectedViewModel");
+            OnPropertyChanged(nameof(TreeViewList));
+            OnPropertyChanged(nameof(SelectedViewModel));
         }
 
         public void CloseWindow()

@@ -24,7 +24,7 @@ namespace EmVerif.EditTabViewModel
             set
             {
                 RefModel.IsExpanded = value;
-                OnPropertyChanged("IsExpanded");
+                OnPropertyChanged(nameof(IsExpanded));
             }
         }
         public bool IsParentInclude
@@ -36,7 +36,8 @@ namespace EmVerif.EditTabViewModel
             set
             {
                 RefModel.IsParentInclude = value;
-                OnPropertyChanged("IsParentInclude");
+                OnPropertyChanged(nameof(IsParentInclude));
+                OnPropertyChanged(nameof(IncludedScriptDocument));
             }
         }
         public string Title
@@ -48,7 +49,7 @@ namespace EmVerif.EditTabViewModel
             set
             {
                 RefModel.Title = value;
-                OnPropertyChanged("Title");
+                OnPropertyChanged(nameof(Title));
             }
         }
         public string Explanation
@@ -60,7 +61,7 @@ namespace EmVerif.EditTabViewModel
             set
             {
                 RefModel.Explanation = value;
-                OnPropertyChanged("Explanation");
+                OnPropertyChanged(nameof(Explanation));
             }
         }
         public TextDocument IncludedScriptDocument
