@@ -98,7 +98,14 @@ namespace EmVerif.EditTabViewModel
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                if (ex.InnerException != null)
+                {
+                    MessageBox.Show(ex.InnerException.Message);
+                }
+                else
+                {
+                    MessageBox.Show(ex.Message);
+                }
             }
         }
 
