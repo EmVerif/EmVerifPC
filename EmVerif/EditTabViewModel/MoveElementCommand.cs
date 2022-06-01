@@ -31,7 +31,7 @@ namespace EmVerif.EditTabViewModel
             SelectedViewModel selectedViewModel = _RefViewModel.SelectedViewModel;
             ObservableCollection<SelectedViewModel> childrenSelectedViewModel = selectedViewModel.Parent.Children;
             OneElement oneElement = Database.Instance.SelectedElement;
-            List<OneElement> childrenOneElement = oneElement.Parent.Children;
+            ObservableCollection<OneElement> childrenOneElement = oneElement.Parent.Children;
             int curIdx = childrenSelectedViewModel.IndexOf(selectedViewModel);
 
             switch ((string)parameter)

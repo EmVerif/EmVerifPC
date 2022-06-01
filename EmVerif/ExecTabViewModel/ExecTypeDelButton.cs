@@ -37,7 +37,6 @@ namespace EmVerif.ExecTabViewModel
                 {
                     Database.Instance.ExecTypeList.Remove(_RefViewModel.SelectedExecType);
                     DelExecFlag(Database.Instance.TreeViewList[0].Children);
-                    _RefViewModel.Update();
                 }
             }
         }

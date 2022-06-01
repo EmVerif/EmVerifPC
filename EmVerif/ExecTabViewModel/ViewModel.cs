@@ -50,19 +50,26 @@ namespace EmVerif.ExecTabViewModel
             ExecTypeDelButtonInstance = new ExecTypeDelButton(this);
             ExecTypeAddButtonInstance = new ExecTypeAddButton(this);
             CheckButtonInstance = new CheckButton(this);
-        }
-
-        public void Update()
-        {
-            MakeDataTableFromDatabase();
-            OnPropertyChanged(nameof(ExecTypeList));
-            OnPropertyChanged(nameof(AddingExecType));
-            OnPropertyChanged(nameof(DataView));
+            Database.Instance.PropertyChanged += Database_PropertyChanged;
         }
 
         public void CloseWindow()
         {
             ExecButtonInstance.ForceEnd();
+        }
+
+        private void Database_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(Database.Instance.ExecTypeList):
+                case nameof(Database.Instance.TreeViewList):
+                    MakeDataTableFromDatabase();
+                    OnPropertyChanged(nameof(ExecTypeList));
+                    OnPropertyChanged(nameof(AddingExecType));
+                    OnPropertyChanged(nameof(DataView));
+                    break;
+            }
         }
 
         private void MakeDataTableFromDatabase()

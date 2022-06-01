@@ -27,7 +27,6 @@ namespace EmVerif.MainWindowViewModel
             set
             {
                 Database.Instance.SelectedIpAddress = value;
-                OnPropertyChanged(nameof(SelectedIpAddress));
             }
         }
 
@@ -36,6 +35,17 @@ namespace EmVerif.MainWindowViewModel
             IpAddressList = PublicController.Instance.GetIpV4List();
             SaveButtonInstance = new SaveButton();
             LoadButtonInstance = new LoadButton();
+            Database.Instance.PropertyChanged += Database_PropertyChanged;
+        }
+
+        private void Database_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case nameof(Database.Instance.SelectedIpAddress):
+                    OnPropertyChanged(nameof(SelectedIpAddress));
+                    break;
+            }
         }
 
         private void OnPropertyChanged(string info)

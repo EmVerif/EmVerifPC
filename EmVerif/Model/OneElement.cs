@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace EmVerif.Model
     {
         public class XmlIO
         {
-            public List<OneElement> Children { get; set; }
+            public ObservableCollection<OneElement> Children { get; set; }
             public bool IsExpanded { get; set; }
             public bool IsParentInclude { get; set; }
             public string Title { get; set; }
@@ -26,7 +27,7 @@ namespace EmVerif.Model
             public SerializableDictionary<string, Boolean> ExecFlagDict { get; set; }
         }
         public OneElement Parent { get; private set; } = null;
-        public List<OneElement> Children { get; private set; } = new List<OneElement>();
+        public ObservableCollection<OneElement> Children { get; private set; } = new ObservableCollection<OneElement>();
         public bool IsExpanded { get; set; } = true;
         private bool _IsParentInclude = true;
         public bool IsParentInclude

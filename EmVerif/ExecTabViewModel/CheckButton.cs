@@ -58,7 +58,6 @@ namespace EmVerif.ExecTabViewModel
             if (dr == MessageBoxResult.OK)
             {
                 CheckIfContainsKeyword();
-                _RefViewModel.Update();
             }
         }
 

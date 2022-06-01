@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using EmVerif.Core.Script;
 using EmVerif.EditTabViewModel;
 
 namespace EmVerif
@@ -25,6 +26,7 @@ namespace EmVerif
         public EditTabView()
         {
             InitializeComponent();
+            CustomTextEditor.SetCompletion(typeof(PublicApis));
         }
 
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)

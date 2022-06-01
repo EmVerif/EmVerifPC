@@ -26,7 +26,6 @@ namespace EmVerif
         private void LoadButtonInstance_LoadFinished(object sender, EventArgs e)
         {
             _EditTab.ViewModel.Update();
-            _ExecTab.ViewModel.Update();
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
@@ -47,16 +46,10 @@ namespace EmVerif
                             _EditTab.ViewModel.Update();
                             break;
                         case 1:
-                            _ExecTab.ViewModel.Update();
                             break;
                     }
                 }
             }
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            _EditTab.CustomTextEditor.SetCompletion();
         }
     }
 }

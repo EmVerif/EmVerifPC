@@ -10,7 +10,6 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 
-using EmVerif.Core.Script;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.CodeCompletion;
 using ICSharpCode.AvalonEdit.Document;
@@ -30,14 +29,14 @@ namespace EmVerif.Common
         {
             get
             {
-                return (ICSharpCode.AvalonEdit.Document.TextDocument)GetValue(AddDocumentProperty);
+                return (ICSharpCode.AvalonEdit.Document.TextDocument)GetValue(_AddDocumentProperty);
             }
             set
             {
-                SetValue(AddDocumentProperty, value);
+                SetValue(_AddDocumentProperty, value);
             }
         }
-        public static readonly DependencyProperty AddDocumentProperty = DependencyProperty.Register(
+        private static readonly DependencyProperty _AddDocumentProperty = DependencyProperty.Register(
             "AddDocument",
             typeof(ICSharpCode.AvalonEdit.Document.TextDocument),
             typeof(CustomTextEditor),
@@ -55,7 +54,7 @@ namespace EmVerif.Common
             TextArea.TextEntered += TextArea_TextEntered;
         }
 
-        public void SetCompletion()
+        public void SetCompletion(Type inHostObjectType = null)
         {
             var workspace = new AdhocWorkspace(MefHostServices.Create(MefHostServices.DefaultAssemblies));
             var compilationOptions = new CSharpCompilationOptions(
@@ -68,9 +67,9 @@ namespace EmVerif.Common
                 "Script",
                 LanguageNames.CSharp,
                 isSubmission: true,
-                hostObjectType: typeof(PublicApis)
+                hostObjectType: inHostObjectType
             )
-            .WithMetadataReferences(new[] { MetadataReference.CreateFromFile(typeof(PublicApis).Assembly.Location) })
+            .WithMetadataReferences(new[] { MetadataReference.CreateFromFile(inHostObjectType.Assembly.Location) })
             .WithCompilationOptions(compilationOptions);
 
             var scriptProject = workspace.AddProject(scriptProjectInfo);
@@ -79,8 +78,8 @@ namespace EmVerif.Common
                 sourceCodeKind: SourceCodeKind.Script,
                 loader: TextLoader.From(TextAndVersion.Create(SourceText.From(""), VersionStamp.Create())));
             _ScriptDocument = workspace.AddDocument(scriptDocumentInfo);
-            var completionService = CompletionService.GetService(_ScriptDocument);
-            var results = completionService.GetCompletionsAsync(_ScriptDocument, 0).Result;
+            //var completionService = CompletionService.GetService(_ScriptDocument);
+            //var results = completionService.GetCompletionsAsync(_ScriptDocument, 0).Result;
         }
 
         private void TextArea_TextEntering(object sender, TextCompositionEventArgs e)
@@ -127,9 +126,9 @@ namespace EmVerif.Common
             }
         }
 
-        public void ShowCompletionWindow()
+        private void ShowCompletionWindow()
         {
-            var completionItems = GetCompletionListAsync(
+            var completionItems = GetCompletionList(
                 AddDocument.Text.Length + TextArea.Caret.Offset,
                 AddDocument.Text + Document.Text
             );
@@ -151,7 +150,7 @@ namespace EmVerif.Common
             }
         }
 
-        private IEnumerable<CompletionData> GetCompletionListAsync(int position, string code)
+        private IEnumerable<CompletionData> GetCompletionList(int position, string code)
         {
             _ScriptDocument = _ScriptDocument.WithText(SourceText.From(code));
             var completionService = CompletionService.GetService(_ScriptDocument);
