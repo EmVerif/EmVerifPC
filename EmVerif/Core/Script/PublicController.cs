@@ -32,6 +32,7 @@ namespace EmVerif.Core.Script
         private UInt32 _TaskTickCounterMs;
         private double _MaxLoad;
         private double _CurLoad;
+        private UInt32 _CanTotalSendNum;
 
         public IEnumerable<IPAddress> GetIpV4List()
         {
@@ -93,6 +94,7 @@ namespace EmVerif.Core.Script
             _TaskTickCounterMs = 0;
             _CurLoad = 0;
             _MaxLoad = 0;
+            _CanTotalSendNum = 0;
             PublicCmd.Instance.OnTimer += BootExecScript1MsTask;
         }
 
@@ -137,6 +139,13 @@ namespace EmVerif.Core.Script
             try
             {
                 _State.UserDataFromEcuStructureList = GetUserDataFromEcu();
+                foreach (var userData in _State.UserDataFromEcuStructureList)
+                {
+                    if (_CanTotalSendNum != userData.CanTotalSendNum)
+                    {
+                        userData.CanSendPossibleNum = 0;
+                    }
+                }
                 SetTimestamp();
 
 
@@ -396,6 +405,7 @@ namespace EmVerif.Core.Script
                 ref _State.UserDataToEcuStructure0,
                 _State.TimestampMs
             );
+            _CanTotalSendNum += _State.UserDataToEcuStructure0.CanSendNum;
             SendUserDataToEcuStructure0();
             SendUserDataToEcuStructure1();
             if (
@@ -493,6 +503,7 @@ namespace EmVerif.Core.Script
         public UInt32 CanSendPossibleNum;
         public UInt32 CError;
         public UInt32 CStatus;
+        public UInt32 CanTotalSendNum;
 
         public UInt32 Timestamp;
 
